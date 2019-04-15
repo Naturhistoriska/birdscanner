@@ -1,6 +1,6 @@
 # Run
 
-    # - Last modified: mån apr 15, 2019  10:25
+    # - Last modified: mån apr 15, 2019  11:32
     # - Sign: JN
     # - Note: These commands are for running one genome at a time.
     #         Iterateive/parallel runs on several genomes may be attempted
@@ -166,6 +166,18 @@
         ${GENOME}.plast200.fas \
         &> /dev/null &
 
+#### Alt. Search scaffolds using the hmms on Uppmax
+
+    ./create-slurm-file.pl -a snicXXXX-X-XX -g ${GENOME}  > ${GENOME}.nhmmer.slurm.sh
+    scp ${GENOME}.nhmmer.slurm.sh rackham.uppmax.uu.se:/proj/xxxxx/johan/run/hmmer/.
+    scp ${GENOME}.plast200.fas rackham.uppmax.uu.se:/proj/xxxxx/johan/run/plast/.
+    scp ${GENOME}.selected_concat.hmm rackham.uppmax.uu.se:/proj/xxxxx/johan/run/hmmer/.
+    ssh rackham
+    cd /proj/xxxxx/johan/run/hmmer
+    # Need to manually substitute or reassign GENOME variable on rackham
+    sbatch -M rackham,snowy ${GENOME}.nhmmer.slurm.sh
+   
+
 #### Parse nhmmer output
 
     cd ${RUNDIR}/hmmer
@@ -179,5 +191,24 @@
     # real	0m6.461s
     # user	0m6.360s
     # sys	0m0.101s
+
+#### Alt. Parse nhmmer output on Uppmax
+
+	cd /proj/uppstore2018005/johan
+	GENOME='PviomiM'
+	perl src/parse-nhmmer.pl \
+		-i run/hmmer/${GENOME}_genome.nhmmer.out \
+		-g run/plast/${GENOME}_genome.plast200.fas \
+		-d out/${GENOME}_genome_hmmer \
+		-p '${GENOME}' \
+		-f '${GENOME}' \
+		--nostats
+
+## Gather genes
+
+    ${SRCDIR}/gather-genes.pl
+
+## Align gene files
+
 
 
