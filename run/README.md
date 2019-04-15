@@ -1,7 +1,10 @@
 # Run
 
-    # - Last modified: fre apr 12, 2019  03:55
+    # - Last modified: mån apr 15, 2019  10:25
     # - Sign: JN
+    # - Note: These commands are for running one genome at a time.
+    #         Iterateive/parallel runs on several genomes may be attempted
+    #         using the `make` pipeline.
 
 
     # The commands used here are to be repeated for each genome (scaffolds) file.

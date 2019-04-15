@@ -1,7 +1,9 @@
 # BirdScanner
 
-- Last modified: Wed Apr 03, 2019  09:16AM
+- Last modified: mån apr 15, 2019  10:23
 - Sign: JN
+
+**Disclaimer:** Work in progress, this is not the final version of the instructions.
 
 ## Description
 
@@ -10,6 +12,7 @@ Extract known genomic regions from scaffold-files.
 ![Workflow](doc/workflow/Diagram1.png)
 
 ## Suggested usage
+
 
 ### Add genome data
 
@@ -21,15 +24,19 @@ sequences.
 ### Run the workflow
 
 I would recommend running the pipeline in steps. The "plast" step will
-take approx 20 mins/genome, while the hmmer step will take ~30 h/per genome(!).
-It would beneficiary to run the hmmer-step on, e.g., Uppmax.
+take approx 20 mins/genome, while the "nhmmer" step will take > ~30 h/per genome(!).
+It would recommend to run the nhmmer-step on, e.g., Uppmax.
 
     make init
     make plast
     make parseplast
-    make hmmer
+
+Current ad-hoc step: transfer files and run the nhmmer step on Uppmax
+
+    #make hmmer
     make parsehmmer
 
 ### Results
 
-Results are in folder `out`.
+Results from the hmmer step are in folder `out`, gathered genes are in `genes`,
+gene alignments are in `alignmnents`.
