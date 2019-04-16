@@ -7,11 +7,17 @@
 
          FILE: gather-genes.pl
 
-        USAGE: ./gather-genes.pl  folders
+        USAGE: ./gather-genes.pl --outdir=out  inputfolders
 
-  DESCRIPTION: 
+  DESCRIPTION: Gather genes from parsed nhmmer output. The script takes
+               folder names as input, where it expects fasta files named
+               <genomename>.<geneid>.fas (e.g. AbucgeM.12236.fas).
+               The script will then gather the same geneid from all
+               genomes and concatenate them to files named <geneid>.fas.
+               These files are written in the current working directory,
+               unless --outdir option is used.
 
-      OPTIONS: ---
+      OPTIONS: -o, --outdir=<dir>  Output directory (created if not present).
 
  REQUIREMENTS: ---
 
@@ -42,17 +48,27 @@ use File::Basename;
 
 exec("perldoc", $0) unless (@ARGV);
 
-my $infile  = q{};
-my $outfile  = q{};
+my $outdir = q{};
 my $VERBOSE = 0;
 
 GetOptions(
-    "infile=s"  => \$infile,
-    "outfile=s" => \$outfile,
-    "verbose!"  => \$VERBOSE,
-    "help"      => sub { exec("perldoc", $0); exit(0); },
+    "outdir=s" => \$outdir,
+    "verbose!" => \$VERBOSE,
+    "help"     => sub { exec("perldoc", $0); exit(0); },
 );
 
+if ($outdir) {
+    if (! -d $outdir) {
+        print "Creating directory $outdir.\n" if $VERBOSE;
+        unless (mkdir $outdir) {
+            die "Unable to create $outdir\n";
+        }
+    }
+    else {
+        print "Adding files to directory $outdir.\n" if $VERBOSE;
+
+    }
+}
 
 my %gene_file_hash = ();
 
@@ -63,13 +79,13 @@ while(my $dir = shift(@ARGV)) {
     my @fasta_files = <$dir/*.fas>;
     foreach my $filename (@fasta_files) {
         my ($name,$path,$suffix) = fileparse($filename,'.fas');
-        my ($n,$geneid) = split /\./, $name;
+        my ($n, $geneid) = split /\./, $name;
         push @{$gene_file_hash{$geneid}}, $filename;
     }
 }
 
 foreach my $gene (keys %gene_file_hash) {
-    my $outfile = $gene . ".fas";
+    my $outfile = $outdir . '/' . $gene . '.fas';
     open my $OUTFILE, ">", $outfile or die "Could not open file $outfile for writing $!\n";
     foreach my $infile (@{$gene_file_hash{$gene}}) {
         open my $INFILE, "<", $infile or die "Could not open file $infile for reading: $!\n";

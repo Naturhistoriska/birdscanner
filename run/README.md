@@ -1,6 +1,6 @@
 # Run
 
-    # - Last modified: mån apr 15, 2019  11:32
+    # - Last modified: tis apr 16, 2019  10:54
     # - Sign: JN
     # - Note: These commands are for running one genome at a time.
     #         Iterateive/parallel runs on several genomes may be attempted
@@ -48,6 +48,7 @@
     RUNDIR="$PROJECTDIR/run"
     SRCDIR="$PROJECTDIR/src"
 
+    NCPU=10
 
 ## Run PLAST
 
@@ -72,7 +73,7 @@
         -i selected_shortlabel.degap.fas \
         -d ${GENOME}.split.fas \
         -o ${GENOME}.selected.plast.tab \
-        -a 10 \
+        -a ${NCPU} \
         -max-hit-per-query 1 \
         -bargraph
     # real	21m56.511s
@@ -174,18 +175,19 @@
     scp ${GENOME}.selected_concat.hmm rackham.uppmax.uu.se:/proj/xxxxx/johan/run/hmmer/.
     ssh rackham
     cd /proj/xxxxx/johan/run/hmmer
-    # Need to manually substitute or reassign GENOME variable on rackham
+    # Need to manually substitute or reassign GENOME variable on rackham!
     sbatch -M rackham,snowy ${GENOME}.nhmmer.slurm.sh
+    jobinfo -M rackham,snowy -u $USER
    
 
 #### Parse nhmmer output
 
-    cd ${RUNDIR}/hmmer
+    cd ${PROJECTDIR}
 
-    time perl $SRCDIR/parse-nhmmer.pl \
-        -i ${GENOME}.hmmer.out \
-        -g ${GENOME}.plast200.fas \
-        -d ${GENOME}_hmmer_output \
+    time perl ${SRCDIR}/parse-nhmmer.pl \
+        -i ${RUNDIR}/hmmer/${GENOME}.hmmer.out \
+        -g ${RUNDIR}/plast/${GENOME}.plast200.fas \
+        -d ${PROJECTDIR}/out/${GENOME}_hmmer_output \
         -f ${GENOME}\
         -p ${GENOME}
     # real	0m6.461s
@@ -206,9 +208,20 @@
 
 ## Gather genes
 
-    ${SRCDIR}/gather-genes.pl
+    cd ${PROJECTDIR}
+    perl ${SRCDIR}/gather-genes.pl --outdir=genes $(find out -mindepth 1 -type d)
+
+
+
 
 ## Align gene files
 
+    cd ${PROJECTDIR}
+    mkdir -p alignments
+    for f in genes/*.fas ; do
+        g="${f%.fas}.mafft.ali"
+        h="alignments/$(basename "$g")"
+        mafft --auto --thread ${NCPU} "$f" > "$h"
+    done
 
 
