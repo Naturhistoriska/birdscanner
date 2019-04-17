@@ -155,7 +155,7 @@ my $slurm_script = <<"END_SLURM";
 #     scancel --state=pending -u user
 #
 # Monitor by using:
-#    jobinfo -u user
+#    jobinfo -u \$USER
 #    squeue
 #
 # Data required (example):
