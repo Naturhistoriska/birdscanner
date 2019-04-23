@@ -1,6 +1,6 @@
 # Run
 
-    # - Last modified: ons apr 17, 2019  04:31
+    # - Last modified: tis apr 23, 2019  03:50
     # - Sign: JN
     # - Note: These commands are for running one genome at a time.
     #         Iterateive/parallel runs on several genomes may be attempted
@@ -49,6 +49,7 @@
     SRCDIR="$PROJECTDIR/src"
 
     NCPU=10
+
 
 ## Run PLAST
 
@@ -183,11 +184,11 @@
 #### Parse nhmmer output
 
     cd ${PROJECTDIR}
-
+    mkdir -p ${PROJECTDIR}/out/genomes
     time perl ${SRCDIR}/parse-nhmmer.pl \
         -i ${RUNDIR}/hmmer/${GENOME}.hmmer.out \
         -g ${RUNDIR}/plast/${GENOME}.plast200.fas \
-        -d ${PROJECTDIR}/out/${GENOME}_hmmer_output \
+        -d ${PROJECTDIR}/out/genomes/${GENOME}_hmmer_output \
         -f ${GENOME}\
         -p ${GENOME}
     # real	0m6.461s
@@ -197,11 +198,12 @@
 #### Alt. Parse nhmmer output on Uppmax
 
 	cd /proj/uppstore2018005/johan
+    mkdir -p out/genomes
 	GENOME="PviomiM"
-	perl src/parse-nhmmer.pl \
+	time perl src/parse-nhmmer.pl \
 		-i "run/hmmer/${GENOME}_genome.nhmmer.out" \
 		-g "run/plast/${GENOME}_genome.plast200.fas" \
-		-d "out/${GENOME}_genome_hmmer" \
+		-d "out/genomes/${GENOME}_genome_hmmer" \
 		-p "${GENOME}" \
 		-f "${GENOME}" \
 		--nostats
@@ -209,67 +211,6 @@
 ## Gather genes
 
     cd ${PROJECTDIR}
-    perl ${SRCDIR}/gather-genes.pl --outdir=genes $(find out -mindepth 1 -type d)
-
-## Align gene files
-
-    cd ${PROJECTDIR}
-    mkdir -p alignments
-    # Try mafft (MAFFT v7.310)
-    for f in genes/*.fas ; do
-        g="${f%.fas}.mafft.ali"
-        h="alignments/$(basename "$g")"
-        mafft --auto --thread ${NCPU} "$f" > "$h"
-    done
-
-### Evaluate alignments
-
-    # $ get_fasta_info.pl 10011.fas
-    # Nseqs	Min.len	Max.len	Avg.len	File
-    # 32	1507	4710	4317	10011.fas
-    # $ get_fasta_info.pl 10011.mafft.ali
-    # Nseqs	Min.len	Max.len	Avg.len	File
-    # 32	4710	4710	4710	10011.mafft.ali
-
-    cd ${PROJECTDIR}/genes
-    get_fasta_info.pl *.fas 2>/dev/null | \
-        sed 's/.fas//' > ../tmp/unaligned.info
-    cd ${PROJECTDIR}/alignments
-    get_fasta_info.pl *.ali 2>/dev/null | \
-        sed 's/\.mafft.ali//' > ../tmp/aligned.info
-
-    cd ${PROJECTDIR}/tmp
-    join -j 5 unaligned.info aligned.info | \
-        awk '{print $1,$3/$NF,$4/$NF,$5/$NF}' | \
-        sort -r -k4
-    # File  min/ali.len max/ali.len avg./ali.len
-    # 10011 0.319958    1           0.916561
-
-    # The idea is to see if, e.g., the ratio avg.len/ali.len is low
-
-#### Try (iterative) OD-Seq
-
-    cd ${PROJECTDIR}/alignments
-    for f in *.mafft.ali ; do
-        ${SRCDIR}/oi.sh "$f";
-    done
-
-    grep -h '>' *-odseq-filtered | sort | uniq -c | sort -n -r
-
-    # TODO: realign the .mafft.ali-odseq-filtered files?
-
-## Trees
-
-    cd ${PROJECTDIR}/trees
-    for f in ../alignments/*.mafft.ali-odseq-filtered ; do
-        g=$(basename "$f")
-        echo "iqtree.${g}"
-        iqtree -s "$f" \
-            -nt AUTO \
-            -ntmax 10 \
-            -m TEST \
-            -pre "iqtree.${g}"
-    done
-
-
+    mkdir -p out/genes
+    time perl ${SRCDIR}/gather-genes.pl --outdir=out/genes $(find out -mindepth 1 -type d)
 
