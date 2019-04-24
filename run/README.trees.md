@@ -1,7 +1,7 @@
-# Trres from the output of birdscanner
+# Trees from the output of birdscanner
 
-    # - Last modified: ons apr 24, 2019  08:34
-    # - Sign: JN
+    # Last modified: ons apr 24, 2019  01:26
+    # Sign: JN
 
 ## Setup
 
@@ -15,25 +15,6 @@
     SRCDIR="$PROJECTDIR/src"
     JARVISDIR="/home/nylander/run/pe/Jarvis_et_al_2014/FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs"
     NCPU=10
-
-## Get outgroup
-
-    # Need to look for
-    #   "ACACH	Rifleman	Acanthisitta_chloris"
-    #   "MANVI	Golden-collared_Manakin	Manacus_vitellinus"
-    # cd "${JARVISDIR}"
-    # OUTGRPFILE="filter.txt"
-    # perl -e 'print "ACACH\nMANVI\n"' > "${FILTFILE}"
-    # FILTERED="${DATADIR}/reference/fasta_files"
-    # mkdir -p "${FILTERED}"
-    # for f in $(find -name 'sate.removed.intron.noout.aligned-allgap.filtered') ; do
-    #     d=$(dirname "${f}" | sed 's/^\.\///')
-    #     g=$(basename "${f}")
-    #     h="${FILTERED}/${d}.${g}.fas"
-    #     fastagrep -t -f "${OUTGRPFILE}" "${f}" | sed '/^$/d' > "${h}"
-    # done
-    # rm "${OUTGRPFILE}"
-
 
 ## Add outgroup
 
@@ -58,6 +39,7 @@
         rm "${ALIDIR}/tmp.${nr}.outgrp.seq"
     done
     rm "${outg}"
+
 
 ##  Align gene files
 
@@ -94,59 +76,71 @@
         awk '{print $1,$3/$NF,$4/$NF,$5/$NF}' | \
         sort -r -k4
 
-#### Try (iterative) OD-Seq
 
-# ons 24 apr 2019 08:34:45:
+#### Try (iterative) OD-Seq
 
     cd ${ALIDIR}
     time for f in *.mafft.ali ; do
         ${SRCDIR}/oi.sh "$f";
     done
+    # real	11m19,422s
+    # user	24m24,693s
+    # sys	38m42,497s
+
     grep -h '>' *-odseq-filtered | \
         sort | \
         uniq -c | \
         sort -n -r
-    # 1422 >CnucorF
-    # 1418 >CnucnuF
-    # 1418 >CmacF
-    # 1413 >CnucorM
-    # 1410 >CgutcM
-    # 1410 >CcervNGM
-    # 1407 >CgutgM
-    # 1405 >AsubF
-    # 1402 >CcervF
-    # 1401 >CcervAM
-    # 1397 >AmacnuM
-    # 1397 >Ainor
-    # 1395 >Amacger
-    # 1393 >Claut
-    # 1392 >PnewM
-    # 1391 >PnewF
-    # 1384 >PvioviF
-    # 1382 >Apapu
-    # 1377 >SchryM
-    # 1372 >SchryF
-    # 1366 >PviomiM
-    # 1337 >Aflavi
-    # 1329 >SaureNRM
-    # 1311 >SdenM
-    # 1295 >AbucgeM
-    # 1293 >AmeljoF
-    # 1291 >AmelmeM
-    # 1288 >AcrasF
-    # 1277 >Amelas
-    # 1194 >SbakeAMNH
-    # 1109 >SaureAMNH
-    #  868 >SardeRMNH
+    #   1422 >CnucorF
+    #   1419 >CmacF
+    #   1418 >CnucnuF
+    #   1414 >CnucorM
+    #   1410 >CcervNGM
+    #   1409 >CgutcM
+    #   1407 >CgutgM
+    #   1404 >AsubF
+    #   1401 >CcervF
+    #   1401 >CcervAM
+    #   1396 >AmacnuM
+    #   1396 >Ainor
+    #   1394 >Amacger
+    #   1393 >Claut
+    #   1391 >PnewM
+    #   1390 >PnewF
+    #   1384 >PvioviF
+    #   1383 >Apapu
+    #   1378 >SchryM
+    #   1374 >SchryF
+    #   1368 >PviomiM
+    #   1338 >Aflavi
+    #   1330 >SaureNRM
+    #   1311 >SdenM
+    #   1296 >AbucgeM
+    #   1294 >AmeljoF
+    #   1293 >AmelmeM
+    #   1289 >AcrasF
+    #   1279 >Amelas
+    #   1195 >SbakeAMNH
+    #   1110 >SaureAMNH
+    #    872 >SardeRMNH
+    #     20 >MANVI
+    #     17 >ACACH
 
-    # TODO: realign the .mafft.ali-odseq-filtered files?
+
+#### Remove "all-gap" positions
+
+    cd ${ALIDIR}
+    find -name '*.ali-odseq-filtered' | \
+        parallel "${SRCDIR}/degap_fasta.pl {}"
+
 
 ## Trees
 
     mkdir -p ${TREEDIR}
     cd ${TREEDIR}
-    time for f in {ALIDIR}/*.mafft.ali-odseq-filtered ; do
-        g=$(basename "$f")
+    time for f in ${ALIDIR}/*.mafft.ali-odseq-filtered.degap.fas ; do
+        g=$(basename "$f" .fas)
+        echo $g
         echo "iqtree.${g}"
         iqtree -s "$f" \
             -nt AUTO \
@@ -156,12 +150,14 @@
     done
 
 
-### ASTRAL III
+## ASTRAL III
 
     mkdir -p ${ASTRALDIR}
     cd ${ASTRALDIR}
-    cat ${TREEDIR}/*.mafft.ali-odseq-filtered.treefile > all.mafft.ali-odseq-filtered.trees
-    time astral -i all.mafft.ali-odseq-filtered.trees -o all.mafft.ali-odseq-filtered.astral
+    indata=all.mafft.ali-odseq-filtered.degap.trees
+    outdata=all.mafft.ali-odseq-filtered.degap.astral
+    cat ${TREEDIR}/*.mafft.ali-odseq-filtered.degap.treefile > "${indata}"
+    time astral -i "${indata}" -o "${outdata}"
     # real	0m18,594s
     # user	0m28,208s
     # sys	0m0,312s

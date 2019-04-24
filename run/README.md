@@ -1,9 +1,9 @@
 # Run
 
-    # - Last modified: tis apr 23, 2019  03:50
+    # - Last modified: ons apr 24, 2019  12:54
     # - Sign: JN
     # - Note: These commands are for running one genome at a time.
-    #         Iterateive/parallel runs on several genomes may be attempted
+    #         Iterative/parallel runs on several genomes may be attempted
     #         using the `make` pipeline.
 
 
