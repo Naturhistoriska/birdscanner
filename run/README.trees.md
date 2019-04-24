@@ -1,6 +1,6 @@
 # Trres from the output of birdscanner
 
-    # - Last modified: tis apr 23, 2019  05:11
+    # - Last modified: ons apr 24, 2019  08:34
     # - Sign: JN
 
 ## Setup
@@ -68,11 +68,9 @@
         aliout="${ALIDIR}/$(basename "$g")"
         mafft --auto --thread ${NCPU} "${f}" > "${aliout}"
     done
-
-
-# tis 23 apr 2019 17:08:04 ############################################################
-
-
+    # real	55m22,108s
+    # user	231m26,448s
+    # sys	48m37,191s
 
 
 ### Evaluate alignments
@@ -87,20 +85,18 @@
     mkdir -p ${PROJECTDIR}/tmp
     cd ${ALIDIR}
     get_fasta_info.pl *.input 2>/dev/null | \
-        sed 's/.input//' > ${PROJECTDIR}/tmp/unaligned.info
+        sed 's/\.outgrp\.input//' > ${PROJECTDIR}/tmp/unaligned.info
     get_fasta_info.pl *.ali 2>/dev/null | \
-        sed 's/\.mafft.ali//' > ${PROJECTDIR}/tmp/aligned.info
+        sed 's/\.outgrp\.mafft.ali//' > ${PROJECTDIR}/tmp/aligned.info
 
     cd ${PROJECTDIR}/tmp
     join -j 5 unaligned.info aligned.info | \
         awk '{print $1,$3/$NF,$4/$NF,$5/$NF}' | \
         sort -r -k4
-    # File  min/ali.len max/ali.len avg./ali.len
-    # 10011 0.319958    1           0.916561
-
-    # The idea is to see if, e.g., the ratio avg.len/ali.len is low
 
 #### Try (iterative) OD-Seq
+
+# ons 24 apr 2019 08:34:45:
 
     cd ${ALIDIR}
     time for f in *.mafft.ali ; do
