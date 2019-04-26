@@ -1,6 +1,6 @@
 # Trees from the output of birdscanner
 
-    # Last modified: ons apr 24, 2019  01:26
+    # Last modified: fre apr 26, 2019  08:34
     # Sign: JN
 
 ## Setup
@@ -148,6 +148,9 @@
             -m TEST \
             -pre "iqtree.${g}"
     done
+    # real	1360m25,347s
+    # user	2766m8,775s
+    # sys	7m35,787s
 
 
 ## ASTRAL III
