@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: mån apr 15, 2019  10:23
+- Last modified: fre apr 26, 2019  08:41
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -12,7 +12,6 @@ Extract known genomic regions from scaffold-files.
 ![Workflow](doc/workflow/Diagram1.png)
 
 ## Suggested usage
-
 
 ### Add genome data
 
@@ -38,5 +37,11 @@ Current ad-hoc step: transfer files and run the nhmmer step on Uppmax
 
 ### Results
 
-Results from the hmmer step are in folder `out`, gathered genes are in `genes`,
-gene alignments are in `alignmnents`.
+Genome-specific results from the hmmer step are in folder `out/genomes/`,
+gathered genes are in `out/genes/`.
+
+## Further analysis
+
+The gene files in `out/genes/` can be further analyzed (multiple sequence alignments,
+phylogenetic tree reconstruction, etc). One such approach is described in the file
+`run/README.trees.md`.
