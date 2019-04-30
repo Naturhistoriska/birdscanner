@@ -1,11 +1,11 @@
 # Prepare reference data
 
-    # - Last modified: tis apr 23, 2019  03:46
+    # - Last modified: tis apr 30, 2019  12:59
     # - Sign: JN
 
 ## Data preparation and data reduction
 
-    # The command used here only needs to be done once for the reference set of alignments.
+    # The following commands only needs to be done once for the reference set of alignments.
     # 
     # Any genome (scaffold) fasta files should be placed in the `data/genomes` folder,
     # and be named `<uniqeshortname>.fasta`, for example: `AbucgeM_genome.fasta`.
@@ -24,19 +24,6 @@
     # the folder "FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs" 
     # by including only sequences containing headers "ACACH", "CORBR", "GEOFO", "MANVI"
     # (representing closest relatives to Bowerbirds):
-
-    ALIGNDIR="/home/nylander/run/pe/Jarvis_et_al_2014/FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs"
-    DATADIR=
-    FILTFILE="filter.txt"
-    perl -e 'print "ACACH\nCORBR\nGEOFO\nMANVI\n"' > "${FILTFILE}"
-    FILTERED="${DATADIR}/fasta_files"
-    for f in "${ALIGNDIR}/*.fasta" ; do
-        g=$(basename "${f}")
-        h="${FILTERED}/${g}.filtered.fas"
-        fastagrep -t -f "${FILTFILE}" "${f}" > "${h}"
-    done
-    rm "${FILTFILE}"
-
 
 
 #### Setup
@@ -64,6 +51,10 @@
         fastagrep -t -f "${FILTFILE}" "${f}" | sed '/^$/d' > "${h}"
     done
     rm "${FILTFILE}"
+
+
+#### Alternative (Extract From Jarvis data)
+
 
 
 #### Create fasta file with degapped selected genes (4 taxa, less than 10,000 bp)
