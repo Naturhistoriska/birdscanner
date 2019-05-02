@@ -1,6 +1,6 @@
 # Prepare reference data
 
-    # - Last modified: tor maj 02, 2019  09:32
+    # - Last modified: tor maj 02, 2019  04:10
     # - Sign: JN
 
 ## Data preparation and data reduction
@@ -31,7 +31,7 @@
     PROJECTDIR='/home/nylander/run/pe/birdscanner'
     DATADIR="$PROJECTDIR/data"
     REFERENCEDIR="$DATADIR/reference"
-    SELECTED="$REFERENCEDIR/selected"
+    SELECTED="$REFERENCEDIR/selected-part"
     GENOMESDIR="$DATADIR/genomes"
     SRCDIR="$PROJECTDIR/src"
 
@@ -40,39 +40,53 @@
 
     JARVISDIR="/home/nylander/run/pe/Jarvis_et_al_2014/FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs"
     cd "${JARVISDIR}"
+
+    ## Split fasta files to parts. Output is in folder "${JARVISDIR}/part_fasta_files"
+    time perl ${SRCDIR}/extract_part_genes.pl
+    # real	59m18,837s
+    # user	17m19,957s
+    # sys	0m2,416s
+
+    
+    ## Extract sequences for target species only
+    DATADIR="$PROJECTDIR/data"
+    cd "${DATADIR}"
     FILTFILE="filter.txt"
     perl -e 'print "ACACH\nCORBR\nGEOFO\nMANVI\n"' > "${FILTFILE}"
-    FILTERED="${DATADIR}/reference/fasta_files"
+    FILTERED="${DATADIR}/reference/part_fasta_files"
     mkdir -p "${FILTERED}"
-    for f in $(find -name 'sate.removed.intron.noout.aligned-allgap.filtered') ; do
-        d=$(dirname "${f}" | sed 's/^\.\///')
-        g=$(basename "${f}")
-        h="${FILTERED}/${d}.${g}.fas"
-        fastagrep -t -f "${FILTFILE}" "${f}" | sed '/^$/d' > "${h}"
-    done
+
+    #time for f in $(find ${JARVISDIR}/part_fasta_files -name '*.fas') ; do
+    #    g=$(basename "${f}")
+    #    partname=${g%%.*}
+    #    outfile="${FILTERED}/${partname}.fas"
+    #    fastagrep -t -f "${FILTFILE}" "${f}" | sed '/^$/d' > "${outfile}"
+    #done
+    # real	3m42,507s
+    # user	3m10,644s
+    # sys	0m52,036s
+
+    export FILTERED
+    export FILTFILE
+    my_func() {
+        g=$(basename "$1")
+        partname="${g%%.*}"
+        outfile="${FILTERED}/${partname}.fas"
+        fastagrep -t -f "${FILTFILE}" "$1" | sed '/^$/d' > "${outfile}"
+    }
+    export -f my_func
+    time find ${JARVISDIR}/part_fasta_files -name '*.fas' -print | \
+        parallel my_func
     rm "${FILTFILE}"
 
 
-#### Create fasta file with degapped selected genes (4 taxa, less than 10,000 bp)
+#### Copy alignment with four taxa, and 100 &lt; positions &lt; 4,000
 
-    #cd $REFERENCEDIR
-
-    #cat $($SRCDIR/get_fasta_info.pl fasta_files/*.fas 2>/dev/null | \
-    #    awk '$2<10e3' | \
-    #    awk '$1==4' | \
-    #    awk '{print $NF}') | \
-    #    $SRCDIR/remove_gaps_in_fasta.pl -a | \
-    #    $SRCDIR/fasta_unwrap.pl | \
-    #    $SRCDIR/fasta_wrap.pl | \
-    #    awk '/>/{$0=">Seq_"++n}1' > 1485.fasta
-
-
-#### Copy alignment with four taxa, and less than 10,000 positions
-
-    mkdir -p ${SELECTED}/fas
     cd ${REFERENCEDIR}
-    cp $(get_fasta_info.pl fasta_files/*.fas 2>/dev/null | \
-        awk '$2<10e3' | \
+    mkdir -p ${SELECTED}/fas
+    cp $(get_fasta_info.pl part_fasta_files/*.fas 2>/dev/null | \
+        awk '$2<4e3' | \
+        awk '$2>99' | \
         awk '$1==4' | \
         awk '{print $NF}') ${SELECTED}/fas/
 
@@ -139,12 +153,12 @@
                        print;
                    };
                  };
-                 close(F);' >> selected_shortlabel.fas
+                 close(F);' >> part_selected_shortlabel.fas
     done
 
-    ${SRCDIR}/remove_gaps_in_fasta.pl selected_shortlabel.fas | \
+    ${SRCDIR}/remove_gaps_in_fasta.pl part_selected_shortlabel.fas | \
         ${SRCDIR}/fasta_unwrap.pl | \
-        ${SRCDIR}/fasta_wrap.pl > selected_shortlabel.degap.fas
+        ${SRCDIR}/fasta_wrap.pl > part_selected_shortlabel.degap.fas
 
 
 ### Compress directories

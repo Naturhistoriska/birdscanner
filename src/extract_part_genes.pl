@@ -1,4 +1,4 @@
-#!/usr/bin/perl 
+#!/usr/bin/env perl 
 #===============================================================================
 =pod
 
@@ -9,7 +9,19 @@
 
         USAGE: ./extract_part_genes.pl  
 
-  DESCRIPTION: 
+  DESCRIPTION: Extracts the parts from sate.removed.intron.noout.aligned-allgap.filtered
+               based on region definitions in sate.removed.intron.noout-allgap.filtered.part
+
+               Content of sate.removed.intron.noout-allgap.filtered.part is (example):
+
+               DNA, 39861 = 1-2851
+               DNA, 39862 = 2852-3714
+
+               Two output files will be created from the example above:
+
+               39861.<foldername>.fas, 39862.<foldername>.fas
+
+               where <foldername> is a numeric value.
 
       OPTIONS: ---
 
@@ -28,7 +40,7 @@
 
       CREATED: 2019-04-30 15:26:30
 
-     REVISION: ---
+     REVISION: tor  2 maj 2019 10:43:26
 
 =cut
 
@@ -92,7 +104,8 @@ foreach my $dir (@dirs) {
             my $id = $F[1];
             my ($start, $end) = split /-/, $F[3];
             print STDERR "dir:$dir id:$id start:$start end:$end\n" if $verbose;
-            extract_fasta_coordinates($outfolder, $dir, $id, $seqfile, $start, $end, $id);
+            extract_fasta_coordinates($outfolder, $dir, $id, $seqfile, $start, $end);
+            #extract_fasta_coordinates($outfolder, $dir, $id, $seqfile, $start, $end, $id);
         }
         close($PFILE);
     ## End Parallel block
@@ -104,7 +117,8 @@ foreach my $dir (@dirs) {
 
 
 sub extract_fasta_coordinates {
-    my ($outfolder, $dir, $id, $seqfile, $start, $end, $outname) = @_;
+    my ($outfolder, $dir, $id, $seqfile, $start, $end) = @_;
+    #my ($outfolder, $dir, $id, $seqfile, $start, $end, $outname) = @_;
     my $fastafilepath = $outfolder . '/' . $id . '.' . $dir . '.fas';
     my $seqfilepath = $dir . '/' . $seqfile;
     open my $FAS, ">", $fastafilepath or die "$!";
@@ -120,12 +134,12 @@ sub extract_fasta_coordinates {
             if ($first) {
                 print $FAS "\n";
             }
-            if ($outname) {
-                print $FAS ">$outname\n";
-            }
-            else {
+            #if ($outname) {
+            #    print $FAS ">$outname\n";
+            #}
+            #else {
                 print $FAS $_, "\n";
-            }
+            #}
             $i = 0;
             $first = 1;
         }
