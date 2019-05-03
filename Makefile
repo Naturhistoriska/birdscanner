@@ -1,18 +1,20 @@
 # Makefile for birdscanner
-# Last modified: fre maj 03, 2019  01:53
+# Last modified: fre maj 03, 2019  02:07
 # Sign: JN
 
 
 # Directories (need to be in place)
+#
 # birdscanner 
-# |
 # ├── data
 # │   ├── genomes
 # │   └── reference
 # │       ├── fasta_files
 # │       └── selected
+# │           └── hmm
 # ├── doc
 # │   └── workflow
+# ├── out
 # ├── run
 # │   ├── hmmer
 # │   └── plast
