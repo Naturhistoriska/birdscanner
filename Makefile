@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre maj 03, 2019  12:58
+# Last modified: fre maj 03, 2019  01:40
 # Sign: JN
 
 # Some settings
@@ -9,22 +9,24 @@ ALILENGTH := 200
 
 # Directories (need to be in place)
 # birdscanner 
+# |
 # ├── data
 # │   ├── genomes
 # │   └── reference
+# │       ├── fasta_files
+# │       └── selected
 # ├── doc
 # │   └── workflow
-# ├── Makefile
-# ├── out
-# ├── README.md
-# ├── README.pdf
 # ├── run
+# │   ├── alignments
+# │   ├── astral
 # │   ├── hmmer
 # │   ├── plast
-# │   └── README.md
-# ├── src
-# └── tmp
-#
+# │   └── trees
+# └── src
+
+
+
 PROJECTDIR   := $(shell pwd)
 RUNDIR       := $(PROJECTDIR)/run
 DATADIR      := $(PROJECTDIR)/data

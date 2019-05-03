@@ -4,6 +4,7 @@ out/
 data/genomes/*.gz
 data/filter.txt
 data/reference/fasta_files/
+data/reference/selected/
 run/trees/*.gz
 run/trees/iqtree*
 run/plast/*
