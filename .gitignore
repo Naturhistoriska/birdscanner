@@ -1,0 +1,13 @@
+Old/
+tmp/
+out/
+data/genomes/*.gz
+data/filter.txt
+data/reference/fasta_files/
+run/trees/*.gz
+run/trees/iqtree*
+run/plast/*
+run/hmmer/*
+run/astral/*
+run/alignments/*
+data/reference/selected/*
