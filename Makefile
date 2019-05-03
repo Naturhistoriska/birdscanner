@@ -1,11 +1,7 @@
 # Makefile for birdscanner
-# Last modified: fre maj 03, 2019  01:40
+# Last modified: fre maj 03, 2019  01:53
 # Sign: JN
 
-# Some settings
-SHELL := /bin/bash
-NCPU      := 10
-ALILENGTH := 200
 
 # Directories (need to be in place)
 # birdscanner 
@@ -18,14 +14,16 @@ ALILENGTH := 200
 # ├── doc
 # │   └── workflow
 # ├── run
-# │   ├── alignments
-# │   ├── astral
 # │   ├── hmmer
-# │   ├── plast
-# │   └── trees
+# │   └── plast
 # └── src
 
 
+# Some settings
+SHELL := /bin/bash
+NCPU      := 10
+ALILENGTH := 200
+REFFAS := selected_shortlabel.degap.fas
 
 PROJECTDIR   := $(shell pwd)
 RUNDIR       := $(PROJECTDIR)/run
@@ -38,10 +36,12 @@ PLASTDIR     := $(RUNDIR)/plast
 HMMERDIR     := $(RUNDIR)/hmmer
 OUTDIR       := $(PROJECTDIR)/out
 
+
 # Files (need to be in place)
 GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
-PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/selected_shortlabel.degap.fas
-PLASTQUERYFP         := $(PLASTDIR)/selected_shortlabel.degap.fas
+PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/$(REFFAS)
+PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
+
 
 # Programs (need to be in place)
 GREPFASTA     := $(SRCDIR)/grepfasta.pl
@@ -61,11 +61,13 @@ $(foreach bin,$(REQUIRED_BINS),\
 $(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
 	ln -sf $< $@
 
+
 # 2. Split fasta: splitfast-100K <(gunzip -c $GENOMEFILE) > ${GENOME}.split.fas
 SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run\/plast}; echo $${n%%.*}.split.fas; done)
 
 $(PLASTDIR)/%.split.fas: $(GENOMESDIR)/%.gz
 	$(SPLITFAST) <(gunzip -c $<) > $@
+
 
 # 3. lw.fas.nin: makeblastdb -dbtype nucl -in %.split.fas
 DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLITFILES))
@@ -73,6 +75,7 @@ DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLI
 $(PLASTDIR)/%.split.fas.nin: $(PLASTDIR)/%.split.fas
 	cd $(PLASTDIR); \
 	makeblastdb -dbtype nucl -in $<
+
 
 # 4. Plastoutput: plast -p plastn \
 #        -i selected_shortlabel.degap.fas \
@@ -92,6 +95,7 @@ $(PLASTDIR)/%.selected.plast.tab: $(PLASTDIR)/%.split.fas $(PLASTQUERYFP)
 		-max-hit-per-query 1 \
 		-bargraph
 
+
 # 5. Scaffoldsid:  awk '$4>200' %.selected.plast.tab | \
 #        perl -npe 's/-\w+//' | \
 #        sort -t$'\t' -k1g -k12rg | \
@@ -108,17 +112,20 @@ $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids: $(PLASTDIR)/%.selected.plast.tab
 		awk -F $$'\t' '{print $$2}' | \
 		sort -u > $@
 
+
 # 6. Searchfile1: sed -e 's/$/\$/' -e 's/^/\^>/' %.plast200.scaffold.ids > %.searchfile1
 SEARCHFILES1 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids,$(PLASTDIR)/%.searchfile1,$(SCAFFOLDIDS))
 
 $(PLASTDIR)/%.searchfile1: $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids
 	sed -e 's/$$/\$$/' -e 's/^/\^>/' $< > $@
 
+
 # 7. Plast200.fas: grepfasta.pl -f %.searchfile1 %.split.fas > %.plast200.fas
 PLASTFASFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.plast$(ALILENGTH).fas,$(SPLITFILES))
 
 $(PLASTDIR)/%.plast$(ALILENGTH).fas: $(PLASTDIR)/%.searchfile1 $(PLASTDIR)/%.split.fas
 	$(GREPFASTA) -f $^ > $@
+
 
 # 8. Refids: awk '$4>200' %.selected.plast.tab | \
 #        perl -npe 's/-\w+//' | \
@@ -134,11 +141,13 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 		awk -F $$'\t' '!x[$$1]++' | \
 		awk -F $$'\t' '{print $$1}' > $@
 
+
 # 9. Searchfile2: sed -e 's/\([0-9]\+\)/hmm\/\1\.sate/' %.plast200.ref.ids > %.searchfile2
 SEARCHFILES2 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTDIR)/%.searchfile2,$(REFIDS))
 
 $(PLASTDIR)/%.searchfile2: $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids
 	sed -e 's/\([0-9]\+\)/hmm\/\1\.sate/' $< > $@
+
 
 # 10. Selected_concat.hmm: cat $(find $SELECTED/hmm -type f -name \*.hmm | grep -f %.searchfile2) > ${RUNDIR}/hmmer/%.selected_concat.hmm
 SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_concat.hmm,$(SEARCHFILES2))
@@ -146,12 +155,14 @@ SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_conc
 $(HMMERDIR)/%.selected_concat.hmm: $(PLASTDIR)/%.searchfile2
 	cat $$(find $(SELECTEDDIR)/hmm -type f -name \*.hmm | grep -f $<) > $@
 
+
 # 11. Hmmpress: hmmpress %.selected_concat.hmm
 HMMPRESSFILES := $(patsubst $(HMMERDIR)/%.hmm,$(HMMERDIR)/%.hmm.h3f,$(SELECTEDHMMS))
 
 $(HMMERDIR)/%.hmm.h3f: $(HMMERDIR)/%.hmm
 	cd $(HMMERDIR) ; \
 	hmmpress $<
+
 
 # 12. Hmmerout: nhmmer \
 #        --tblout %.nhmmer.out \
@@ -167,7 +178,8 @@ $(HMMERDIR)/%.nhmmer.out: $(HMMERDIR)/%.selected_concat.hmm $(PLASTDIR)/%.plast$
 		--notextw \
 		--cpu $(NCPU) \
 		$^
-	
+
+
 # 13. Hmmer_parse_output: perl $SRCDIR/parse-nhmmer.pl \
 #        -i %.nhmmer.out \
 #        -g %.plast200.fas \
@@ -183,6 +195,9 @@ $(OUTDIR)/%_nhmmer_output/: $(HMMERDIR)/%.nhmmer.out
 		-d $@ \
 		-f % \
 		-p %
+
+
+# Tasks:
 
 all: init plast parseplast
 
