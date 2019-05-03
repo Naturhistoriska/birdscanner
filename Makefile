@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre apr 12, 2019  01:06
+# Last modified: fre maj 03, 2019  12:58
 # Sign: JN
 
 # Some settings
@@ -37,7 +37,7 @@ HMMERDIR     := $(RUNDIR)/hmmer
 OUTDIR       := $(PROJECTDIR)/out
 
 # Files (need to be in place)
-GENOMEFILES          := $(wildcard $(GENOMESDIR)/*)
+GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
 PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/selected_shortlabel.degap.fas
 PLASTQUERYFP         := $(PLASTDIR)/selected_shortlabel.degap.fas
 
@@ -200,12 +200,13 @@ readplast: $(SCAFFOLDIDS) $(SEARCHFILES1) $(PLASTFASFILES) $(REFIDS) $(SEARCHFIL
 parseplast:
 	$(MAKE) -j$(NCPU) readplast
 
-#slurm:
-#	cd $(HMMERDIR) ; \
-#	for f in *.hmm; do g=$(basename "$f" .selected_concat.hmm); ../../src/create_slurm_file.pl -g "$g"; done ; \
-#	cd $(PROJECTDIR); \
-#	tar -I pigz -cvf run4uppmax.tgz run/plast/*.plast200.fas run/hmmer/*.selected_concat.hmm run/hmmer/*.nhmmer.slurm.sh ;
+# Note: need to change the hardcoded ".plast200.fas" below
 # The size of run4uppmax.tgz was 2.6G, expanded size 27G.
+slurm:
+	cd $(HMMERDIR) ; \
+	for f in *.hmm; do g=$$(basename "$$f" .selected_concat.hmm); $(SRCDIR)/create_slurm_file.pl -g "$$g"; done ; \
+	cd $(PROJECTDIR); \
+	tar -I pigz -cvf run4uppmax.tgz $(PLASTDIR)/*.plast200.fas $(HMMERDIR)/*.selected_concat.hmm $(HMMERDIR)/*.nhmmer.slurm.sh ;
 
 hmmer: $(HMMEROUT)
 
