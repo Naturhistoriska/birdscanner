@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre maj 03, 2019  02:07
+# Last modified: tor maj 09, 2019  08:47
 # Sign: JN
 
 
