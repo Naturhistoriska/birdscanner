@@ -1,13 +1,13 @@
 # Genomes
 
-- Last modified: fre maj 03, 2019  08:43
+- Last modified: fre maj 03, 2019  03:21
 - Sign: JN
 
 
-Put genome files here. 
+Put gzipped genome files (scaffolds fasta) here. 
 
 Names (e.g.):
 
-AbucgeM_genome.gz
-AmeljoF_genome.gz
-Aflavi_genome.gz
+    AbucgeM_genome.gz
+    AmeljoF_genome.gz
+    Aflavi_genome.gz

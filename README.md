@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: fre apr 26, 2019  08:41
+- Last modified: fre maj 03, 2019  01:13
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -26,11 +26,17 @@ I would recommend running the pipeline in steps. The "plast" step will
 take approx 20 mins/genome, while the "nhmmer" step will take > ~30 h/per genome(!).
 It would recommend to run the nhmmer-step on, e.g., Uppmax.
 
+Run initial similarity search:
+
     make init
     make plast
     make parseplast
 
-Current ad-hoc step: transfer files and run the nhmmer step on Uppmax
+Current ad-hoc step: prepare files for uppmax.uu.se
+
+    make slurm
+
+Copy files to uppmax. Run hummer on the remote resources.
 
     #make hmmer
     make parsehmmer
