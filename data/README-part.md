@@ -1,6 +1,6 @@
 # Prepare reference data
 
-    # - Last modified: fre maj 03, 2019  08:34
+    # - Last modified: fre maj 03, 2019  09:19
     # - Sign: JN
 
 ## Data preparation and data reduction
@@ -31,7 +31,7 @@
     PROJECTDIR='/home/nylander/run/pe/birdscanner'
     DATADIR="$PROJECTDIR/data"
     REFERENCEDIR="$DATADIR/reference"
-    SELECTED="$REFERENCEDIR/selected-part"
+    SELECTED="$REFERENCEDIR/selected"
     GENOMESDIR="$DATADIR/genomes"
     SRCDIR="$PROJECTDIR/src"
 
@@ -41,7 +41,7 @@
     JARVISDIR="/home/nylander/run/pe/Jarvis_et_al_2014/FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs"
     cd "${JARVISDIR}"
 
-    ## Split fasta files to parts. Output is in folder "${JARVISDIR}/part_fasta_files"
+    ## Split fasta files to parts. Output is in folder "${JARVISDIR}/fasta_files"
     time perl ${SRCDIR}/extract_part_genes.pl
     # real	59m18,837s
     # user	17m19,957s
@@ -53,10 +53,10 @@
     cd "${DATADIR}"
     FILTFILE="filter.txt"
     perl -e 'print "ACACH\nCORBR\nGEOFO\nMANVI\n"' > "${FILTFILE}"
-    FILTERED="${DATADIR}/reference/part_fasta_files"
+    FILTERED="${DATADIR}/reference/fasta_files"
     mkdir -p "${FILTERED}"
 
-    #time for f in $(find ${JARVISDIR}/part_fasta_files -name '*.fas') ; do
+    #time for f in $(find ${JARVISDIR}/fasta_files -name '*.fas') ; do
     #    g=$(basename "${f}")
     #    partname=${g%%.*}
     #    outfile="${FILTERED}/${partname}.fas"
@@ -75,7 +75,7 @@
         fastagrep -t -f "${FILTFILE}" "$1" | sed '/^$/d' > "${outfile}"
     }
     export -f my_func
-    time find ${JARVISDIR}/part_fasta_files -name '*.fas' -print | \
+    time find ${JARVISDIR}/fasta_files -name '*.fas' -print | \
         parallel my_func
     rm "${FILTFILE}"
 
@@ -84,7 +84,7 @@
 
     cd ${REFERENCEDIR}
     mkdir -p ${SELECTED}/fas
-    cp $(get_fasta_info.pl part_fasta_files/*.fas 2>/dev/null | \
+    cp $(get_fasta_info.pl fasta_files/*.fas 2>/dev/null | \
         awk '$2<4e3' | \
         awk '$2>99' | \
         awk '$1==4' | \
@@ -153,12 +153,12 @@
                        print;
                    };
                  };
-                 close(F);' >> part_selected_shortlabel.fas
+                 close(F);' >> selected_shortlabel.fas
     done
 
-    ${SRCDIR}/remove_gaps_in_fasta.pl part_selected_shortlabel.fas | \
+    ${SRCDIR}/remove_gaps_in_fasta.pl selected_shortlabel.fas | \
         ${SRCDIR}/fasta_unwrap.pl | \
-        ${SRCDIR}/fasta_wrap.pl > part_selected_shortlabel.degap.fas
+        ${SRCDIR}/fasta_wrap.pl > selected_shortlabel.degap.fas
 
 
 ### Compress directories

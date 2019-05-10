@@ -1,6 +1,6 @@
 # Run
 
-    # - Last modified: ons apr 24, 2019  12:54
+    # - Last modified: tor maj 09, 2019  11:11
     # - Sign: JN
     # - Note: These commands are for running one genome at a time.
     #         Iterative/parallel runs on several genomes may be attempted
@@ -39,7 +39,7 @@
     GENOMEFILE='AbucgeM_genome.fa.fa.gz'
     GENOME=${GENOMEFILE%%.*}
 
-    PROJECTDIR='/home/nylander/run/pe/birdscanner'
+    PROJECTDIR='/home/nylander/run/pe/birdscanner-part'
 
     DATADIR="$PROJECTDIR/data"
     REFERENCEDIR="$DATADIR/reference"

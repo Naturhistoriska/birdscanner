@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre apr 12, 2019  01:06
+# Last modified: tor maj 09, 2019  04:47
 # Sign: JN
 
 # Some settings
@@ -8,10 +8,14 @@ NCPU      := 10
 ALILENGTH := 200
 
 # Directories (need to be in place)
+#
 # birdscanner 
 # ├── data
 # │   ├── genomes
 # │   └── reference
+# │       ├── fasta_files
+# │       └── selected
+# │           └── hmm
 # ├── doc
 # │   └── workflow
 # ├── Makefile
@@ -20,11 +24,16 @@ ALILENGTH := 200
 # ├── README.pdf
 # ├── run
 # │   ├── hmmer
-# │   ├── plast
-# │   └── README.md
-# ├── src
-# └── tmp
-#
+# │   └── plast
+# └── src
+
+
+# Some settings
+SHELL := /bin/bash
+NCPU      := 10
+ALILENGTH := 200
+REFFAS := selected_shortlabel.degap.fas
+
 PROJECTDIR   := $(shell pwd)
 RUNDIR       := $(PROJECTDIR)/run
 DATADIR      := $(PROJECTDIR)/data
@@ -37,12 +46,12 @@ HMMERDIR     := $(RUNDIR)/hmmer
 OUTDIR       := $(PROJECTDIR)/out
 
 # Files (need to be in place)
-GENOMEFILES          := $(wildcard $(GENOMESDIR)/*)
-PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/selected_shortlabel.degap.fas
-PLASTQUERYFP         := $(PLASTDIR)/selected_shortlabel.degap.fas
+GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
+PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/$(REFFAS)
+PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
+
 
 # Programs (need to be in place)
-GREPFASTA     := $(SRCDIR)/grepfasta.pl
 SPLITFAST     := $(SRCDIR)/splitfast-100K
 PARSENHMMER   := $(SRCDIR)/parse-nhmmer.pl
 REMOVEGAPS    := $(SRCDIR)/remove_gaps_in_fasta.pl
@@ -51,7 +60,6 @@ REQUIRED_BINS := hmmpress nhmmer plast makeblastdb
 
 $(foreach bin,$(REQUIRED_BINS),\
 	$(if $(shell command -v $(bin) 2> /dev/null),,$(error Error: could not find program `$(bin)`)))
-
 
 # Output files and rules
 .PHONY: preplast splitfast dbfiles plast parseplast hmmer 
@@ -118,6 +126,7 @@ PLASTFASFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.plast$(ALILENG
 $(PLASTDIR)/%.plast$(ALILENGTH).fas: $(PLASTDIR)/%.searchfile1 $(PLASTDIR)/%.split.fas
 	$(GREPFASTA) -f $^ > $@
 
+
 # 8. Refids: awk '$4>200' %.selected.plast.tab | \
 #        perl -npe 's/-\w+//' | \
 #        sort -t$'\t' -k1g -k12rg | \
@@ -142,6 +151,14 @@ $(PLASTDIR)/%.searchfile2: $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids
 SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_concat.hmm,$(SEARCHFILES2))
 
 $(HMMERDIR)/%.selected_concat.hmm: $(PLASTDIR)/%.searchfile2
+	#cat $$(find $(SELECTEDDIR)/hmm -type f -name \*.hmm | grep -f $<) > $@
+	# Crate new recepie here for concatenating correct files
+	# Based on this stub:
+	# cat $(TTT='/home/nylander/run/pe/birdscanner-part/run/plast/' && \
+	#     sed -e "s#.*#${TTT}&\.fas.degap.hmm#" /home/nylander/run/pe/birdscanner-part/run/plast/SaureNRM_genome.plast200.ref.ids)
+	#
+	#
+	#
 	cat $$(find $(SELECTEDDIR)/hmm -type f -name \*.hmm | grep -f $<) > $@
 
 # 11. Hmmpress: hmmpress %.selected_concat.hmm
@@ -200,12 +217,13 @@ readplast: $(SCAFFOLDIDS) $(SEARCHFILES1) $(PLASTFASFILES) $(REFIDS) $(SEARCHFIL
 parseplast:
 	$(MAKE) -j$(NCPU) readplast
 
-#slurm:
-#	cd $(HMMERDIR) ; \
-#	for f in *.hmm; do g=$(basename "$f" .selected_concat.hmm); ../../src/create_slurm_file.pl -g "$g"; done ; \
-#	cd $(PROJECTDIR); \
-#	tar -I pigz -cvf run4uppmax.tgz run/plast/*.plast200.fas run/hmmer/*.selected_concat.hmm run/hmmer/*.nhmmer.slurm.sh ;
+# Note: need to change the hardcoded ".plast200.fas" below
 # The size of run4uppmax.tgz was 2.6G, expanded size 27G.
+slurm:
+	cd $(HMMERDIR) ; \
+	for f in *.hmm; do g=$$(basename "$$f" .selected_concat.hmm); $(SRCDIR)/create_slurm_file.pl -g "$$g"; done ; \
+	cd $(PROJECTDIR); \
+	tar -I pigz -cvf run4uppmax.tgz $(PLASTDIR)/*.plast200.fas $(HMMERDIR)/*.selected_concat.hmm $(HMMERDIR)/*.nhmmer.slurm.sh ;
 
 hmmer: $(HMMEROUT)
 
