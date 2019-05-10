@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre maj 10, 2019  08:33
+# Last modified: fre maj 10, 2019  09:17
 # Sign: JN
 
 
@@ -141,6 +141,20 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 		sort -t$$'\t' -k1g -k12rg | \
 		awk -F $$'\t' '!x[$$1]++' | \
 		awk -F $$'\t' '{print $$1}' > $@
+
+## TODO: Rewrite 9. and 10. to one step.
+# We want to read each genome specific /home/nylander/run/pe/birdscanner-part/run/plast/*.ref.ids
+# and for each ref.ids file, find the corresponding /home/nylander/run/pe/birdscanner-part/data/reference/selected/hmm/<ID>.fas.degap.hmm
+# Stub:
+#
+#    TTT='/home/nylander/run/pe/birdscanner-part/run/plast/'
+#    while read theid; do
+#      echo "$theid"; \
+#      find /home/nylander/run/pe/birdscanner-part -name "${theid}.fas.degap.hmm";\
+#      #echo "${TTT}${theid}.fas.degap.hmm"; \
+#    done < /home/nylander/run/pe/birdscanner-part/run/plast/SaureNRM_genome.plast200.ref.ids > OUTFILE
+
+
 
 
 # 9. Searchfile2: sed -e 's/\([0-9]\+\)/hmm\/\1\.sate/' %.plast200.ref.ids > %.searchfile2
