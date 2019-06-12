@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: fre maj 03, 2019  01:13
+- Last modified: ons jun 12, 2019  01:27
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -13,14 +13,20 @@ Extract known genomic regions from scaffold-files.
 
 ## Suggested usage
 
-### Add genome data
+### 1. Add genome data
 
 Add compressed (`gzip`) genome files to the folder `data/genomes/`.
 Files need to be named named (example) `<name>.gz`. The `<name>` should
 be unique and will be used in the output as label for the extracted
 sequences.
 
-### Run the workflow
+### 2. Add reference data
+
+Reference data are a number of nucleotide sequence alignments in fasta format.
+Documentation is currently work in process.
+Please see the file `data/reference/README.md`.
+
+### 3. Run the workflow
 
 I would recommend running the pipeline in steps. The "plast" step will
 take approx 20 mins/genome, while the "nhmmer" step will take > ~30 h/per genome(!).
