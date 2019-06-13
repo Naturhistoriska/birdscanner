@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: tor jun 13, 2019  04:13
+- Last modified: tor jun 13, 2019  04:17
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -36,7 +36,7 @@ Run initial similarity search:
 
     [local]$ make init
     [local]$ make plast
-    [local]$ parseplast
+    [local]$ make parseplast
 
 Run hmmer:
 
