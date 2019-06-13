@@ -4,9 +4,9 @@
 
 =head1
 
-         FILE: extract-fasta-coordinates.pl
+         FILE: extract_fasta_coordinates.pl
 
-        USAGE: ./extract-fasta-coordinates.pl [-s=<start>] [-e=<end>] [-o=<string>] INPUT  
+        USAGE: ./extract_fasta_coordinates.pl [-s=<start>] [-e=<end>] [-o=<string>] INPUT  
 
   DESCRIPTION: Extract positions from fasta formatted sequence entries.
                Reads from stdin, prints to stdout.
@@ -30,7 +30,7 @@
 
       CREATED: 09/22/2015 02:53:00 PM
 
-     REVISION: ---
+     REVISION: 2019-06-13
 
 =cut
 

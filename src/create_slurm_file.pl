@@ -5,10 +5,10 @@
 
 =head2
 
-         FILE: create-slurm-file.pl
+         FILE: create_slurm_file.pl
 
-        USAGE: ./create-slurm-file.pl -a <account> -g <genome> [-t <time>][-c <cluster>] > <genome>.nhmmer.slurm.sh
-               ./create-slurm-file.pl -a snic2017-7-10 -g PvioviF_genome  > PvioviF_genome.nhmmer.slurm.sh
+        USAGE: ./create_slurm_file.pl -a <account> -g <genome> [-t <time>][-c <cluster>] > <genome>.nhmmer.slurm.sh
+               ./create_slurm_file.pl -a snic2017-7-10 -g PvioviF_genome  > PvioviF_genome.nhmmer.slurm.sh
 
 
   DESCRIPTION: Generate slurm file for running nhmmer.
@@ -74,7 +74,7 @@
 
       CREATED: 04/03/2019 10:34:41 AM
 
-     REVISION: fre 12 apr 2019 15:28:58
+     REVISION: 2019-06-13
 
 =cut
 

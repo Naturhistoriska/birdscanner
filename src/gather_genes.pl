@@ -1,13 +1,13 @@
-#!/usr/bin/perl 
+#!/usr/bin/env perl 
 #===============================================================================
 =pod
 
 
 =head2
 
-         FILE: gather-genes.pl
+         FILE: gatherr_genes.pl
 
-        USAGE: ./gather-genes.pl --outdir=out  inputfolders
+        USAGE: ./gather_genes.pl --outdir=out  inputfolders
 
   DESCRIPTION: Gather genes from parsed nhmmer output. The script takes
                folder names as input, where it expects fasta files named
@@ -33,7 +33,7 @@
 
       CREATED: 2019-04-12 16:12:21
 
-     REVISION: ---
+     REVISION: 2019-06-13
 
 =cut
 

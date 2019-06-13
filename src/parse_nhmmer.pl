@@ -5,15 +5,15 @@
 
 =head1
 
-         FILE:  parse-nhmmer.pl
+         FILE:  parse_nhmmer.pl
 
-        USAGE: ./parse-nhmmer.pl -i nhmmer.out -g genome.fas [-d outdir] [-p prefix] [--nostats] [-f output-fasta-header]
+        USAGE: ./parse_nhmmer.pl -i nhmmer.out -g genome.fas [-d outdir] [-p prefix] [--nostats] [-f output-fasta-header]
 
-               ./parse-nhmmer.pl \
+               ./parse_nhmmer.pl \
                    -i run/hmmer/AbucgeM_genome.nhmmer.out \
                    -g run/plast/AbucgeM_genome.plast200.fas
 
-               perl src/parse-nhmmer.pl \
+               perl src/parse_nhmmer.pl \
                    -i run/hmmer/AbucgeM_genome.nhmmer.out \
                    -g run/plast/AbucgeM_genome.plast200.fas \
                    -d out/AbucgeM_genome_hmmer \
@@ -65,7 +65,7 @@
 
       CREATED: 09/17/2015 11:06:04 PM
 
-     REVISION: Wed 20 Mar 2019 11:59:28 AM CET
+     REVISION: 2019-06-13
 
 =cut
 

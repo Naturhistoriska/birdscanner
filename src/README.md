@@ -1,21 +1,21 @@
 # README.md for birdscanner/src
 
-- Last modified: mån apr 15, 2019  10:16
+- Last modified: Thu Jun 13
 - Sign: JN
 
 ## Programs and scripts used
 
 ### In-house scripts
 
-- create-slurm-file.pl
-- extract-fasta-coordinates.pl
+- create_slurm_file.pl
+- extract_fasta_coordinates.pl
 - fasta2stockholm.pl
 - fasta_unwrap.pl
 - fasta_wrap.pl
-- gather-genes.pl
-- parse-nhmmer.pl
+- gather_genes.pl
+- parse_nhmmer.pl
 - remove_gaps_in_fasta.pl
-- splitfast-100K
+- splitfast_100K
 
 ### Public software (Debian/\*buntu, or GitHub)
 

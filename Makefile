@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre maj 10, 2019  09:17
+# Last modified: 2019-June-13
 # Sign: JN
 
 
@@ -46,11 +46,12 @@ PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
 
 
 # Programs (need to be in place)
-SPLITFAST     := $(SRCDIR)/splitfast-100K
-PARSENHMMER   := $(SRCDIR)/parse-nhmmer.pl
+GREPFASTA     := $(SRCDIR)/grepfasta.pl
+SPLITFAST     := $(SRCDIR)/splitfast_100K
+PARSENHMMER   := $(SRCDIR)/parse_nhmmer.pl
 REMOVEGAPS    := $(SRCDIR)/remove_gaps_in_fasta.pl
 SLURMFILES    := $(SRCDIR)/create_slurm_files.pl
-REQUIRED_BINS := hmmpress nhmmer plast makeblastdb
+REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl
 
 $(foreach bin,$(REQUIRED_BINS),\
 	$(if $(shell command -v $(bin) 2> /dev/null),,$(error Error: could not find program `$(bin)`)))
