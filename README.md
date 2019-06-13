@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: ons jun 12, 2019  01:27
+- Last modified: tor jun 13, 2019  04:13
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -40,9 +40,9 @@ Run initial similarity search:
 
 Run hmmer:
 
-    #[local]$ make hmmer
-
 **Current ad-hoc steps**: run on uppmax.uu.se
+
+Create files to be transferred:
 
     [local]$ make slurm
 
@@ -64,7 +64,7 @@ Run hmmer using the slurm files:
     [uppmax]$ cd path/to/birdscanner/run/hmmer
     [uppmax]$ for f in *.slurm.sh ; do sbatch "$f" ; done
 
-Parse hmmer output (*documentation not updated*):
+Parse hmmer output (*documentation not updated. Try next make step on Uppmax!*):
 
     make parsehmmer
 
