@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/env perl
 #===============================================================================
 =pod
 
@@ -26,7 +26,7 @@
         NOTES: Modified from fasta2stockholm.pl 02/22/2010 02:30:02 PM CET
                Note: reads only the first word in the fasta header!
 
-       AUTHOR: Johan Nylander (JN), johan.nylander@bils.se
+       AUTHOR: Johan Nylander (JN), johan.nylander@nbis.se
 
       COMPANY: BILS/NRM
 
@@ -34,7 +34,7 @@
 
       CREATED: 02/22/2010 07:12:32 PM CET
 
-     REVISION: ---
+     REVISION: 2019 06 13 
 
 =cut
 
@@ -59,15 +59,19 @@ my $any          = 0;
 my $suffix       = ".degap.fas";
 my $gap          = '-';
 my $print_length = 80;
+my $verbose      = 0;
+my $debug        = 0;
 
 ## Handle arguments
 if (@ARGV < 1) {
     die $usage;
 }
 else {
-    GetOptions('help' => sub {print $usage; exit(0);},
-               'all'  => \$all,
-               'any'  => \$any,
+    GetOptions('help'    => sub {print $usage; exit(0);},
+               'all'     => \$all,
+               'any'     => \$any,
+               'verbose' => \$verbose,
+               'debug'   => \$debug,
               );
 }
 
@@ -81,9 +85,9 @@ while ( my $fasta = shift(@ARGV) ) {
     my $outfile     = q{};
     my @gap_columns = ();
 
-    open FASTA, "<$fasta" or die "Couldn't open '$fasta': $!";
-    print STDERR "$fasta: ";
-    while (<FASTA>) {
+    open my $FASTA, "<", $fasta or die "Couldn't open '$fasta': $!";
+    print STDERR "$fasta: " if $verbose;
+    while (<$FASTA>) {
         chomp();
         if (/^\s*>\s*(\S+)/) {
             $name = $1;
@@ -95,16 +99,16 @@ while ( my $fasta = shift(@ARGV) ) {
                 warn "Ignoring: $_";
             }
             else {
-                print STDERR "replacing white space in input\n";
+                print STDERR "replacing white space in input\n" if $verbose;
                 s/\s//g;
-                print STDERR "splitting line in input\n";
+                print STDERR "splitting line in input\n" if $verbose;
                 my @line = split //, $_;
-                print STDERR "pushing lines in input\n";
+                print STDERR "pushing lines in input\n" if $verbose;
                 push ( @{$seq_hash{$name}}, @line );
             }
         }
     }
-    close FASTA;
+    close $FASTA;
     
     ## Check all seqs are same length
     my $length;
@@ -142,7 +146,7 @@ while ( my $fasta = shift(@ARGV) ) {
                 }
             }
         }
-        #print STDERR "Any gap in columns: ", @gap_columns, "\n";
+        print STDERR "Any gap in columns: ", @gap_columns, "\n" if $debug;
     }
     else {
         ## Remove gap-only columns
@@ -155,13 +159,13 @@ while ( my $fasta = shift(@ARGV) ) {
                 push @gap_columns, $i;
             }
         }
-        #print STDERR "All-gaps in columns: ", @gap_columns, "\n";
+        print STDERR "All-gaps in columns: ", @gap_columns, "\n" if $debug;
     }
 
     ## Check if any gaps where found
     if(scalar(@gap_columns) > 0) {
         my $p = scalar(@gap_columns);
-        print STDERR "removing $p positions, ";
+        print STDERR "removing $p positions, " if $verbose;
         foreach my $name (@names) {
             foreach my $pos (@gap_columns) {
                 $seq_hash{$name}->[$pos] =~ s/\S//;
@@ -170,15 +174,17 @@ while ( my $fasta = shift(@ARGV) ) {
     }
 
     ## Print sequences
+    $fasta =~ s/\.[^.]+$//;
     $outfile = $fasta . $suffix;
     open my $OUTFILE, ">", $outfile or die "could not open outfile : $! \n";
-    print STDERR "writing $outfile\n";
+    print STDERR "writing $outfile\n" if $verbose;
     foreach my $name (@names) {
         print $OUTFILE ">$name\n";
         my $seq = join( '', @{$seq_hash{$name}} );
         $seq =~ s/\S{80}/$&\n/g;
         print $OUTFILE "$seq\n";
     }
+    close $OUTFILE;
 }
 
 exit();
