@@ -246,7 +246,7 @@ slurm:
 	cd $(HMMERDIR) ; \
 	for f in *.hmm; do g=$$(basename "$$f" .selected_concat.hmm); $(SRCDIR)/create_slurm_file.pl -g "$$g"; done ; \
 	cd $(PROJECTDIR); \
-	tar -I pigz -cvf run4uppmax.tgz $(PLASTDIR)/*.plast$(ALILENGTH).fas $(HMMERDIR)/*.selected_concat.hmm $(HMMERDIR)/*.nhmmer.slurm.sh ;
+	tar -I pigz -cvf run4uppmax.tgz run/plast/*.plast$(ALILENGTH).fas run/hmmer/*.selected_concat.hmm run/hmmer/*.nhmmer.slurm.sh ;
 
 hmmer: $(HMMEROUT)
 

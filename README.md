@@ -34,17 +34,38 @@ It would recommend to run the nhmmer-step on, e.g., Uppmax.
 
 Run initial similarity search:
 
-    make init
-    make plast
-    make parseplast
+    [local]$ make init
+    [local]$ make plast
+    [local]$ parseplast
 
-Current ad-hoc step: prepare files for uppmax.uu.se
+Run hmmer:
 
-    make slurm
+    #[local]$ make hmmer
 
-Copy files to uppmax. Run hummer on the remote resources.
+**Current ad-hoc steps**: run on uppmax.uu.se
 
-    #make hmmer
+    [local]$ make slurm
+
+Copy file to uppmax:
+
+    [local]$ scp run4uppmax.tgz rackham.uppmax.uu.se:.
+
+Then log in to uppmax, clone the "birdscanner" repo:
+
+    [uppmax]$ git clone https://github.com/Naturhistoriska/birdscanner.git
+
+Move the run4uppmax.tgz to the "birdscanner" directory, and uncompress.
+
+    [uppmax]$ mv ~/run4uppmax.tgz path/to/birdscanner
+    [uppmax]$ tar xvzf path/to/birdscanner/run4uppmax.tgz
+
+Run hmmer using the slurm files:
+
+    [uppmax]$ cd path/to/birdscanner/run/hmmer
+    [uppmax]$ for f in *.slurm.sh ; do sbatch "$f" ; done
+
+Parse hmmer output (*documentation not updated*):
+
     make parsehmmer
 
 ### Results
