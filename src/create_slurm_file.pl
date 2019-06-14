@@ -172,6 +172,11 @@ module load bioinfo-tools $hmmer
 
 BIRDSCANNERDIR=\$1
 
+if [ -z "\$BIRDSCANNERDIR" ]; then
+  echo "Error: Need to provide full path to birdscanner directory as argument to the slurm script."
+  exit 1
+fi
+
 ## Copy files to \$SNIC_TMP
 cp \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \$SNIC_TMP
 cp \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas \$SNIC_TMP
