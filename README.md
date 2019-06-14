@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: fre jun 14, 2019  12:40
+- Last modified: fre jun 14, 2019  12:47
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -66,7 +66,7 @@ Run hmmer using the slurm files:
 
 Parse hmmer output (*documentation not updated. Try next make step on Uppmax!*):
 
-    make parsehmmer
+    [uppmax]$ make parsehmmer
 
 ### Results
 
