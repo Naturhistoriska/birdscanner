@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: 2019-June-13
+# Last modified: fre jun 14, 2019  02:11
 # Sign: JN
 
 
@@ -204,12 +204,19 @@ $(HMMERDIR)/%.nhmmer.out: $(HMMERDIR)/%.selected_concat.hmm $(PLASTDIR)/%.plast$
 		$^
 
 
-# 13. Hmmer_parse_output: perl $SRCDIR/parse-nhmmer.pl \
+# 13. Hmmer_parse_output: perl $SRCDIR/parse_nhmmer.pl \
 #        -i %.nhmmer.out \
 #        -g %.plast200.fas \
 #        -d %_nhmmer_output \
 #        -f % \
 #        -p %
+#
+# perl src/parse_nhmmer.pl \
+#     -i run/hmmer/Ainor_genome.nhmmer.out \
+#     -g run/plast/Ainor_genome.plast200.fas \
+#     -d /proj/uppstore2018005/birdscanner/out/Ainor_genome_nhmmer_output/ \
+#     -f Ainor_genome \
+#     -p Ainor_genome
 HMMEROUTDIR := $(patsubst $(HMMERDIR)/%.nhmmer.out,$(OUTDIR)/%_nhmmer_output/,$(HMMEROUT))
 
 $(OUTDIR)/%_nhmmer_output/: $(HMMERDIR)/%.nhmmer.out
