@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: tor jun 13, 2019  04:17
+- Last modified: fre jun 14, 2019  12:40
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -62,7 +62,7 @@ Move the run4uppmax.tgz to the "birdscanner" directory, and uncompress.
 Run hmmer using the slurm files:
 
     [uppmax]$ cd path/to/birdscanner/run/hmmer
-    [uppmax]$ for f in *.slurm.sh ; do sbatch "$f" ; done
+    [uppmax]$ for f in *.slurm.sh ; do sbatch "$f" /path/to/birdscanner; sleep 1 ; done
 
 Parse hmmer output (*documentation not updated. Try next make step on Uppmax!*):
 

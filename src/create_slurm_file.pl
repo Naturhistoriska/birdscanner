@@ -74,7 +74,7 @@
 
       CREATED: 04/03/2019 10:34:41 AM
 
-     REVISION: 2019-06-13
+     REVISION: fre 14 jun 2019 12:39:38
 
 =cut
 
@@ -88,19 +88,20 @@ use Getopt::Long;
 
 exec("perldoc", $0) unless (@ARGV);
 
-my $account     = 'snic2017-7-10';
-my $cluster     = 'rackham,snowy';
-my $filesuffix  = '.nhmmer.slurm.sh';
-my $genome      = q{};
-my $hmmer       = 'hmmer/3.2.1-intel';
-my $ncpu        = 10;
-my $out         = 1;
-my $outfile     = q{};
-my $path        = '/proj/uppstore2018005/johan';
-my $partition   = 'core';
-my $standardout = 0;
-my $time        = '40:00:00';
-my $PRINT;        # Print file handle. Using the typeglob notation below
+my $account      = 'snic2017-7-10';
+my $cluster      = 'rackham,snowy';
+my $filesuffix   = '.nhmmer.slurm.sh';
+my $genome       = q{};
+my $hmmer        = 'hmmer/3.2.1-intel';
+my $ncpu         = 10;
+my $out          = 1;
+my $outfile      = q{};
+my $path         = q{}; #'/proj/uppstore2018005/johan'
+my $partition    = 'core';
+my $standardout  = 0;
+my $time         = '40:00:00';
+my $slurm_script = q{};
+my $PRINT; # Print file handle. Using the typeglob notation below
 
 GetOptions(
     "account=s"   => \$account,
@@ -125,9 +126,79 @@ else {
     open ($PRINT, '>', $outfile) or die "$0 : Failed to open output file $out : $!\n\n";
 }
 
+if ($path eq '') {
+$slurm_script = <<"END_SLURM";
+#!/bin/bash -l
+
+#SBATCH -J $genome.nhmmer
+#SBATCH -A $account
+#SBATCH -t $time
+#SBATCH -p $partition
+#SBATCH -n $ncpu
+#SBATCH --output=/dev/null
+#SBATCH --error=$genome.nhmmer.err
+
+# Slurm script for nhmmer.
+#
+# The slurm script needs to be submitted in
+# the run/hmmer dir (the same dir as the script).
+#
+# Test by using:
+#     sbatch --test-only $genome.nhmmer.slurm.sh /path/to/birdscanner
+#
+# Start by using:
+#     sbatch $genome.nhmmer.slurm.sh /path/to/birdscanner
+#
+# Stop by using:
+#     scancel 1234
+#     scancel -i -u user
+#     scancel --state=pending -u user
+#
+# Monitor by using:
+#    jobinfo -u \$USER
+#    squeue
+#
+# Data required (example):
+# ./run/hmmer/$genome.selected_concat.hmm
+# ./run/plast/$genome.plast200.fas
+#
+# File structure:
+#    run
+#    ├── hmmer/$genome.selected_concat.hmm
+#    ├── hmmer/$genome.nhmmer.slurm.sh
+#    └── plast/$genome.plast200.fas
+
+module load bioinfo-tools $hmmer
+
+BIRDSCANNERDIR=\$1
+
+## Copy files to \$SNIC_TMP
+cp \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \$SNIC_TMP
+cp \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas \$SNIC_TMP
+cd \$SNIC_TMP
+
+nhmmer --notextw --cpu $ncpu \\
+    --tblout \${SNIC_TMP}/$genome.nhmmer.out \\
+    \${SNIC_TMP}/$genome.selected_concat.hmm \\
+    \${SNIC_TMP}/$genome.plast200.fas
+
+# Copy back
+cp \${SNIC_TMP}/$genome.nhmmer.out \${BIRDSCANNERDIR}/run/hmmer/.
+rm \${SNIC_TMP}/$genome.selected_concat.hmm
+rm \${SNIC_TMP}/$genome.plast200.fas
+
+#nhmmer --notextw --cpu $ncpu \\
+#    --tblout \${BIRDSCANNERDIR}/run/hmmer/$genome.nhmmer.out \\
+#    \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \\
+#    \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas
+
+END_SLURM
+
+}
+else {
 # Include the following later: '#SBATCH -M $cluster'
 
-my $slurm_script = <<"END_SLURM";
+$slurm_script = <<"END_SLURM";
 #!/bin/bash -l
 
 #SBATCH -J $genome.nhmmer
@@ -191,7 +262,9 @@ rm \$SNIC_TMP/$genome.plast200.fas
 #    $path/run/plast/$genome.plast200.fas
 
 END_SLURM
- 
+
+}
+
 print $PRINT $slurm_script;
 
 if ($outfile) {
