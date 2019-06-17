@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: mån jun 17, 2019  04:43
+# Last modified: mån jun 17, 2019  04:51
 # Sign: JN
 
 
@@ -232,9 +232,7 @@ $(OUTDIR)/%_nhmmer_output/: $(HMMERDIR)/%.nhmmer.out
 
 # Tasks:
 
-all: init plast parseplast
-
-#all: init plast parseplast hmmer parsehmmer
+all: refdata init plast parseplast slurm
 
 refdata:
 	$(MAKE) -C $(REFERENCEDIR)
