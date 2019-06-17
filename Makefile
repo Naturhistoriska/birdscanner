@@ -1,7 +1,6 @@
 # Makefile for birdscanner
-# Last modified: mån jun 17, 2019  04:51
+# Last modified: mån jun 17, 2019  05:01
 # Sign: JN
-
 
 # Directories (need to be in place)
 #
@@ -19,7 +18,6 @@
 # │   ├── hmmer
 # │   └── plast
 # └── src
-
 
 # Some settings
 SHELL := /bin/bash
@@ -42,12 +40,13 @@ OUTDIR       := $(PROJECTDIR)/out
 
 export PROJECTDIR
 
+# All
+all: refdata init plast parseplast slurm
 
 # Files (need to be in place)
 GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
 PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/$(REFFAS)
 PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
-
 
 # Programs (need to be in place)
 GREPFASTA     := $(SRCDIR)/grepfasta.pl
@@ -60,13 +59,11 @@ REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl
 $(foreach bin,$(REQUIRED_BINS),\
 	$(if $(shell command -v $(bin) 2> /dev/null),,$(error Error: could not find program `$(bin)`)))
 
-
 # Output files and rules
-.PHONY: preplast splitfast dbfiles plast parseplast hmmer 
+.PHONY: all refdata init splitfast plastdb plast readplast parseplast slurm hmmer readhmmer parsehmmer copytestdata
 
 $(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
 	ln -sf $< $@
-
 
 # 2. Split fasta: splitfast-100K <(gunzip -c $GENOMEFILE) > ${GENOME}.split.fas
 SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run\/plast}; echo $${n%%.*}.split.fas; done)
@@ -74,14 +71,12 @@ SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run
 $(PLASTDIR)/%.split.fas: $(GENOMESDIR)/%.gz
 	$(SPLITFAST) <(gunzip -c $<) > $@
 
-
 # 3. lw.fas.nin: makeblastdb -dbtype nucl -in %.split.fas
 DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLITFILES))
 
 $(PLASTDIR)/%.split.fas.nin: $(PLASTDIR)/%.split.fas
 	cd $(PLASTDIR); \
 	makeblastdb -dbtype nucl -in $<
-
 
 # 4. Plastoutput: plast -p plastn \
 #        -i selected_shortlabel.degap.fas \
@@ -101,7 +96,6 @@ $(PLASTDIR)/%.selected.plast.tab: $(PLASTDIR)/%.split.fas $(PLASTQUERYFP)
 		-max-hit-per-query 1 \
 		-bargraph
 
-
 # 5. Scaffoldsid:  awk '$4>200' %.selected.plast.tab | \
 #        perl -npe 's/-\w+//' | \
 #        sort -t$'\t' -k1g -k12rg | \
@@ -118,20 +112,17 @@ $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids: $(PLASTDIR)/%.selected.plast.tab
 		awk -F $$'\t' '{print $$2}' | \
 		sort -u > $@
 
-
 # 6. Searchfile1: sed -e 's/$/\$/' -e 's/^/\^>/' %.plast200.scaffold.ids > %.searchfile1
 SEARCHFILES1 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids,$(PLASTDIR)/%.searchfile1,$(SCAFFOLDIDS))
 
 $(PLASTDIR)/%.searchfile1: $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids
 	sed -e 's/$$/\$$/' -e 's/^/\^>/' $< > $@
 
-
 # 7. Plast200.fas: grepfasta.pl -f %.searchfile1 %.split.fas > %.plast200.fas
 PLASTFASFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.plast$(ALILENGTH).fas,$(SPLITFILES))
 
 $(PLASTDIR)/%.plast$(ALILENGTH).fas: $(PLASTDIR)/%.searchfile1 $(PLASTDIR)/%.split.fas
 	$(GREPFASTA) -f $^ > $@
-
 
 # 8. Refids: awk '$4>200' %.selected.plast.tab | \
 #        perl -npe 's/-\w+//' | \
@@ -146,7 +137,6 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 		sort -t$$'\t' -k1g -k12rg | \
 		awk -F $$'\t' '!x[$$1]++' | \
 		awk -F $$'\t' '{print $$1}' > $@
-
 
 ## TODO: Rewrite 9. and 10. to one step.
 # We want to read each genome specific /home/nylander/run/pe/birdscanner-part/run/plast/*.ref.ids
@@ -166,7 +156,6 @@ SEARCHFILES2 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTDIR)/%
 $(PLASTDIR)/%.searchfile2: $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids
 	sed -e 's/\([0-9]\+\)/hmm\/\1\.sate/' $< > $@
 
-
 # 10. Selected_concat.hmm: cat $(find $SELECTED/hmm -type f -name \*.hmm | grep -f %.searchfile2) > ${RUNDIR}/hmmer/%.selected_concat.hmm
 SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_concat.hmm,$(SEARCHFILES2))
 
@@ -181,14 +170,12 @@ $(HMMERDIR)/%.selected_concat.hmm: $(PLASTDIR)/%.searchfile2
 	#
 	cat $$(find $(SELECTEDDIR)/hmm -type f -name \*.hmm | grep -f $<) > $@
 
-
 # 11. Hmmpress: hmmpress %.selected_concat.hmm
 HMMPRESSFILES := $(patsubst $(HMMERDIR)/%.hmm,$(HMMERDIR)/%.hmm.h3f,$(SELECTEDHMMS))
 
 $(HMMERDIR)/%.hmm.h3f: $(HMMERDIR)/%.hmm
 	cd $(HMMERDIR) ; \
 	hmmpress $<
-
 
 # 12. Hmmerout: nhmmer \
 #        --tblout %.nhmmer.out \
@@ -204,7 +191,6 @@ $(HMMERDIR)/%.nhmmer.out: $(HMMERDIR)/%.selected_concat.hmm $(PLASTDIR)/%.plast$
 		--notextw \
 		--cpu $(NCPU) \
 		$^
-
 
 # 13. Hmmer_parse_output: perl $SRCDIR/parse_nhmmer.pl \
 #        -i %.nhmmer.out \
@@ -229,10 +215,9 @@ $(OUTDIR)/%_nhmmer_output/: $(HMMERDIR)/%.nhmmer.out
 		-f $* \
 		-p $*
 
-
 # Tasks:
 
-all: refdata init plast parseplast slurm
+#all: refdata init plast parseplast slurm
 
 refdata:
 	$(MAKE) -C $(REFERENCEDIR)
@@ -278,6 +263,7 @@ distclean:
 	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \
 	cd $(OUTDIR) ; rm -rf *_nhmmer_output
 
-copytestfiles:
+copytestdata:
 	cp -v -u $(PROJECTDIR)/testdata/data/genomes/*.gz $(GENOMESDIR) ; \
 	cp -v -u $(PROJECTDIR)/testdata/data/reference/fasta_files/*.fas $(REFERENCEDIR)/fasta_files
+
