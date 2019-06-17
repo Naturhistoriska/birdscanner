@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: mån jun 17, 2019  03:53
+# Last modified: mån jun 17, 2019  04:43
 # Sign: JN
 
 
@@ -271,11 +271,15 @@ parsehmmer:
 #	( cd $(PLASTDIR) ; $(RM) * ; cd $(HMMERDIR) ; $(RM) * )
 
 distclean:
+	cd $(PROJECTDIR) ; $(RM) run4uppmax.tgz ; \
 	cd $(GENOMESDIR) ; $(RM) *.gz ; \
 	cd $(REFERENCEDIR)/fasta_files ; $(RM) *.fas ; \
 	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
 	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
-	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm ; \
-	cd $(PLASTDIR) ; $(RM) *.plast*.fas ; \
+	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm* *.sh ; \
+	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \
 	cd $(OUTDIR) ; rm -rf *_nhmmer_output
 
+copytestfiles:
+	cp -v -u $(PROJECTDIR)/testdata/data/genomes/*.gz $(GENOMESDIR) ; \
+	cp -v -u $(PROJECTDIR)/testdata/data/reference/fasta_files/*.fas $(REFERENCEDIR)/fasta_files

@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: mån jun 17, 2019  04:21
+- Last modified: mån jun 17, 2019  04:40
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -89,3 +89,10 @@ gathered genes are in `out/genes/`.
 The gene files in `out/genes/` can be further analyzed (multiple sequence alignments,
 phylogenetic tree reconstruction, etc). One such approach is described in the file
 `run/README.trees.md`.
+
+## Clean up
+
+To remove all input- and output files (including the fasta files and the genome files):
+
+    [uppmax]$ make distclean
+
