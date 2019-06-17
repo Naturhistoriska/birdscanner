@@ -1,17 +1,26 @@
 # BirdScanner
 
-- Last modified: fre jun 14, 2019  12:47
+- Last modified: mån jun 17, 2019  04:21
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
 
 ## Description
 
-Extract known genomic regions from scaffold-files.
+Extract known genomic regions (based on multiple sequence alignments and HMMs) from genome- (scaffold) files.
 
 ![Workflow](doc/workflow/Diagram1.png)
 
 ## Suggested usage
+
+### 0. Install prerequisites
+
+The workflow is tested on Linux (Ubuntu 18.04, and CentOS Linux 7).
+Specific packages that needs to be installed (in the `PATH`) are:
+- nhmmer, hmmpress (HMMER 3.1b2)
+- plast (v.2.3.1)
+- makeblastdb (v.2.6.0+)
+- grepfasta.pl (https://github.com/nylander/grepfasta)
 
 ### 1. Add genome data
 
@@ -23,14 +32,16 @@ sequences.
 ### 2. Add reference data
 
 Reference data are a number of nucleotide sequence alignments in fasta format.
-Documentation is currently work in process.
-Please see the file `data/reference/README.md`.
+Please see the file `data/reference/README.md` for details.
+When necessary files are in place, run (in the `/path/to/birdscanner` directory):
 
-### 3. Run the workflow
+    [local]$ make refdata
+
+### 3. Run the search workflow
 
 I would recommend running the pipeline in steps. The "plast" step will
 take approx 20 mins/genome, while the "nhmmer" step will take > ~30 h/per genome(!).
-It would recommend to run the nhmmer-step on, e.g., Uppmax.
+It would be recommend to run the nhmmer-step on, e.g., Uppmax.
 
 Run initial similarity search:
 
@@ -40,7 +51,7 @@ Run initial similarity search:
 
 Run hmmer:
 
-**Current ad-hoc steps**: run on uppmax.uu.se
+**Current ad-hoc steps**: Run hmmer on uppmax.uu.se!
 
 Create files to be transferred:
 
@@ -64,7 +75,7 @@ Run hmmer using the slurm files:
     [uppmax]$ cd path/to/birdscanner/run/hmmer
     [uppmax]$ for f in *.slurm.sh ; do sbatch "$f" /path/to/birdscanner; sleep 1 ; done
 
-Parse hmmer output (*documentation not updated. Try next make step on Uppmax!*):
+Parse hmmer output:
 
     [uppmax]$ make parsehmmer
 
