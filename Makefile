@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: mån jun 17, 2019  12:54
+# Last modified: mån jun 17, 2019  03:53
 # Sign: JN
 
 
@@ -27,6 +27,8 @@ NCPU      := 10
 ALILENGTH := 200
 REFFAS := selected_shortlabel.degap.fas
 
+export NCPU
+
 PROJECTDIR   := $(shell pwd)
 RUNDIR       := $(PROJECTDIR)/run
 DATADIR      := $(PROJECTDIR)/data
@@ -37,6 +39,8 @@ SRCDIR       := $(PROJECTDIR)/src
 PLASTDIR     := $(RUNDIR)/plast
 HMMERDIR     := $(RUNDIR)/hmmer
 OUTDIR       := $(PROJECTDIR)/out
+
+export PROJECTDIR
 
 
 # Files (need to be in place)
@@ -232,6 +236,9 @@ all: init plast parseplast
 
 #all: init plast parseplast hmmer parsehmmer
 
+refdata:
+	$(MAKE) -C $(REFERENCEDIR)
+
 init:
 	$(MAKE) -j$(NCPU) splitfast plastdb
 
@@ -260,8 +267,15 @@ readhmmer: $(HMMEROUTDIR)
 parsehmmer:
 	$(MAKE) -j$(NCPU) readhmmer
 
-#refdata:
+#clean:
+#	( cd $(PLASTDIR) ; $(RM) * ; cd $(HMMERDIR) ; $(RM) * )
 
-clean:
-	( cd $(PLASTDIR) ; $(RM) * ; cd $(HMMERDIR) ; $(RM) * )
+distclean:
+	cd $(GENOMESDIR) ; $(RM) *.gz ; \
+	cd $(REFERENCEDIR)/fasta_files ; $(RM) *.fas ; \
+	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
+	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
+	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm ; \
+	cd $(PLASTDIR) ; $(RM) *.plast*.fas ; \
+	cd $(OUTDIR) ; rm -rf *_nhmmer_output
 
