@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: fre jun 14, 2019  02:11
+# Last modified: mån jun 17, 2019  12:54
 # Sign: JN
 
 
@@ -143,6 +143,7 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 		awk -F $$'\t' '!x[$$1]++' | \
 		awk -F $$'\t' '{print $$1}' > $@
 
+
 ## TODO: Rewrite 9. and 10. to one step.
 # We want to read each genome specific /home/nylander/run/pe/birdscanner-part/run/plast/*.ref.ids
 # and for each ref.ids file, find the corresponding /home/nylander/run/pe/birdscanner-part/data/reference/selected/hmm/<ID>.fas.degap.hmm
@@ -154,9 +155,6 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 #      find /home/nylander/run/pe/birdscanner-part -name "${theid}.fas.degap.hmm";\
 #      #echo "${TTT}${theid}.fas.degap.hmm"; \
 #    done < /home/nylander/run/pe/birdscanner-part/run/plast/SaureNRM_genome.plast200.ref.ids > OUTFILE
-
-
-
 
 # 9. Searchfile2: sed -e 's/\([0-9]\+\)/hmm\/\1\.sate/' %.plast200.ref.ids > %.searchfile2
 SEARCHFILES2 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTDIR)/%.searchfile2,$(REFIDS))
@@ -222,10 +220,10 @@ HMMEROUTDIR := $(patsubst $(HMMERDIR)/%.nhmmer.out,$(OUTDIR)/%_nhmmer_output/,$(
 $(OUTDIR)/%_nhmmer_output/: $(HMMERDIR)/%.nhmmer.out
 	perl $(PARSENHMMER) \
 		-i $< \
-		-g $(PLASTDIR)/%.plast$(ALILENGTH).fas \
+		-g $(PLASTDIR)/$*.plast$(ALILENGTH).fas \
 		-d $@ \
-		-f % \
-		-p %
+		-f $* \
+		-p $*
 
 
 # Tasks:
