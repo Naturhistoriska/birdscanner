@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: mån jun 17, 2019  04:40
+- Last modified: ons jun 19, 2019  01:04
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -81,14 +81,15 @@ Parse hmmer output:
 
 ### Results
 
-Genome-specific results from the hmmer step are in folder `out/genomes/`,
-gathered genes are in `out/genes/`.
+Individual gene files (fasta format) for each `genome` are written to the folder
+`out/<genome>_nhmmer_output/`.
 
 ## Further analysis
 
-The gene files in `out/genes/` can be further analyzed (multiple sequence alignments,
-phylogenetic tree reconstruction, etc). One such approach is described in the file
-`run/README.trees.md`.
+The gene files in `out/<genome>_nhmmer_output/` can be further analyzed 
+(multiple sequence alignments, phylogenetic tree reconstruction, etc).
+One such approach is described in the file `run/README.trees.md`. Note
+that the exact approach needs to be tailored to your own setup and needs.
 
 ## Clean up
 
