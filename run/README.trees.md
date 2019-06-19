@@ -1,6 +1,6 @@
 # Trees from the output of birdscanner
 
-    # Last modified: fre apr 26, 2019  08:34
+    # Last modified: ons jun 19, 2019  01:28
     # Sign: JN
 
 ## Setup
@@ -23,13 +23,13 @@
     #   "MANVI	Golden-collared_Manakin	Manacus_vitellinus"
 
     cd ${PROJECTDIR}
-    mkdir -p "${ALIDIR}" 
+    mkdir -p "${ALIDIR}"
     outg="${ALIDIR}/tmp.outgroups.txt"
     perl -e 'print "ACACH\nMANVI\n"' > "${outg}"
     for f in ${GENESDIR}/*.fas ; do
         nr=$(basename "${f}" .fas)
         reffas="${REFERENCEDIR}/fasta_files/${nr}.sate.removed.intron.noout.aligned-allgap.filtered.fas"
-        fastagrep -t -f "${outg}" "${reffas}" | \
+        grepfasta.pl -f "${outg}" "${reffas}" | \
             sed '/^$/d' | \
             ${SRCDIR}/remove_gaps_in_fasta.pl > "${ALIDIR}/tmp.${nr}.outgrp.seq"
         aliin="${ALIDIR}/${nr}.outgrp.input"
@@ -164,5 +164,4 @@
     # real	0m18,594s
     # user	0m28,208s
     # sys	0m0,312s
-
 
