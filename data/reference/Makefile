@@ -1,6 +1,6 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: mån jun 17, 2019  03:11
+# Last modified: fre aug 02, 2019  04:06
 # Sign: JN
 #
 # Usage:
@@ -8,6 +8,7 @@
 #    in birdscanner/data/reference/fasta_files (file ending `.fas`, no periods in file name).
 # 2) Call this Makefile from the root Makefile as such
 #     cd /path/to/birdscanner && make reference
+# Note: PROJECTDIR, NCPU will be inheritade from the root Makefile
 
 
 #### Setup 
@@ -82,7 +83,7 @@ degapandwrap:
 #### Compress some files
 compress:
 	cd $(SELECTED) && \
-	tar czf fas.tgz fas && rm -r fas/ ; \
-	tar czf sto.tgz sto && rm -r sto/ ;\
-	gzip selected_shortlabel.fas
+	tar -I pigz -czf fas.tgz fas && rm -r fas/ ; \
+	tar -I pigz -czf sto.tgz sto && rm -r sto/ ;\
+	pigz selected_shortlabel.fas
 

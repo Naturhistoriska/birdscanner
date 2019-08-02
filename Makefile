@@ -1,5 +1,5 @@
 # Makefile for birdscanner
-# Last modified: mån jun 17, 2019  05:01
+# Last modified: fre aug 02, 2019  03:34
 # Sign: JN
 
 # Directories (need to be in place)
@@ -245,7 +245,15 @@ slurm:
 
 hmmer: $(HMMEROUT)
 
-readhmmer: $(HMMEROUTDIR)
+#readhmmer: $(HMMEROUTDIR)
+# Ad-hoc code for now (fre  2 aug 2019 15:33:17):
+readhmmer:
+	for f in $$(find run/hmmer/ -name '*.out') ; do \
+		g=$${f#'run/hmmer/'}; \
+		h=$${g%'.nhmmer.out'}; \
+		i=$${h%'_genome'}; \
+		perl src/parse_nhmmer.pl -i "$$f" -g run/plast/"$$h".plast200.fas -d out/"$$h"_hmmer -p "$$i" -f "$$i" --nostats ;\
+	done
 
 parsehmmer:
 	$(MAKE) -j$(NCPU) readhmmer
@@ -263,6 +271,7 @@ distclean:
 	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \
 	cd $(OUTDIR) ; rm -rf *_nhmmer_output
 
+# This will only work if you have the testdata folder
 copytestdata:
 	cp -v -u $(PROJECTDIR)/testdata/data/genomes/*.gz $(GENOMESDIR) ; \
 	cp -v -u $(PROJECTDIR)/testdata/data/reference/fasta_files/*.fas $(REFERENCEDIR)/fasta_files

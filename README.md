@@ -1,6 +1,6 @@
 # BirdScanner
 
-- Last modified: ons jun 19, 2019  01:04
+- Last modified: fre aug 02, 2019  02:10
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -77,6 +77,7 @@ Run hmmer using the slurm files:
 
 Parse hmmer output:
 
+    [uppmax]$ module load bioinfo-tools hmmer/3.2.1 blast/2.7.1+
     [uppmax]$ make parsehmmer
 
 ### Results
