@@ -1,6 +1,6 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: fre aug 02, 2019  04:06
+# Last modified: mån aug 05, 2019  02:01
 # Sign: JN
 #
 # Usage:
@@ -83,7 +83,7 @@ degapandwrap:
 #### Compress some files
 compress:
 	cd $(SELECTED) && \
-	tar -I pigz -czf fas.tgz fas && rm -r fas/ ; \
-	tar -I pigz -czf sto.tgz sto && rm -r sto/ ;\
+	tar -I pigz -cf fas.tgz fas && rm -r fas/ ; \
+	tar -I pigz -cf sto.tgz sto && rm -r sto/ ;\
 	pigz selected_shortlabel.fas
 
