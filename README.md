@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: ons aug 07, 2019  05:25
+- Last modified: ons aug 07, 2019  05:36
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -8,10 +8,12 @@
 ## Description
 
 The workflow will try to extract known genomic regions (based on multiple sequence 
-alignments (user provided) and HMMs) from genome- (scaffold) files (aslo user provided).
-The approach taken is esentially a search with HMM's against a reference genome, with an
-extra step where an initial similarity search (using plast) is used to reduce the input
-data to hmm's and genomic regions having hits by the inital similarity search.
+alignments and HMMs) from genome files. The approach taken is essentially a search 
+with HMM's against a reference genome, with an extra step where an initial similarity
+search (using plast) is used to reduce the input data to hmm's and genomic regions
+having hits by the initial similarity search. Both the known genomic regions (multiple
+nucleotide-sequence alignments in fasta format), and the genome files (fasta format,
+one or several scaffolds) must be provided by the user.
 
 ![Workflow](doc/workflow/Diagram1.png)
 
@@ -26,7 +28,7 @@ the ``SLURM'' batch system implemented on Uppmax.
 
 The workflow uses standard Linux (`bash`) tools, and in addition, the slurm scripts will load
 necessary software using the `module` system. In addition, the software `plast` needs to be
-installed by the user from the develper's site. Please see section **Software used** below.
+installed by the user from the developer's site. Please see section **Software used** below.
 
 ## Steps to run the pipeline
 
@@ -49,8 +51,8 @@ See instructions in `data/README.md`.
 
 Here you need to manually adjust (text edit) the time asked for in the slurm scripts.
 
- *Vague instructions*: The "plast" step will take approx 20 mins/genome, while 
- the "hmmer" step will take > ~30 h/per genome. This might be a starting point:
+The "plast" step will take approx 20 mins/genome, while the "hmmer" step will 
+take > ~30 h/per genome. This might be a starting point (**table not finished**):
 
 |Script|Current `-t` setting|Comment|
 |------|--------------------|-------|
@@ -88,7 +90,7 @@ A final report (as well as any error messages) are printed to the file `plast.er
 
     [user@rackham slurm]$ sbatch parseplast.slurm.sh
 
-This step will attempt to read the outpu from the similarity search, and prepare XXXXXXXX.
+This step will attempt to read the output from the similarity search, and prepare XXXXXXXX.
 A final report (as well as any error messages) are printed to the file `parseplast.err`.
 
 ##### 9. When finished, submit the next:
@@ -111,7 +113,7 @@ A final report (as well as any error messages) are printed to the file `parsehmm
 ## Notes:
 
 - The steps 5--8 can most probably be combined (untested at this stage), hence resulting in
-three logical steps ("prepare data and run plast", "run and wait for nhmmer", "parse hmmer").
+three logical steps ("prepare data and run plast", "run and wait for nhmmer", "gather genes").
 
 
 ## Software used
