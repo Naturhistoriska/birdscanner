@@ -1,0 +1,221 @@
+# Makefile for birdscanner, uppmax
+# Last modified: ons aug 07, 2019  04:05
+# Sign: JN
+
+# Make sure you have the correct account nr (e.g. 'snic2019-1-234')
+UPPNR :=
+
+ifndef UPPNR
+$(error UPPNR is not set. Please run \"make account UPPNR=snic1234-5-678\" \(use your account nr\) or edit the Makefile and the slurm/*.sh files and add your uppmax compute account nr. )
+endif
+
+# Minimum default alignment length
+ALILENGTH := 200
+
+# Some settings
+SHELL := /bin/bash
+NCPU  := 10
+
+export NCPU
+
+# Folders
+PROJECTDIR   := $(shell pwd)
+RUNDIR       := $(PROJECTDIR)/run
+DATADIR      := $(PROJECTDIR)/data
+OUTDIR       := $(PROJECTDIR)/out
+SLURMDIR     := $(PROJECTDIR)/slurm
+SRCDIR       := $(PROJECTDIR)/src
+REFERENCEDIR := $(DATADIR)/reference
+GENOMESDIR   := $(DATADIR)/genomes
+PLASTDIR     := $(RUNDIR)/plast
+HMMERDIR     := $(RUNDIR)/hmmer
+SELECTEDDIR  := $(REFERENCEDIR)/selected
+
+export PROJECTDIR
+
+# Files
+GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
+REFFAS               := selected_shortlabel.degap.fas
+PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/$(REFFAS)
+PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
+
+# Programs (need to be in place)
+GREPFASTA     := $(SRCDIR)/grepfasta.pl
+SPLITFAST     := $(SRCDIR)/splitfast_100K
+PARSENHMMER   := $(SRCDIR)/parse_nhmmer.pl
+REMOVEGAPS    := $(SRCDIR)/remove_gaps_in_fasta.pl
+NHMMERSLURM   := $(SRCDIR)/create_nhmmer_slurm_file.pl
+REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel
+
+# Check for programs. Need to be loaded using the module system on uppmax:
+# `module load bioinfo-tools hmmer/3.2.1-intel blast/2.7.1+ gnuparallel`
+$(foreach bin,$(REQUIRED_BINS),\
+	$(if $(shell command -v $(bin) 2> /dev/null),,$(error Error: could not find program `$(bin)`. Did you load/install it?)))
+
+# Output files and rules
+.PHONY: all refdata init splitfast plastdb plast readplast parseplast hmmer readhmmer parsehmmer clean distclean copytestdata
+
+# Recepies
+$(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
+	ln -sf $< $@
+
+SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run\/plast}; echo $${n%%.*}.split.fas; done)
+
+$(PLASTDIR)/%.split.fas: $(GENOMESDIR)/%.gz
+	$(SPLITFAST) <(gunzip -c $<) > $@
+
+DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLITFILES))
+
+$(PLASTDIR)/%.split.fas.nin: $(PLASTDIR)/%.split.fas
+	cd $(PLASTDIR); \
+	makeblastdb -dbtype nucl -in $<
+
+PLASTTABFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.selected.plast.tab,$(SPLITFILES))
+
+$(PLASTDIR)/%.selected.plast.tab: $(PLASTDIR)/%.split.fas $(PLASTQUERYFP)
+	plast -p plastn \
+		-i $(PLASTQUERYFP) \
+		-d $< \
+		-o $@ \
+		-a $(NCPU) \
+		-max-hit-per-query 1 \
+		-bargraph
+
+SCAFFOLDIDS := $(patsubst $(PLASTDIR)/%.selected.plast.tab,$(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids,$(PLASTTABFILES))
+
+$(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids: $(PLASTDIR)/%.selected.plast.tab
+	awk '$$4>$(ALILENGTH)' $< | \
+		perl -npe 's/-\w+//' | \
+		sort -t$$'\t' -k1g -k12rg | \
+		awk -F $$'\t' '!x[$$1]++' | \
+		awk -F $$'\t' '{print $$2}' | \
+		sort -u > $@
+
+SEARCHFILES1 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids,$(PLASTDIR)/%.searchfile1,$(SCAFFOLDIDS))
+
+$(PLASTDIR)/%.searchfile1: $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids
+	sed -e 's/$$/\$$/' -e 's/^/\^>/' $< > $@
+
+PLASTFASFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.plast$(ALILENGTH).fas,$(SPLITFILES))
+
+$(PLASTDIR)/%.plast$(ALILENGTH).fas: $(PLASTDIR)/%.searchfile1 $(PLASTDIR)/%.split.fas
+	$(GREPFASTA) -f $^ > $@
+
+REFIDS := $(patsubst $(PLASTDIR)/%.selected.plast.tab,$(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTTABFILES))
+
+$(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
+	awk '$$4>$(ALILENGTH)' $< | \
+		perl -npe 's/-\w+//' | \
+		sort -t$$'\t' -k1g -k12rg | \
+		awk -F $$'\t' '!x[$$1]++' | \
+		awk -F $$'\t' '{print $$1}' > $@
+
+SEARCHFILES2 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTDIR)/%.searchfile2,$(REFIDS))
+
+$(PLASTDIR)/%.searchfile2: $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids
+	sed -e 's/\([0-9]\+\)/hmm\/\1\.sate/' $< > $@
+
+SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_concat.hmm,$(SEARCHFILES2))
+
+$(HMMERDIR)/%.selected_concat.hmm: $(PLASTDIR)/%.searchfile2
+	cat $$(find $(SELECTEDDIR)/hmm -type f -name \*.hmm | grep -f $<) > $@
+
+HMMPRESSFILES := $(patsubst $(HMMERDIR)/%.hmm,$(HMMERDIR)/%.hmm.h3f,$(SELECTEDHMMS))
+
+$(HMMERDIR)/%.hmm.h3f: $(HMMERDIR)/%.hmm
+	cd $(HMMERDIR) ; \
+	hmmpress $<
+
+#nhmmerslurm:
+#	for f in $$(find run/hmmer/ -name '*.hmm') ; do \$(SLURMDIR)/%.nhmmer.slurm.sh
+#		g=$${f#'run/hmmer/'}; \
+#		h=$${g%'.selected_concat.hmm'}; \
+#		perl $(SRCDIR)/create_nhmmer_slurm_file.pl -g "$$h" -o slurm/"$$h".nhmmer.slurm.sh; \
+#	done
+
+HMMEROUT := $(patsubst $(HMMERDIR)/%.selected_concat.hmm,$(HMMERDIR)/%.nhmmer.out,$(SELECTEDHMMS))
+
+$(HMMERDIR)/%.nhmmer.out: $(SLURMDIR)/%.nhmmer.slurm.sh
+	sbatch $< $$(dirname $$PWD) ; sleep 1
+
+HMMEROUTDIR := $(patsubst $(HMMERDIR)/%.nhmmer.out,$(OUTDIR)/%_nhmmer_output/,$(HMMEROUT))
+
+$(OUTDIR)/%_nhmmer_output/: $(HMMERDIR)/%.nhmmer.out
+	perl $(PARSENHMMER) \
+		-i $< \
+		-g $(PLASTDIR)/$*.plast$(ALILENGTH).fas \
+		-d $@ \
+		-f $* \
+		-p $*
+
+$(SLURMDIR)/%.nhmmer.slurm.sh: $(HMMERDIR)/%.selected_concat.hmm
+	perl $(NHMMERSLURM) \
+		-o $@ \
+		-g $(patsubst %.selected_concat.hmm,%,$(notdir $<)) \
+		-a $(UPPNR)
+
+# Rules/tasks:
+
+all: refdata init plast parseplast hmmer
+
+account:
+	sed -i 's/#UPPMAXACCOUNTNR#/$(UPPNR)/' $(SLURMDIR)/*.slurm.sh ; \
+	sed -i '/^UPPNR/ s/$$/ $(UPPNR)/' $(lastword $(MAKEFILE_LIST))
+
+refdata:
+	$(MAKE) -C $(REFERENCEDIR)
+
+init:
+	$(MAKE) -j$(NCPU) splitfast plastdb
+
+splitfast: $(SPLITFILES)
+
+plastdb: $(DBFILES)
+
+plast: $(PLASTTABFILES)
+
+readplast: $(SCAFFOLDIDS) $(SEARCHFILES1) $(PLASTFASFILES) $(REFIDS) $(SEARCHFILES2) $(SELECTEDHMMS) $(HMMPRESSFILES)
+
+parseplast:
+	$(MAKE) -j$(NCPU) readplast
+
+hmmer: $(HMMEROUT)
+
+readhmmer: $(HMMEROUTDIR)
+## Ad-hoc code (fre  2 aug 2019 15:33:17).
+#readhmmer:
+#	for f in $$(find run/hmmer/ -name '*.out') ; do \
+#		g=$${f#'run/hmmer/'}; \
+#		h=$${g%'.nhmmer.out'}; \
+#		i=$${h%'_genome'}; \
+#		perl src/parse_nhmmer.pl -i "$$f" -g run/plast/"$$h".plast200.fas -d out/"$$h"_hmmer -p "$$i" -f "$$i" --nostats ;\
+#	done
+
+parsehmmer:
+	$(MAKE) -j$(NCPU) readhmmer
+
+clean:
+	cd $(PROJECTDIR) ; $(RM) run4uppmax.tgz ; \
+	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
+	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
+	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm* *.sh ; \
+	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \
+	cd $(OUTDIR) ; rm -rf *_nhmmer_output ; \
+	cd $(SLURMDIR) ; $(RM) *.err *.nhmmer.slurm.sh
+
+distclean:
+	cd $(PROJECTDIR) ; $(RM) run4uppmax.tgz ; \
+	cd $(GENOMESDIR) ; $(RM) *.gz ; \
+	cd $(REFERENCEDIR)/fasta_files ; $(RM) *.fas ; \
+	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
+	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
+	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm* *.sh ; \
+	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \
+	cd $(OUTDIR) ; rm -rf *_nhmmer_output \
+	cd $(SLURMDIR) ; $(RM) *.err *.nhmmer.slurm.sh
+
+# This will only work if you have the testdata folder
+copytestdata:
+	cp -v -u $(PROJECTDIR)/testdata/data/genomes/*.gz $(GENOMESDIR) ; \
+	cp -v -u $(PROJECTDIR)/testdata/data/reference/fasta_files/*.fas $(REFERENCEDIR)/fasta_files
+

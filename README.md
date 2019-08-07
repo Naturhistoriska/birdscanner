@@ -1,100 +1,148 @@
-# BirdScanner
+# BirdScanner on Uppmax
 
-- Last modified: fre aug 02, 2019  02:10
+- Last modified: ons aug 07, 2019  05:25
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
 
 ## Description
 
-Extract known genomic regions (based on multiple sequence alignments and HMMs) from genome- (scaffold) files.
+The workflow will try to extract known genomic regions (based on multiple sequence 
+alignments (user provided) and HMMs) from genome- (scaffold) files (aslo user provided).
+The approach taken is esentially a search with HMM's against a reference genome, with an
+extra step where an initial similarity search (using plast) is used to reduce the input
+data to hmm's and genomic regions having hits by the inital similarity search.
 
 ![Workflow](doc/workflow/Diagram1.png)
 
-## Suggested usage
 
-### 0. Install prerequisites
+The current version is made for running on ``Uppmax'' (compute clusters rackham and snowy
+<https://www.uppmax.uu.se>).
 
-The workflow is tested on Linux (Ubuntu 18.04, and CentOS Linux 7).
-Specific packages that needs to be installed (in the `PATH`) are:
-- nhmmer, hmmpress (HMMER 3.1b2)
-- plast (v.2.3.1)
-- makeblastdb (v.2.6.0+)
-- grepfasta.pl (https://github.com/nylander/grepfasta)
+The workflow is managed by the `make` program, and tasks are send to compute units using
+the ``SLURM'' batch system implemented on Uppmax.
 
-### 1. Add genome data
+## Prerequisites
 
-Add compressed (`gzip`) genome files to the folder `data/genomes/`.
-Files need to be named named (example) `<name>.gz`. The `<name>` should
-be unique and will be used in the output as label for the extracted
-sequences.
+The workflow uses standard Linux (`bash`) tools, and in addition, the slurm scripts will load
+necessary software using the `module` system. In addition, the software `plast` needs to be
+installed by the user from the develper's site. Please see section **Software used** below.
 
-### 2. Add reference data
+## Steps to run the pipeline
 
-Reference data are a number of nucleotide sequence alignments in fasta format.
-Please see the file `data/reference/README.md` for details.
-When necessary files are in place, run (in the `/path/to/birdscanner` directory):
+##### 1. Start by cloning birdscanner:
 
-    [local]$ make refdata
+    [user@rackham ~]$ git clone https://github.com/Naturhistoriska/birdscanner.git
+    [user@rackham ~]$ cd birdscanner
 
-### 3. Run the search workflow
+##### 2. Set your compute account nr (e.g. 'snic1234-5-678') by running
 
-I would recommend running the pipeline in steps. The "plast" step will
-take approx 20 mins/genome, while the "nhmmer" step will take > ~30 h/per genome(!).
-It would be recommend to run the nhmmer-step on, e.g., Uppmax.
+    [user@rackham birdscanner]$ make account UPPID=snic1234-5-678
 
-Run initial similarity search:
+##### 3. Add correctly named and formatted genome files and reference data to the `data` folder
 
-    [local]$ make init
-    [local]$ make plast
-    [local]$ make parseplast
+See instructions in `data/README.md`.
 
-Run hmmer:
+##### 4. Change directory to the `slurm` directory.
 
-**Current ad-hoc steps**: Run hmmer on uppmax.uu.se!
+    [user@rackham birdscanner]$ cd slurm
 
-Create files to be transferred:
+Here you need to manually adjust (text edit) the time asked for in the slurm scripts.
 
-    [local]$ make slurm
+ *Vague instructions*: The "plast" step will take approx 20 mins/genome, while 
+ the "hmmer" step will take > ~30 h/per genome. This might be a starting point:
 
-Copy file to uppmax:
+|Script|Current `-t` setting|Comment|
+|------|--------------------|-------|
+|refdata.slurm.sh|00:10:00||
+|init.slurm.sh|00:10:00||
+|plast.slurm.sh|00:20:00||
+|parseplast.slurm.sh|00:10:00||
+|hmmer.slurm.sh|00:05:00|The time asked for is actually set in another file (default 40h)|
+|parsehmmer.slurm.sh|00:05:00||
 
-    [local]$ scp run4uppmax.tgz rackham.uppmax.uu.se:.
+##### 5. Change directory to the `slurm` folder, and submit the first slurm script:
 
-Then log in to uppmax, clone the "birdscanner" repo:
+    [user@rackham birdscanner]$ cd slurm
+    [user@rackham slurm]$ sbatch refdata.slurm.sh
 
-    [uppmax]$ git clone https://github.com/Naturhistoriska/birdscanner.git
+This step will attempt to read and reformat the reference data, and also create hmm's
+for all alignments found.
+A final report (as well as any error messages) are printed to the file `refdata.err`.
 
-Move the run4uppmax.tgz to the "birdscanner" directory, and uncompress.
+##### 6. When finished, submit the next:
 
-    [uppmax]$ mv ~/run4uppmax.tgz path/to/birdscanner
-    [uppmax]$ tar xvzf path/to/birdscanner/run4uppmax.tgz
+    [user@rackham slurm]$ sbatch init.slurm.sh
 
-Run hmmer using the slurm files:
+This step will attempt to reformat genome files and XXXXXX.
+A final report (as well as any error messages) are printed to the file `init.err`.
 
-    [uppmax]$ cd path/to/birdscanner/run/hmmer
-    [uppmax]$ for f in *.slurm.sh ; do sbatch "$f" /path/to/birdscanner; sleep 1 ; done
+##### 7. When finished, submit the next:
 
-Parse hmmer output:
+    [user@rackham slurm]$ sbatch plast.slurm.sh
 
-    [uppmax]$ module load bioinfo-tools hmmer/3.2.1 blast/2.7.1+
-    [uppmax]$ make parsehmmer
+This step will attempt to initiate the similarity search 
+A final report (as well as any error messages) are printed to the file `plast.err`.
 
-### Results
+##### 8. When finished, submit the next:
 
-Individual gene files (fasta format) for each `genome` are written to the folder
-`out/<genome>_nhmmer_output/`.
+    [user@rackham slurm]$ sbatch parseplast.slurm.sh
 
-## Further analysis
+This step will attempt to read the outpu from the similarity search, and prepare XXXXXXXX.
+A final report (as well as any error messages) are printed to the file `parseplast.err`.
 
-The gene files in `out/<genome>_nhmmer_output/` can be further analyzed 
-(multiple sequence alignments, phylogenetic tree reconstruction, etc).
-One such approach is described in the file `run/README.trees.md`. Note
-that the exact approach needs to be tailored to your own setup and needs.
+##### 9. When finished, submit the next:
 
-## Clean up
+    [user@rackham1 birdscanner]$ sbatch hmmer.slurm.sh
 
-To remove all input- and output files (including the fasta files and the genome files):
+This step will attempt to submit several slurm jobs to the scheduler, one for each genome.
+This step is probably time consuming.
+A final report (as well as any error messages) are printed to the file `hmmer.err`.
 
-    [uppmax]$ make distclean
+##### 10. When finished, submit the last:
+
+    [user@rackham1 birdscanner]$ sbatch parsehmmer.slurm.sh
+
+This step will attempt to parse the results from hmmer and create separate folders with found
+genomic regions in the `birdscanner/out` folder, one for each genome.
+A final report (as well as any error messages) are printed to the file `parsehmmer.err`.
+
+
+## Notes:
+
+- The steps 5--8 can most probably be combined (untested at this stage), hence resulting in
+three logical steps ("prepare data and run plast", "run and wait for nhmmer", "parse hmmer").
+
+
+## Software used
+
+- GNU Make 4.1
+- nhmmer, hmmerpress (hmmer 3.2.1)
+- makeblastdb (blast+ 2.7.1)
+- gnuparallel ()
+- grepfasta.pl (<https://github.com/nylander/grepfasta>)
+- custom scripts in `birdscanner/src/`
+- plast v2.3.1 ()
+
+The `plast` program needs to be installed locally on uppmax.
+Here is one way (installing in user's own `bin` folder):
+
+    wget http://plast.gforge.inria.fr/files/plastbinary_linux_v2.3.1.tar.gz
+    tar xvzf plastbinary_linux_v2.3.1.tar.gz
+    cp plastbinary_linux_20160121/build/bin/plast ~/bin/plast
+
+Or, compile (on uppmax):
+
+    module load cmake
+    module load doxygen
+
+    git clone https://github.com/PLAST-software/plast-library.git
+    cd plast-library
+    git checkout stable
+    sed -i '98,99{s/^/#/}' CMakeLists.txt
+    mkdir build
+    cd build
+    cmake ..
+    make
+    cp bin/PlastCmd ~/bin/plast
 
