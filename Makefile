@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: tor aug 08, 2019  11:54
+## Last modified: tor aug 08, 2019  01:11
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -30,6 +30,10 @@ GENOMESDIR   := $(DATADIR)/genomes
 PLASTDIR     := $(RUNDIR)/plast
 HMMERDIR     := $(RUNDIR)/hmmer
 SELECTEDDIR  := $(REFERENCEDIR)/selected
+
+mkfile_path  := $(abspath $(lastword $(MAKEFILE_LIST)))
+mkfile_dir   := $(dir $(mkfile_path))
+
 
 export PROJECTDIR
 
@@ -128,7 +132,7 @@ $(HMMERDIR)/%.hmm.h3f: $(HMMERDIR)/%.hmm
 HMMEROUT := $(patsubst $(HMMERDIR)/%.selected_concat.hmm,$(HMMERDIR)/%.nhmmer.out,$(SELECTEDHMMS))
 
 $(HMMERDIR)/%.nhmmer.out: $(SLURMDIR)/%.nhmmer.slurm.sh
-	sbatch $< $$(dirname $$PWD) ; sleep 1
+	sbatch $< $(mkfile_dir)
 
 HMMEROUTDIR := $(patsubst $(HMMERDIR)/%.nhmmer.out,$(OUTDIR)/%_nhmmer_output/,$(HMMEROUT))
 
@@ -144,7 +148,8 @@ $(SLURMDIR)/%.nhmmer.slurm.sh: $(HMMERDIR)/%.selected_concat.hmm
 	perl $(NHMMERSLURM) \
 		-o $@ \
 		-g $(patsubst %.selected_concat.hmm,%,$(notdir $<)) \
-		-a $(UPPNR)
+		-a $(UPPNR) \
+		-n $(NCPU)
 
 ## Rules/tasks:
 

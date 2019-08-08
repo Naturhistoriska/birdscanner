@@ -7,7 +7,7 @@
 
          FILE: create_nhmmer_slurm_file.pl
 
-        USAGE: ./create_nhmmer_slurm_file.pl -a <account> -g <genome> [-t <time>][-c <cluster>] > <genome>.nhmmer.slurm.sh
+        USAGE: ./create_nhmmer_slurm_file.pl -a <account> -g <genome> [-t <time>][-c <cluster>][-n <Ncpus>] > <genome>.nhmmer.slurm.sh
                ./create_nhmmer_slurm_file.pl -a snic201X-X-XX -g PvioviF_genome > PvioviF_genome.nhmmer.slurm.sh
 
 
@@ -106,11 +106,11 @@ $slurm_script = <<"END_SLURM";
 #SBATCH -A $account
 #SBATCH -J $genome.nhmmer
 #SBATCH -t $time
-#SBATCH -c $cluster
 #SBATCH -p $partition
 #SBATCH -n $ncpu
+#SBATCH -M $cluster
 #SBATCH --output=/dev/null
-#SBATCH --error=$genome.nhmmer.err
+#SBATCH --error=slurm/$genome.nhmmer.err
 
 # Slurm script for nhmmer.
 #
@@ -171,6 +171,9 @@ rm \${SNIC_TMP}/$genome.plast200.fas
 #    \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \\
 #    \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas
 
+>&2 echo "Reached the end of the $genome.nhmmer slurm script"
+>&2 echo "Look for file ../run/hmmer/$genome.nhmmer.out when finished."
+
 END_SLURM
 
 }
@@ -181,11 +184,11 @@ $slurm_script = <<"END_SLURM";
 #SBATCH -A $account
 #SBATCH -J $genome.nhmmer
 #SBATCH -t $time
-#SBATCH -c $cluster
 #SBATCH -p $partition
 #SBATCH -n $ncpu
+#SBATCH -M $cluster
 #SBATCH --output=/dev/null
-#SBATCH --error=$genome.nhmmer.err
+#SBATCH --error=slurm/$genome.nhmmer.err
 
 # Slurm script for nhmmer.
 #
@@ -239,9 +242,8 @@ rm \$SNIC_TMP/$genome.plast200.fas
 #    $path/run/hmmer/$genome.selected_concat.hmm \\
 #    $path/run/plast/$genome.plast200.fas
 
->&2 echo "Reached the end of the hmmer slurm script"
->&2 echo "Generated files should be in the ../run/hmmer folder"
->&2 tree -P '*.nhmmer.out' ../run/hmmer
+>&2 echo "Reached the end of the $genome.nhmmer slurm script"
+>&2 echo "Look for file ../run/hmmer/$genome.nhmmer.out when finished."
 
 
 END_SLURM

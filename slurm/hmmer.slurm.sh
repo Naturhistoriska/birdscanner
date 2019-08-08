@@ -6,8 +6,7 @@
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham,snowy 
-#SBATCH --output=/dev/null
-#SBATCH --error=hmmer.err
+#SBATCH --output=hmmer.err
 
 # Slurm script for hmmer
 #
@@ -35,8 +34,12 @@ module load gnuparallel
 
 make -C .. hmmer
 
->&2 echo "Reached the end of the hmmer slurm script"
->&2 echo "Generated files should be in the ../run/hmmer folder"
->&2 tree -P '*.nhmmer.out' ../run/hmmer
-
+echo ""
+echo ""
+echo "Reached the end of the hmmer slurm script."
+echo "nhmmer jobs should now have been submitted to cluster."
+echo "Submission details, and any possible errors, are in the hmmer.err file."
+echo "Monitor submitted jobs with with the 'jobinfo' command."
+echo "When all nhmmer searches are finished, you should see outfiles,"
+echo "/run/hmmer/<genome>.nhmmer.out, in the folder birdscanner/run/hmmer."
 
