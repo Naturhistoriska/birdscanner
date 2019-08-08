@@ -137,7 +137,7 @@ else {
         die "Unable to create $directory\n";
     }
 }
-print STDOUT "Created output directory $directory\n" if ($VERBOSE);
+print STDERR "Created output directory $directory\n" if ($VERBOSE);
 
 ## Read genome file
 open my $FASTA, "<", $genome or die "Cannot open fasta file: $genome $! \n";
