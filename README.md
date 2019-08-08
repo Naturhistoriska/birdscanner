@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor aug 08, 2019  04:23
+- Last modified: tor aug 08, 2019  04:32
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -19,11 +19,11 @@ data to mnatching HMM's and genomic regions. Both the known genomic regions
 ![Workflow](doc/workflow/Diagram1.png)
 
 
-The current version is made for running on ``Uppmax'' (compute clusters rackham
+The current version is made for running on "Uppmax" (compute clusters rackham
 and snowy <https://www.uppmax.uu.se>).
 
 The workflow is managed by the `make` program, and tasks are send to compute
-units using the ``SLURM'' batch system implemented on Uppmax.
+units using the SLURM batch system implemented on Uppmax.
 
 
 ## Prerequisites
@@ -154,7 +154,7 @@ extracted sequences.
 
 Add reference sequence alignments (nt, fasta format, file suffix `.fas`) in the
 folder `data/reference/fasta_files`. Each alignment file would represent one
-genomic region (``gene'').  The name of the alignment file will be used in
+genomic region ("gene").  The name of the alignment file will be used in
 downstream analyses, so they should have names that are easy to parse.
 Examples: `myo.fas`, `odc.fas`, `988.fas`, `999.fas`, etc. Do not use spaces or
 special characters in the file names. The fasta headers are also used in
@@ -164,7 +164,7 @@ sequences doesn't need to be the same in all files.
 
 From the pool of files in `data/reference/fasta_files`, a filtered selection is
 placed in the `data/reference/selected` folder by the pipeline. These steps
-where designed specifically for ``the Jarvis data'', and is currently carried
+where designed specifically for "The Jarvis data", and is currently carried
 out using the commands in the `birdscanner/data/reference/Makefile` (and
 executed by `make refdata`). It may be possible to circumvent that step by
 manually creating the necessary files (untested).
@@ -183,13 +183,15 @@ starting with `perl $(PARSENHMMER)`). This is mostly untested, however.
 
 ## Software used
 
-- GNU Make 4.1
-- nhmmer, hmmerpress (hmmer 3.2.1)
-- makeblastdb (blast+ 2.7.1)
-- gnuparallel ()
+- GNU Make (4.1)
+- nhmmer, hmmerpress (hmmer 3.2.1, <http://hmmer.org/>)
+- makeblastdb (blast+ 2.7.1, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
+- plast v2.3.1 (<https://github.com/PLAST-software>)
+- gnuparallel (<https://www.gnu.org/software/parallel>)
 - grepfasta.pl (<https://github.com/nylander/grepfasta>)
 - custom scripts in `birdscanner/src/`
-- plast v2.3.1 ()
+
+#### plast
 
 The `plast` program needs to be installed locally on uppmax.
 Here is one way (installing in user's own `bin` folder):
