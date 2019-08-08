@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor aug 08, 2019  04:19
+- Last modified: tor aug 08, 2019  04:23
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -80,7 +80,7 @@ take > ~30 h/per genome. This might be a starting point:
 
 |Script|Current `-t` setting|Comment|
 |------|--------------------|-------|
-|`init_and_plast.slurm.sh`|00:30:00|Allow, say, 30 min %x% number of genomes|
+|`init_and_plast.slurm.sh`|00:30:00|Allow, say, 30 min $x$ number of genomes|
 |`hmmer.slurm.sh`|40:00:00|The time asked for is set in the call to `make` (variable `HMMERTIME`)|
 |`parsehmmer.slurm.sh`|00:30:00|30 min should be OK?|
 
