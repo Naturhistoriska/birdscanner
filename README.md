@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor aug 08, 2019  11:37
+- Last modified: tor aug 08, 2019  11:50
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -61,7 +61,7 @@ exact approach needs to be tailored to your own setup and needs.
 
 ##### 2. Set your compute account nr (e.g. 'snic1234-5-678') by running
 
-    [user@rackham birdscanner]$ make account UPPID=snic1234-5-678
+    [user@rackham birdscanner]$ make account UPPNR=snic1234-5-678
 
 
 ##### 3. Add correctly named and formatted genome files and reference data to the `data` folder
