@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor aug 08, 2019  11:50
+- Last modified: tor aug 08, 2019  12:44
 - Sign: JN
 
 **Disclaimer:** Work in progress, this is not the final version of the instructions.
@@ -103,8 +103,9 @@ are printed to the file `refdata.err`.
 
     [user@rackham slurm]$ sbatch init.slurm.sh
 
-This step will attempt to reformat genome files and XXXXXX.  A final report (as
-well as any error messages) are printed to the file `init.err`.
+This step will attempt to reformat genome files and prepare for the next
+`plast`-step.  A final report (as well as any error messages) are printed to
+the file `init.err`.
 
 
 ##### 7. When finished, submit the next:
@@ -120,13 +121,15 @@ well as any error messages) are printed to the file `plast.err`.
     [user@rackham slurm]$ sbatch parseplast.slurm.sh
 
 This step will attempt to read the output from the similarity search, and
-prepare XXXXXXXX.  A final report (as well as any error messages) are printed
-to the file `parseplast.err`.
+prepare files for the `nhmmer`-search. A report (as well as any error messages)
+are printed to the file `parseplast.err`.
 
 
 ##### 9. When finished, submit the next:
 
-    [user@rackham1 birdscanner]$ sbatch hmmer.slurm.sh
+**NOT WORKING AT THE MOMENT (tor  8 aug 2019 12:44:28)**
+
+    [user@rackham1 slurm]$ sbatch hmmer.slurm.sh
 
 This step will attempt to submit several slurm jobs to the scheduler, one for
 each genome.  This step is probably time consuming.  A final report (as well as
@@ -135,7 +138,7 @@ any error messages) are printed to the file `hmmer.err`.
 
 ##### 10. When finished, submit the last:
 
-    [user@rackham1 birdscanner]$ sbatch parsehmmer.slurm.sh
+    [user@rackham1 slurm]$ sbatch parsehmmer.slurm.sh
 
 This step will attempt to parse the results from hmmer and create separate
 folders with found genomic regions in the `birdscanner/out` folder, one for
