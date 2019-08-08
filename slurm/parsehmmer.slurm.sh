@@ -2,7 +2,7 @@
 
 #SBATCH -A #UPPMAXACCOUNTNR#
 #SBATCH -J parsehmmer
-#SBATCH -t 00:05:00
+#SBATCH -t 00:30:00
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M snowy 

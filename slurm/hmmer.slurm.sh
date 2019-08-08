@@ -2,7 +2,7 @@
 
 #SBATCH -A #UPPMAXACCOUNTNR#
 #SBATCH -J hmmer
-#SBATCH -t 00:05:00
+#SBATCH -t 00:10:00
 #SBATCH -p core
 #SBATCH -n 1
 #SBATCH -M rackham,snowy 
@@ -31,6 +31,9 @@ module load bioinfo-tools
 module load hmmer/3.2.1-intel
 module load blast/2.7.1+
 module load gnuparallel
+
+
+## Adjust here the time asked for _per_genome_ in the nhmmer search
 
 make HMMERTIME=40:00:00 -C .. hmmer
 
