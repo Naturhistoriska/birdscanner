@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: tor aug 08, 2019  01:11
+## Last modified: tor aug 08, 2019  04:03
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -11,6 +11,9 @@ endif
 
 ## Minimum default alignment length
 ALILENGTH := 200
+
+## Time asked for in the nhmmer step
+HMMERTIME := 40:00:00
 
 ## Some settings
 SHELL := /bin/bash
@@ -149,7 +152,8 @@ $(SLURMDIR)/%.nhmmer.slurm.sh: $(HMMERDIR)/%.selected_concat.hmm
 		-o $@ \
 		-g $(patsubst %.selected_concat.hmm,%,$(notdir $<)) \
 		-a $(UPPNR) \
-		-n $(NCPU)
+		-n $(NCPU) \
+		-t $(HMMERTIME)
 
 ## Rules/tasks:
 

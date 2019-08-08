@@ -32,7 +32,7 @@ module load hmmer/3.2.1-intel
 module load blast/2.7.1+
 module load gnuparallel
 
-make -C .. hmmer
+make HMMERTIME=40:00:00 -C .. hmmer
 
 echo ""
 echo ""

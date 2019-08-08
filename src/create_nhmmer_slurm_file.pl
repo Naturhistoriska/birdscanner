@@ -171,7 +171,7 @@ rm \${SNIC_TMP}/$genome.plast200.fas
 #    \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \\
 #    \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas
 
->&2 echo "Reached the end of the $genome.nhmmer slurm script"
+>&2 echo "Submitted the $genome.nhmmer slurm script"
 >&2 echo "Look for file ../run/hmmer/$genome.nhmmer.out when finished."
 
 END_SLURM
@@ -242,7 +242,7 @@ rm \$SNIC_TMP/$genome.plast200.fas
 #    $path/run/hmmer/$genome.selected_concat.hmm \\
 #    $path/run/plast/$genome.plast200.fas
 
->&2 echo "Reached the end of the $genome.nhmmer slurm script"
+>&2 echo "Submitted the $genome.nhmmer slurm script"
 >&2 echo "Look for file ../run/hmmer/$genome.nhmmer.out when finished."
 
 
