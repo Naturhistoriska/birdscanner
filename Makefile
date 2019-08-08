@@ -1,24 +1,24 @@
-# Makefile for birdscanner, uppmax
-# Last modified: ons aug 07, 2019  04:05
-# Sign: JN
+## Makefile for birdscanner, uppmax
+## Last modified: tor aug 08, 2019  10:42
+## Sign: JN
 
-# Make sure you have the correct account nr (e.g. 'snic2019-1-234')
+## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
 UPPNR :=
 
 ifndef UPPNR
 $(error UPPNR is not set. Please run \"make account UPPNR=snic1234-5-678\" \(use your account nr\) or edit the Makefile and the slurm/*.sh files and add your uppmax compute account nr. )
 endif
 
-# Minimum default alignment length
+## Minimum default alignment length
 ALILENGTH := 200
 
-# Some settings
+## Some settings
 SHELL := /bin/bash
 NCPU  := 10
 
 export NCPU
 
-# Folders
+## Folders
 PROJECTDIR   := $(shell pwd)
 RUNDIR       := $(PROJECTDIR)/run
 DATADIR      := $(PROJECTDIR)/data
@@ -33,13 +33,13 @@ SELECTEDDIR  := $(REFERENCEDIR)/selected
 
 export PROJECTDIR
 
-# Files
+## Files
 GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
 REFFAS               := selected_shortlabel.degap.fas
 PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/$(REFFAS)
 PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
 
-# Programs (need to be in place)
+## Programs (need to be in place)
 GREPFASTA     := $(SRCDIR)/grepfasta.pl
 SPLITFAST     := $(SRCDIR)/splitfast_100K
 PARSENHMMER   := $(SRCDIR)/parse_nhmmer.pl
@@ -47,15 +47,14 @@ REMOVEGAPS    := $(SRCDIR)/remove_gaps_in_fasta.pl
 NHMMERSLURM   := $(SRCDIR)/create_nhmmer_slurm_file.pl
 REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel
 
-# Check for programs. Need to be loaded using the module system on uppmax:
-# `module load bioinfo-tools hmmer/3.2.1-intel blast/2.7.1+ gnuparallel`
+## Check for programs. Need to be loaded using the module system on uppmax:
+## `module load bioinfo-tools hmmer/3.2.1-intel blast/2.7.1+ gnuparallel`
 $(foreach bin,$(REQUIRED_BINS),\
 	$(if $(shell command -v $(bin) 2> /dev/null),,$(error Error: could not find program `$(bin)`. Did you load/install it?)))
 
-# Output files and rules
 .PHONY: all refdata init splitfast plastdb plast readplast parseplast hmmer readhmmer parsehmmer clean distclean copytestdata
 
-# Recepies
+## Recepies
 $(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
 	ln -sf $< $@
 
@@ -126,13 +125,6 @@ $(HMMERDIR)/%.hmm.h3f: $(HMMERDIR)/%.hmm
 	cd $(HMMERDIR) ; \
 	hmmpress $<
 
-#nhmmerslurm:
-#	for f in $$(find run/hmmer/ -name '*.hmm') ; do \$(SLURMDIR)/%.nhmmer.slurm.sh
-#		g=$${f#'run/hmmer/'}; \
-#		h=$${g%'.selected_concat.hmm'}; \
-#		perl $(SRCDIR)/create_nhmmer_slurm_file.pl -g "$$h" -o slurm/"$$h".nhmmer.slurm.sh; \
-#	done
-
 HMMEROUT := $(patsubst $(HMMERDIR)/%.selected_concat.hmm,$(HMMERDIR)/%.nhmmer.out,$(SELECTEDHMMS))
 
 $(HMMERDIR)/%.nhmmer.out: $(SLURMDIR)/%.nhmmer.slurm.sh
@@ -154,7 +146,7 @@ $(SLURMDIR)/%.nhmmer.slurm.sh: $(HMMERDIR)/%.selected_concat.hmm
 		-g $(patsubst %.selected_concat.hmm,%,$(notdir $<)) \
 		-a $(UPPNR)
 
-# Rules/tasks:
+## Rules/tasks:
 
 all: refdata init plast parseplast hmmer
 
@@ -182,20 +174,11 @@ parseplast:
 hmmer: $(HMMEROUT)
 
 readhmmer: $(HMMEROUTDIR)
-## Ad-hoc code (fre  2 aug 2019 15:33:17).
-#readhmmer:
-#	for f in $$(find run/hmmer/ -name '*.out') ; do \
-#		g=$${f#'run/hmmer/'}; \
-#		h=$${g%'.nhmmer.out'}; \
-#		i=$${h%'_genome'}; \
-#		perl src/parse_nhmmer.pl -i "$$f" -g run/plast/"$$h".plast200.fas -d out/"$$h"_hmmer -p "$$i" -f "$$i" --nostats ;\
-#	done
 
 parsehmmer:
 	$(MAKE) -j$(NCPU) readhmmer
 
 clean:
-	cd $(PROJECTDIR) ; $(RM) run4uppmax.tgz ; \
 	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
 	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
 	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm* *.sh ; \
@@ -204,7 +187,6 @@ clean:
 	cd $(SLURMDIR) ; $(RM) *.err *.nhmmer.slurm.sh
 
 distclean:
-	cd $(PROJECTDIR) ; $(RM) run4uppmax.tgz ; \
 	cd $(GENOMESDIR) ; $(RM) *.gz ; \
 	cd $(REFERENCEDIR)/fasta_files ; $(RM) *.fas ; \
 	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
@@ -214,7 +196,7 @@ distclean:
 	cd $(OUTDIR) ; rm -rf *_nhmmer_output \
 	cd $(SLURMDIR) ; $(RM) *.err *.nhmmer.slurm.sh
 
-# This will only work if you have the testdata folder
+## This will only work if you have the testdata folder
 copytestdata:
 	cp -v -u $(PROJECTDIR)/testdata/data/genomes/*.gz $(GENOMESDIR) ; \
 	cp -v -u $(PROJECTDIR)/testdata/data/reference/fasta_files/*.fas $(REFERENCEDIR)/fasta_files
