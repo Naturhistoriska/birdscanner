@@ -1,6 +1,6 @@
 # Software used for birdscanner
 
-- Last modified: fre aug 09, 2019  03:58
+- Last modified: fre aug 09, 2019  04:28
 - Sign: JN
 
 
@@ -34,4 +34,5 @@
 - `mafft` (<https://mafft.cbrc.jp/alignment/software/>)
 - `odseq` (<https://github.com/PeterJehl/OD-Seq>)
 - `oi.sh` (provided)
+- `extract_part_genes.pl` (provided)
 
