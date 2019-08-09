@@ -11,9 +11,6 @@ run/hmmer/
 run/plast/
 run/trees/
 tmp/
-run4uppmax.tgz
 testdata/
 testdata.tgz
-DEBUG.md
 *.swp
-src-extra/
