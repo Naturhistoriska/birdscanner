@@ -1,6 +1,6 @@
 # Prepare reference data
 
-    # - Last modified: tor maj 02, 2019  09:32
+    # - Last modified: fre aug 09, 2019  04:01
     # - Sign: JN
 
 ## Data preparation and data reduction
@@ -48,7 +48,7 @@
         d=$(dirname "${f}" | sed 's/^\.\///')
         g=$(basename "${f}")
         h="${FILTERED}/${d}.${g}.fas"
-        fastagrep -t -f "${FILTFILE}" "${f}" | sed '/^$/d' > "${h}"
+        ${SRCDIR}/grepfasta.pl -f "${FILTFILE}" "${f}" | sed '/^$/d' > "${h}"
     done
     rm "${FILTFILE}"
 

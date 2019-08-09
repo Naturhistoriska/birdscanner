@@ -1,31 +1,37 @@
-# README.md for birdscanner/src
+# Software used for birdscanner
 
-- Last modified: Thu Jun 13
+- Last modified: fre aug 09, 2019  03:58
 - Sign: JN
 
-## Programs and scripts used
 
-### In-house scripts
+### Public software
 
-- create_slurm_file.pl
-- extract_fasta_coordinates.pl
-- fasta2stockholm.pl
-- fasta_unwrap.pl
-- fasta_wrap.pl
-- gather_genes.pl
-- parse_nhmmer.pl
-- remove_gaps_in_fasta.pl
-- splitfast_100K
+- `grepfasta.pl` (provided, <https://github.com/nylander/grepfasta>)
+- `hmmerbuild`, `hmmpress`, `nhmmer` (hmmer v.3.2.1, <http://hmmer.org/>)
+- `makeblastdb` (ncbi-blast+ v.2.6.0+, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
+- `parallel` (<https://www.gnu.org/software/parallel/>)
+- `pigz` (<https://zlib.net/pigz/>)
+- `plast` (plast v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
 
-### Public software (Debian/\*buntu, or GitHub)
 
-- makeblastdb (ncbi-blast+ v.2.6.0+)
-- plast (plast v.2.3.1)
-- hmmpress (hmmer v.3.2.1)
-- nhmmer (hmmer v.3.2.1)
-- grepfasta.pl (https://github.com/nylander/grepfasta)
-- get_fasta_info.pl (https://github.com/nylander/get_fasta_info)
+### In-house software 
 
-## System programs
+- `create_nhmmer_slurm_file.pl`
+- `degap_fasta.pl`
+- `fasta2stockholm.pl`
+- `fasta_unwrap.pl`
+- `fasta_wrap.pl`
+- `parse_nhmmer.pl`
+- `remove_gaps_in_fasta.pl`
+- `splitfast_100K`
 
-- gnu-parallel (https://www.gnu.org/software/parallel/)
+
+## Optional software
+
+- `astral` (<https://github.com/smirarab/ASTRAL>)
+- `get_fasta_info.pl` (<https://github.com/nylander/get_fasta_info>)
+- `iqtree` (<http://www.iqtree.org/>)
+- `mafft` (<https://mafft.cbrc.jp/alignment/software/>)
+- `odseq` (<https://github.com/PeterJehl/OD-Seq>)
+- `oi.sh` (provided)
+

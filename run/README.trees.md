@@ -1,11 +1,25 @@
 # Trees from the output of birdscanner
 
-    # Last modified: ons jun 19, 2019  01:28
+    # Last modified: fre aug 09, 2019  02:59
     # Sign: JN
+    # Software used:
+    #    astral
+    #    degap_fasta.pl
+    #    fasta_unwrap.pl
+    #    fasta_wrap.pl
+    #    get_fasta_info.pl
+    #    grepfasta.pl
+    #    iqtree
+    #    mafft
+    #    odseq
+    #    oi.sh
+    #    remove_gaps_in_fasta.pl
+    # Data used:
+    #    "2500orthologs" from Jarvis et al.
 
 ## Setup
 
-    PROJECTDIR='/home/nylander/run/pe/birdscanner'
+    PROJECTDIR='/path/to/birdscanner'
     DATADIR="$PROJECTDIR/data"
     REFERENCEDIR="$DATADIR/reference"
     GENESDIR="${PROJECTDIR}/out/genes"
@@ -13,7 +27,7 @@
     TREEDIR="${PROJECTDIR}/run/trees"
     ASTRALDIR="${PROJECTDIR}/run/astral"
     SRCDIR="$PROJECTDIR/src"
-    JARVISDIR="/home/nylander/run/pe/Jarvis_et_al_2014/FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs"
+    JARVISDIR="/path/to/2500orthologs"
     NCPU=10
 
 ## Add outgroup

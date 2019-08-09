@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: tor aug 08, 2019  04:03
+## Last modified: fre aug 09, 2019  02:48
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -34,9 +34,8 @@ PLASTDIR     := $(RUNDIR)/plast
 HMMERDIR     := $(RUNDIR)/hmmer
 SELECTEDDIR  := $(REFERENCEDIR)/selected
 
-mkfile_path  := $(abspath $(lastword $(MAKEFILE_LIST)))
-mkfile_dir   := $(dir $(mkfile_path))
-
+MKFILEPATH  := $(abspath $(lastword $(MAKEFILE_LIST)))
+MKFILEDIR   := $(dir $(MKFILEPATH))
 
 export PROJECTDIR
 
@@ -135,7 +134,7 @@ $(HMMERDIR)/%.hmm.h3f: $(HMMERDIR)/%.hmm
 HMMEROUT := $(patsubst $(HMMERDIR)/%.selected_concat.hmm,$(HMMERDIR)/%.nhmmer.out,$(SELECTEDHMMS))
 
 $(HMMERDIR)/%.nhmmer.out: $(SLURMDIR)/%.nhmmer.slurm.sh
-	sbatch $< $(mkfile_dir)
+	sbatch $< $(MKFILEDIR)
 
 HMMEROUTDIR := $(patsubst $(HMMERDIR)/%.nhmmer.out,$(OUTDIR)/%_nhmmer_output/,$(HMMEROUT))
 
