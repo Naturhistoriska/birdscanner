@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: fre aug 09, 2019  01:45
+- Last modified: fre aug 09, 2019  04:35
 - Sign: JN
 
 **Disclaimer:** Work in progress.
@@ -183,13 +183,15 @@ starting with `perl $(PARSENHMMER)`). This is mostly untested, however.
 
 ## Software used
 
-- GNU Make (4.1)
-- nhmmer, hmmerpress (hmmer 3.2.1, <http://hmmer.org/>)
-- makeblastdb (blast+ 2.7.1, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
-- plast v2.3.1 (<https://github.com/PLAST-software>)
-- gnuparallel (<https://www.gnu.org/software/parallel>)
-- grepfasta.pl (<https://github.com/nylander/grepfasta>)
+- `make` (GNU Make 4.1)
+- `grepfasta.pl` (provided, <https://github.com/nylander/grepfasta>)
+- `hmmerbuild`, `hmmpress`, `nhmmer` (hmmer v.3.2.1, <http://hmmer.org/>)
+- `makeblastdb` (ncbi-blast+ v.2.6.0+, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
+- `parallel` (<https://www.gnu.org/software/parallel/>)
+- `pigz` (<https://zlib.net/pigz/>)
+- `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
 - custom scripts in `birdscanner/src/`
+
 
 #### plast
 
