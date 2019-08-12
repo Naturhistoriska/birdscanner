@@ -36,7 +36,7 @@ and `awk`:
         awk '$2 >= 200 && $2 <= 5000 {print $5}'
 
 
-## Data preparation
+## How the data sets were prepared
 
 Custom scripts are from [https://github.com/Naturhistoriska/birdscanner](https://github.com/Naturhistoriska/birdscanner).
 
