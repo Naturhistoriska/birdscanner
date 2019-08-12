@@ -5,10 +5,21 @@
 
 ## Description
 
-Genomic data sets from the publication [Jarvis et al. (2014)] [1], downloaded and
+Genomic data sets from the publication [Jarvis et al. (2014)] [1], was downloaded and
 polished into two sets; **Introns** and **Exons**.
 
-Original description of the data can be found here <http://gigadb.org/dataset/101041>,
+These two data sets are avaialble for download here:
+
+- [Exons, compressed folder "fasta_files.tgz", 70 MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf)
+
+        wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf/download"
+
+- [Introns, compressed folder "fasta_files.tgz" 164 MB](https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9)
+
+        wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9/download"
+
+
+Description of the original data can be found here <http://gigadb.org/dataset/101041>,
 and here <ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
 
 The final data includes many fasta files with number of sequences per file in
@@ -25,7 +36,7 @@ and `awk`:
         awk '$2 >= 200 && $2 <= 5000 {print $5}'
 
 
-## Data download and polishing
+## Data preparation
 
 Custom scripts are from [https://github.com/Naturhistoriska/birdscanner](https://github.com/Naturhistoriska/birdscanner).
 

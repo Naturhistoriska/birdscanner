@@ -3,8 +3,6 @@
 - Last modified: fre aug 09, 2019  04:35
 - Sign: JN
 
-**Disclaimer:** Work in progress.
-
 
 ## Description
 
@@ -19,8 +17,8 @@ format, one or several scaffolds) must be provided by the user.
 ![Workflow](doc/workflow/Diagram1.png)
 
 
-The current version is made for running on "Uppmax" (compute clusters rackham
-and snowy <https://www.uppmax.uu.se>).
+The current version is made for running on "Uppmax" (compute clusters Rackham
+and Snowy, <https://www.uppmax.uu.se>).
 
 The workflow is managed by the `make` program, and tasks are send to compute
 units using the SLURM batch system implemented on Uppmax.
@@ -169,6 +167,9 @@ out using the commands in the `birdscanner/data/reference/Makefile` (and
 executed by `make refdata`). It may be possible to circumvent that step by
 manually creating the necessary files (mostly untested).
 
+We also provide filtered versions of the "Jarvis data". Please see the file
+`birdscanner/doc/Jarvis_et_al_2015/README.md`.
+
 
 ## Outdata
 
@@ -190,7 +191,7 @@ starting with `perl $(PARSENHMMER)`). This is mostly untested, however.
 - `parallel` (<https://www.gnu.org/software/parallel/>)
 - `pigz` (<https://zlib.net/pigz/>)
 - `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
-- custom scripts in `birdscanner/src/`
+- Custom scripts in `birdscanner/src/`
 
 
 #### plast
