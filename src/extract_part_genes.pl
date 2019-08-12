@@ -32,7 +32,7 @@
         NOTES: Should be run inside /home/nylander/run/pe/Jarvis_et_al_2014/FASTA_files_of_loci_datasets/Filtered_sequence_alignments/2516_Introns/2500orthologs
                or passed the path to that folder as argument
 
-       AUTHOR: Johan Nylander (JN), johan.nylander@nbis.se
+       AUTHOR: Johan Nylander (JN), johan.nylander@nrm.se
 
       COMPANY: NBIS/NRM
 
@@ -60,8 +60,8 @@ my $verbose = 1;
 my $cpu = 10;
 
 GetOptions(
-    "verbose!"  => \$verbose,
-    "help"      => sub { exec("perldoc", $0); exit(0); },
+    "verbose!" => \$verbose,
+    "help"     => sub { exec("perldoc", $0); exit(0); },
 );
 
 
@@ -82,7 +82,8 @@ else {
 
 my @dirs = read_dir($wd);
 
-my $outfolder = $wd . '/' . 'part_fasta_files';
+#my $outfolder = $wd . '/' . 'part_fasta_files';
+my $outfolder = $wd . '/' . 'fasta_files';
 
 make_path($outfolder);
 

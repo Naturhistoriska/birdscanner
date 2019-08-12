@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: fre aug 09, 2019  02:48
+## Last modified: 08/12/2019 02:04:39 PM
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -49,7 +49,6 @@ PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)
 GREPFASTA     := $(SRCDIR)/grepfasta.pl
 SPLITFAST     := $(SRCDIR)/splitfast_100K
 PARSENHMMER   := $(SRCDIR)/parse_nhmmer.pl
-REMOVEGAPS    := $(SRCDIR)/remove_gaps_in_fasta.pl
 NHMMERSLURM   := $(SRCDIR)/create_nhmmer_slurm_file.pl
 REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel
 
