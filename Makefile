@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: 08/12/2019 02:04:39 PM
+## Last modified: tis aug 13, 2019  04:01
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -188,6 +188,7 @@ parsehmmer:
 clean:
 	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
 	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
+	cd $(SELECTEDDIR) ; rm -r fas sto ; \
 	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm* *.sh ; \
 	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \
 	cd $(OUTDIR) ; rm -rf *_nhmmer_output ; \
@@ -197,6 +198,7 @@ distclean:
 	cd $(GENOMESDIR) ; $(RM) *.gz ; \
 	cd $(REFERENCEDIR)/fasta_files ; $(RM) *.fas ; \
 	cd $(SELECTEDDIR) ; $(RM) *.tgz *.gz *.fas ; \
+	cd $(SELECTEDDIR) ; rm -r fas sto ; \
 	cd $(SELECTEDDIR)/hmm ; $(RM) *.hmm ; \
 	cd $(HMMERDIR) ; $(RM) *.nhmmer.out *.selected_concat.hmm* *.sh ; \
 	cd $(PLASTDIR) ; $(RM) *.fas *.ids *.searchfile* *.tab *.nhr *.nin *.nsq; \

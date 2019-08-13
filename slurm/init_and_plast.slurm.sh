@@ -1,6 +1,6 @@
 #!/bin/bash -l
 
-#SBATCH -A snic2017-7-291
+#SBATCH -A #UPPMAXACCOUNTNR#
 #SBATCH -J init_and_plast
 #SBATCH -t 00:30:00
 #SBATCH -p core
