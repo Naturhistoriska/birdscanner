@@ -1,6 +1,6 @@
 # Trees from the output of birdscanner
 
-    # Last modified: fre aug 09, 2019  02:59
+    # Last modified: tis aug 13, 2019  03:20
     # Sign: JN
     # Software used:
     #    astral
@@ -145,7 +145,7 @@
 
     cd ${ALIDIR}
     find -name '*.ali-odseq-filtered' | \
-        parallel "${SRCDIR}/degap_fasta.pl {}"
+        parallel "${SRCDIR}/degap_fasta.pl -o={}.degap.fas {}"
 
 
 ## Trees

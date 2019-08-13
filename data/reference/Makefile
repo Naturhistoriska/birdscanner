@@ -1,6 +1,6 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: mån aug 05, 2019  02:01
+# Last modified: tis aug 13, 2019  03:18
 # Sign: JN
 #
 # Usage:
@@ -43,7 +43,7 @@ trim1:
 
 trim2:
 	find "$(SELECTED)/fas" -type f -name '*.fas' | \
-		parallel -j $(NCPU) "$(SRCDIR)/degap_fasta.pl {}"
+		parallel -j $(NCPU) "$(SRCDIR)/degap_fasta.pl -o={}.degap.fas {}"
 
 trim3:
 	find "$(SELECTED)/fas" -type f -name '*.degap.fas' | \
