@@ -1,6 +1,6 @@
 # Phylogenomic analyses data of the avian phylogenomics project.
 
-- Last modified: tor aug 15, 2019  01:18
+- Last modified: tor aug 15, 2019  01:20
 - Sign: JN
 
 ## Description
@@ -11,13 +11,13 @@ polished into two sets; **Introns** and **Exons**.
 These two data sets are avaialble for download here:
 
 - [Exons, compressed folder "fasta_files.tgz", 70
-  MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf). 8,253 fasta files
+  MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf): 8,253 fasta files
   with 42--48 sequences per file, and seq length in the range of 99--15,777 bp.
 
         $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf/download"
 
 - [Introns, compressed folder "fasta_files.tgz" 164
-  MB](https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9). 11,013 fasta files
+  MB](https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9): 11,013 fasta files
   with 38--48 sequences per file, and seq length in the range of 58--38,848 bp.
 
         $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9/download"
@@ -26,9 +26,6 @@ These two data sets are avaialble for download here:
 Description of the original data can be found here <http://gigadb.org/dataset/101041>,
 and here <ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
 
-The final data includes many fasta files with number of sequences per file in
-the range 38--48 for Introns, and 42--48 for Exons. The sequence length varies
-from 58--38,848 bp for Introns, and 99--15,777 bp for Exons.
 
 ## Further filtering and selection of alignments
 
