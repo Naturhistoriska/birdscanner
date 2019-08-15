@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: fre aug 09, 2019  04:35
+- Last modified: tor aug 15, 2019  12:48
 - Sign: JN
 
 
@@ -42,9 +42,9 @@ folder `out/<genome>_nhmmer_output/`.
 ## Further analysis
 
 The gene files in `out/<genome>_nhmmer_output/` can be further analyzed
-(multiple sequence alignments, phylogenetic tree reconstruction, etc). One
-such approach is described in the file `run/README.trees.md`. Note that the
-exact approach needs to be tailored to your own needs.
+(multiple sequence alignments, phylogenetic tree reconstruction, etc). One such
+approach is described in the file [`run/README.trees.md`](run/README.trees.md).
+Note that the exact approach needs to be tailored to your own needs.
 
 
 ## Steps to run the pipeline
@@ -78,7 +78,8 @@ the "hmmer" step will take > ~30 h/per genome. This might be a starting point:
 |Script|Current `-t` setting|Comment|
 |------|--------------------|-------|
 |`init_and_plast.slurm.sh`|00:30:00|Change. Allow, say, 30 min x number of genomes|
-|`hmmer.slurm.sh`|40:00:00|The time asked for is per genome and is *not* set by the `-t` option, but in the call to `make` (variable `HMMERTIME`)|
+|`hmmer.slurm.sh`|40:00:00|The time asked for is per genome and is *not* set by the `-t` option,|
+|||but in the call to `make` (variable `HMMERTIME`)|
 |`parsehmmer.slurm.sh`|00:30:00|30 min should be OK?|
 
 
@@ -162,13 +163,13 @@ number of sequences doesn't need to be the same in all files.
 
 From the pool of files in `data/reference/fasta_files`, a filtered selection is
 placed in the `data/reference/selected` folder by the pipeline. These steps
-where designed specifically for "The Jarvis data", and is currently carried
-out using the commands in the `birdscanner/data/reference/Makefile` (and
-executed by `make refdata`). It may be possible to circumvent that step by
+where designed specifically for "The Jarvis data", and is currently carried out
+using the commands in the [`data/reference/Makefile`](data/reference/Makefile)
+(and executed by `make refdata`). It may be possible to circumvent that step by
 manually creating the necessary files (mostly untested).
 
 We also provide filtered versions of the "Jarvis data". Please see the file
-`birdscanner/doc/Jarvis_et_al_2015/README.md`.
+[`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md).
 
 
 ## Outdata
@@ -178,7 +179,7 @@ folder `out/<genome>_nhmmer_output/`, with the default name
 `<genome>.<gene>.fas`. The (default) fasta header contains the genome name:
 `><genome>` and, in addition, some statistics from the HMMer search. The
 default filenames and fasta header format can be changed by altering the call
-to the script `parse_nhmmer.pl` inside the `birdscanner/Makefile` (line
+to the script `parse_nhmmer.pl` inside the [`Makefile`](Makefile) (line
 starting with `perl $(PARSENHMMER)`). This is mostly untested, however.
 
 
@@ -191,7 +192,7 @@ starting with `perl $(PARSENHMMER)`). This is mostly untested, however.
 - `parallel` (<https://www.gnu.org/software/parallel/>)
 - `pigz` (<https://zlib.net/pigz/>)
 - `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
-- Custom scripts in `birdscanner/src/`
+- Custom scripts in [src/](src/)
 
 
 #### plast
