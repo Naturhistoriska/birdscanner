@@ -1,6 +1,6 @@
 # Phylogenomic analyses data of the avian phylogenomics project.
 
-- Last modified: tor aug 15, 2019  01:33
+- Last modified: tor aug 15, 2019  01:34
 - Sign: JN
 
 ## Description
@@ -24,8 +24,7 @@ These two data sets are avaialble for download here:
 
 
 Description of the original data can be found here <http://gigadb.org/dataset/101041>,
-and here 
-<ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
+and here <ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
 
 
 ## Further filtering and selection of alignments
