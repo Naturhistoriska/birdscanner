@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor aug 15, 2019  12:48
+- Last modified: tor aug 15, 2019  12:58
 - Sign: JN
 
 
@@ -73,7 +73,7 @@ Here you need to manually adjust (text edit) the time-asked-for in the slurm
 scripts.
 
 As a rough estimate, the "plast" step will take approx 20 mins/genome, while
-the "hmmer" step will take > ~30 h/per genome. This might be a starting point:
+the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 
 |Script|Current `-t` setting|Comment|
 |------|--------------------|-------|
@@ -136,8 +136,9 @@ genome files, use:
 - Most problems in the run will probably be associated with file formats.
   Please pay close attention to any error messages, especially in the file
   `init_and_plast.log`.
-- The `Makefile` also have settings that may be changed before the run. Please
-  see the first 60 lines if anything specific applies for your data.
+- The [`Makefile`](Makefile) also have settings that may be changed before the
+  run. Please see the first 60 lines if anything specific applies for your
+  data.
 
 
 ## Indata
@@ -179,8 +180,9 @@ folder `out/<genome>_nhmmer_output/`, with the default name
 `<genome>.<gene>.fas`. The (default) fasta header contains the genome name:
 `><genome>` and, in addition, some statistics from the HMMer search. The
 default filenames and fasta header format can be changed by altering the call
-to the script `parse_nhmmer.pl` inside the [`Makefile`](Makefile) (line
-starting with `perl $(PARSENHMMER)`). This is mostly untested, however.
+to the script [`parse_nhmmer.pl`](src/parse_nhmmer.pl) inside the
+[`Makefile`](Makefile) (line starting with `perl $(PARSENHMMER)`). This is
+mostly untested, however.
 
 
 ## Software used
