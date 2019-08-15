@@ -1,6 +1,6 @@
 # Phylogenomic analyses data of the avian phylogenomics project.
 
-- Last modified: tis aug 13, 2019  03:43
+- Last modified: tor aug 15, 2019  01:18
 - Sign: JN
 
 ## Description
@@ -10,11 +10,15 @@ polished into two sets; **Introns** and **Exons**.
 
 These two data sets are avaialble for download here:
 
-- [Exons, compressed folder "fasta_files.tgz", 70 MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf)
+- [Exons, compressed folder "fasta_files.tgz", 70
+  MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf). 8,253 fasta files
+  with 42--48 sequences per file, and seq length in the range of 99--15,777 bp.
 
         $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf/download"
 
-- [Introns, compressed folder "fasta_files.tgz" 164 MB](https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9)
+- [Introns, compressed folder "fasta_files.tgz" 164
+  MB](https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9). 11,013 fasta files
+  with 38--48 sequences per file, and seq length in the range of 58--38,848 bp.
 
         $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9/download"
 
