@@ -1,6 +1,6 @@
 # Software used for birdscanner
 
-- Last modified: 08/12/2019 01:59:01 PM
+- Last modified: tis okt 01, 2019  03:47
 - Sign: JN
 
 
@@ -35,5 +35,6 @@
 - `odseq` (<https://github.com/PeterJehl/OD-Seq>)
 - `oi.sh` (provided)
 - `extract_part_genes.pl` (provided)
+- `gather_genes.pl` (provided)
 - `remove_gapped_seqs_in_fasta.pl` (provided)
 

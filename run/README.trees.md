@@ -1,12 +1,13 @@
 # Trees from the output of birdscanner
 
-    # Last modified: tis aug 13, 2019  03:20
+    # Last modified: tis okt 01, 2019  04:09
     # Sign: JN
     # Software used:
     #    astral
     #    degap_fasta.pl
     #    fasta_unwrap.pl
     #    fasta_wrap.pl
+    #    gather_genes.pl
     #    get_fasta_info.pl
     #    grepfasta.pl
     #    iqtree
@@ -30,19 +31,38 @@
     JARVISDIR="/path/to/2500orthologs"
     NCPU=10
 
-## Add outgroup
+## Gather genes
 
+    ## Create one directory where we put all genes
+    ## found among all genomes. The output are
+    ## unaligned fasta files.
+
+    cd "${PROJECTDIR}"
+    perl "${SRCDIR}"/gather_genes.pl -o "${GENESDIR}" $(find out -mindepth 1 -type d)
+
+    ## Remove hmmer description from fasta headers
+    sed -i  's/ .*//' "${GENESDIR}"/*.fas
+
+
+## Add outgroup (optional)
+
+    # Note: this step was used for a version of the Jarvis data.
+    #
     # Need to look for
     #   "ACACH	Rifleman	Acanthisitta_chloris"
     #   "MANVI	Golden-collared_Manakin	Manacus_vitellinus"
+    #
+    # Also: adjust the file ending for the reference data
+    #       (now: '.sate.removed.intron.noout.aligned-allgap.filtered.fas')
 
-    cd ${PROJECTDIR}
+    cd "${PROJECTDIR}"
     mkdir -p "${ALIDIR}"
     outg="${ALIDIR}/tmp.outgroups.txt"
     perl -e 'print "ACACH\nMANVI\n"' > "${outg}"
     for f in ${GENESDIR}/*.fas ; do
         nr=$(basename "${f}" .fas)
         reffas="${REFERENCEDIR}/fasta_files/${nr}.sate.removed.intron.noout.aligned-allgap.filtered.fas"
+        #reffas="${REFERENCEDIR}/fasta_files/${nr}.fas"
         grepfasta.pl -f "${outg}" "${reffas}" | \
             sed '/^$/d' | \
             ${SRCDIR}/remove_gaps_in_fasta.pl > "${ALIDIR}/tmp.${nr}.outgrp.seq"
