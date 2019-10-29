@@ -1,14 +1,14 @@
 # Phylogenomic analyses data of the avian phylogenomics project.
 
-- Last modified: tor aug 15, 2019  01:34
+- Last modified: tis okt 29, 2019  04:08
 - Sign: JN
 
-## Description
+## Description of Data sets
 
 Genomic data sets from the publication [Jarvis et al. (2014)] [1], was downloaded and
 polished into two sets; **Introns** and **Exons**.
 
-These two data sets are avaialble for download here:
+These two data sets are available for download here:
 
 - [Exons, compressed folder "fasta_files.tgz", 70
   MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf): 8,253 fasta files
@@ -22,9 +22,24 @@ These two data sets are avaialble for download here:
 
         $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9/download"
 
-
 Description of the original data can be found here <http://gigadb.org/dataset/101041>,
 and here <ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
+
+Two additional subsets of the exon and intron data, but including only files
+containing sequences of lengths between 200 and 5,000 bp (see below) are also
+available here: 
+
+- [Lenth-filtered Exons, compressed folder "fasta_files.tgz", 60.3 
+  MB](https://owncloud.nrm.se/index.php/s/XaqkBWbAPCZenhI): 7,979 fasta files
+  with 42--48 sequences per file, and seq length in the range of 201--4,989 bp.
+
+        $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/XaqkBWbAPCZenhI/download"
+
+- [Length-filtered Introns, compressed folder "fasta_files.tgz" 100.7
+  MB](https://owncloud.nrm.se/index.php/s/nPvL1lefxm1V8PO): 9,362 fasta files
+  with 38--48 sequences per file, and seq length in the range of 200--4,998 bp.
+
+        $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/nPvL1lefxm1V8PO/download"
 
 
 ## Further filtering and selection of alignments
