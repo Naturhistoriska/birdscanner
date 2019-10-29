@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: ons aug 21, 2019  10:19
+- Last modified: tis okt 29, 2019  04:19
 - Sign: JN
 
 
@@ -175,7 +175,10 @@ carried out using the commands in the
 refdata`). It may be possible to circumvent that step by manually creating the
 necessary files (mostly untested).
 
-We also provide filtered versions of the "Jarvis data". Please see the file
+We also provide filtered versions of the "Jarvis data". If you wish to use any
+of these data sets, I recommend to download and uncompress the data-set folder
+directly inside the `birdscanner/data/reference/` folder, and the proceed with
+the first SLURM script (`init_and_plast.slurm.sh`). Please see the file
 [`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md).
 
 
