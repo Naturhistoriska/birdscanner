@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: ons okt 30, 2019  03:45
+- Last modified: ons okt 30, 2019  03:47
 - Sign: JN
 
 
@@ -87,7 +87,7 @@ the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 
     [user@rackham slurm]$ sbatch refdata_and_init_and_plast.slurm.sh
 
-This step will attempt to read and reformat the reference data, create hmm's
+This step will attempt to read and reformat the reference data, create HMM's
 for all alignments, perform a similarity search using plast, and finally
 prepare a more restricted data for the next step. A brief progress report (as
 well as any error messages) is printed to the file `refdata_and_init_and_plast.err`. More
@@ -184,8 +184,8 @@ these data sets, it is recommend to download and uncompress the data
 and then continue with any data filtering steps, and finally proceed with the
 first SLURM script (`refdata_and_init_and_plast.slurm.sh`).
 
-If you wish to save some computaitonal time, and use the "length-filtered" data
-subsets, we also provide the necessary hmm's and reference fasta file.  It is
+If you wish to save some computational time, and use the "length-filtered" data
+subsets, we also provide the necessary HMM's and reference fasta file.  It is
 then recommended to download and uncompress the data (`selected.tgz`) directly
 inside the `birdscanner/data/reference/` folder and proceed with the SLURM
 script `init_and_plast.slurm.sh`.
