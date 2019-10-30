@@ -2,7 +2,7 @@
 
 #SBATCH -A #UPPMAXACCOUNTNR#
 #SBATCH -J init_and_plast
-#SBATCH -t 00:30:00
+#SBATCH -t 01:00:00
 #SBATCH -p core
 #SBATCH -n 10
 #SBATCH -M snowy,rackham 
@@ -29,7 +29,7 @@
 
 module load bioinfo-tools
 module load hmmer/3.2.1-intel
-module load blast/2.7.1+
+module load blast/2.9.0+
 module load gnuparallel
 
 make -C .. refdata

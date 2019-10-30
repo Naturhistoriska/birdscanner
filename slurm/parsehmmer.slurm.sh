@@ -29,7 +29,7 @@
 
 module load bioinfo-tools
 module load hmmer/3.2.1-intel
-module load blast/2.7.1+
+module load blast/2.9.0+
 module load gnuparallel
 
 make -C .. parsehmmer

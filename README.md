@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tis okt 29, 2019  04:19
+- Last modified: ons okt 30, 2019  09:59
 - Sign: JN
 
 
@@ -72,12 +72,12 @@ See instructions in section [Indata](#indata) below.
 Here you need to manually adjust (text edit) the time-asked-for in the slurm
 scripts.
 
-As a rough estimate, the "plast" step will take approx 20 mins/genome, while
+As a rough estimate, the "plast" step will take approx 20-60 mins/genome, while
 the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 
 |Script|Current `-t` setting|Comment|
 |------|--------------------|-------|
-|`init_and_plast.slurm.sh`|00:30:00|Change. Allow, say, 30 min x number of genomes|
+|`init_and_plast.slurm.sh`|01:00:00|Change. Allow, say, 40 min x number of genomes|
 |`hmmer.slurm.sh`|40:00:00|The time asked for is per genome and is *not* set by the `-t` option,|
 |||but in the call to `make` (variable `HMMERTIME`)|
 |`parsehmmer.slurm.sh`|00:30:00|30 min should be OK?|
@@ -199,7 +199,7 @@ mostly untested, however.
 - `make` (GNU Make 4.1)
 - `grepfasta.pl` (provided, <https://github.com/nylander/grepfasta>)
 - `hmmerbuild`, `hmmpress`, `nhmmer` (hmmer v.3.2.1, <http://hmmer.org/>)
-- `makeblastdb` (ncbi-blast+ v.2.6.0+, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
+- `makeblastdb` (ncbi-blast+ v.2.9.0+, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
 - `parallel` (<https://www.gnu.org/software/parallel/>)
 - `pigz` (<https://zlib.net/pigz/>)
 - `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
