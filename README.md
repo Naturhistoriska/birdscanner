@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: ons okt 30, 2019  01:36
+- Last modified: ons okt 30, 2019  03:39
 - Sign: JN
 
 
@@ -175,11 +175,24 @@ carried out using the commands in the
 refdata`). It may be possible to circumvent that step by manually creating the
 necessary files (mostly untested).
 
-We also provide filtered versions of the "Jarvis data". If you wish to use any
-of these data sets, it is recommend to download and uncompress the data
-directly inside the `birdscanner/data/reference/` folder, and the proceed with
-the first SLURM script (`refdata_and_init_and_plast.slurm.sh`). Please see the
-file [`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md).
+##### 2.2 Jarvis data
+
+We also provide filtered versions of the "Jarvis data" (Jarvis *et al*.
+2015)[doc/Jarvis_et_al_2015/Jarvis_et_al_2015.pdf]. If you wish to use any of
+these data sets, it is recommend to download and uncompress the data
+(`fasta_files.tgz`) directly inside the `birdscanner/data/reference/` folder,
+and then continue with any data filtering steps, and finally proceed with the
+first SLURM script (`refdata_and_init_and_plast.slurm.sh`).
+
+If you wish to save some computaitonal time, and use the "length-filtered" data
+subsets, we also provide the necessary hmm's and reference fasta file.  It is
+then recommended to download and uncompress the data (`selected.tgz`) directly
+inside the `birdscanner/data/reference/` folder and proceed with the SLURM
+script `init_and_plast.slurm.sh`.
+
+Please see the file
+[`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md) for full
+description.
 
 
 ## Outdata
