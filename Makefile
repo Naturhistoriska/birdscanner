@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: ons okt 30, 2019  12:24
+## Last modified: ons okt 30, 2019  02:36
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -40,7 +40,12 @@ MKFILEDIR   := $(dir $(MKFILEPATH))
 export PROJECTDIR
 
 ## Files
-GENOMEFILES          := $(wildcard $(GENOMESDIR)/*.gz)
+GENOMEFILES := $(wildcard $(GENOMESDIR)/*.gz)
+
+ifndef GENOMEFILES
+$(error GENOMEFILES is not set. Did you provide genome files in .gz format in data/genomes/ ?)
+endif
+
 REFFAS               := selected_shortlabel.degap.fas
 PLASTQUERYSELECTEDFP := $(SELECTEDDIR)/$(REFFAS)
 PLASTQUERYFP         := $(PLASTDIR)/$(REFFAS)

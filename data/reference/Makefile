@@ -1,14 +1,15 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: tis aug 13, 2019  03:18
+# Last modified: ons okt 30, 2019  02:53
 # Sign: JN
 #
 # Usage:
 # 1) Add reference data (nt alignments in fasta format, files ending in '.fas', no periods in file names)'
-#    in birdscanner/data/reference/fasta_files (file ending `.fas`, no periods in file name).
+#    in birdscanner/data/reference/fasta_files.
 # 2) Call this Makefile from the root Makefile as such
 #     cd /path/to/birdscanner && make reference
-# Note: PROJECTDIR, NCPU will be inheritade from the root Makefile
+#
+# Note: PROJECTDIR, NCPU will be inherited from the root Makefile
 
 
 #### Setup 
@@ -22,6 +23,13 @@ SELECTED     := $(REFERENCEDIR)/selected
 GENOMESDIR   := $(DATADIR)/genomes
 SRCDIR       := $(PROJECTDIR)/src
 
+#### Check if we can find .fas files
+FASFILES := $(wildcard $(REFERENCEDIR)/fasta_files/*.fas)
+
+ifndef FASFILES
+$(error FASFILES is not set. Did you provide alignment files in .fas format in data/reference/fasta_files/ ?)
+endif
+
 .PHONY: linebreaks fastafiles trim1 trim2 trim3 tosto buildhmms concat degapandwrap compress
 
 all: linebreaks fastafiles trim1 trim2 trim3 tosto buildhmms concat degapandwrap compress
@@ -31,7 +39,8 @@ linebreaks:
 	find "$(REFERENCEDIR)/fasta_files" -type f -name '*.fas' | \
 		parallel -j $(NCPU) "sed -i 's/.$$//' {}"
 
-#### Select which sequences, and which fasta files to be used ("selected"). If no filtering (as in example below), all files and sequences can be used.
+#### Select which sequences, and which fasta files to be used ("selected").
+#### If no filtering (as in example below), all files and sequences can be used.
 fastafiles:    
 	mkdir -p "$(SELECTED)/fas" && \
 	cp $(REFERENCEDIR)/fasta_files/*.fas "$(SELECTED)/fas"
@@ -72,7 +81,6 @@ concat:
 		echo $$h ; \
 		h=$$h f=$$f perl -e '$$f=shift;open(F,"<",$$ENV{f});while(<F>){if(/>/){$$_=~s/>(\w+)$$/>$$ENV{h}-$$1/;print;}else{print;}}close(F);' >> $(SELECTED)/selected_shortlabel.fas ;\
 	done
-
 
 #### Degap and wrap
 degapandwrap:
