@@ -1,6 +1,6 @@
 # Phylogenomic data form the Avian Phylogenomics project.
 
-- Last modified: ons okt 30, 2019  03:38
+- Last modified: ons okt 30, 2019  03:50
 - Sign: JN
 
 
@@ -30,7 +30,7 @@ Two additional subsets of the exon and intron data, including only files
 containing sequences of lengths between 200 and 5,000 bp (see below), are also
 available here: 
 
-- [Lenth-filtered Exons, compressed folder "fasta_files.tgz", 60.3 
+- [Length-filtered Exons, compressed folder "fasta_files.tgz", 60.3 
   MB](https://owncloud.nrm.se/index.php/s/XaqkBWbAPCZenhI): 7,979 fasta files
   with 42--48 sequences per file, and seq length in the range of 201--4,989 bp.
 
@@ -44,12 +44,12 @@ available here:
 
 To save some time in the Birdscanner pipeline, the HMM's and summary fasta
 file are also provided. If these data sets are to be used in
-[birdscanner](https://github.com/Naturhistoriska/birdscanner), it is
+[Birdscanner](https://github.com/Naturhistoriska/birdscanner), it is
 recommended to download and uncompress the data (`selected.tgz`) directly
 inside the `birdscanner/data/reference/` folder and proceed with the SLURM
 script `init_and_plast.slurm.sh`. These data can be downloaded here:
 
-- [Lenth-filtered Exons with HMM's. Compressed folder "selected.tgz", 233.4
+- [Length-filtered Exons with HMM's. Compressed folder "selected.tgz", 233.4
   MB](https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download).
 
         $ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download"
