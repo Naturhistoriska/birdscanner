@@ -1,21 +1,21 @@
 #!/bin/bash -l
 
 #SBATCH -A #UPPMAXACCOUNTNR#
-#SBATCH -J init_and_plast
+#SBATCH -J refdata_and_init_and_plast
 #SBATCH -t 01:00:00
 #SBATCH -p core
 #SBATCH -n 10
 #SBATCH -M snowy,rackham 
-#SBATCH --output=init_and_plast.out
-#SBATCH --error=init_and_plast.err
+#SBATCH --output=refdata_and_init_and_plast.out
+#SBATCH --error=refdata_and_init_and_plast.err
 
-# Slurm script for first step init_and_plast 
+# Slurm script for first step refdata_and_init_and_plast 
 #
 # Test by using:
-#     sbatch --test-only init_and_plast.slurm.sh
+#     sbatch --test-only refdata_and_init_and_plast.slurm.sh
 #
 # Start by using:
-#     sbatch init_and_plast.slurm.sh
+#     sbatch refdata_and_init_and_plast.slurm.sh
 #
 # Stop by using:
 #     scancel 1234
@@ -31,6 +31,10 @@ module load bioinfo-tools
 module load hmmer/3.2.1-intel
 module load blast/2.9.0+
 module load gnuparallel
+
+make -C .. refdata
+
+>&2 echo "did make refdata"
 
 make -C .. init
 

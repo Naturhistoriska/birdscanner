@@ -1,6 +1,6 @@
 # Files for running on Uppmax
 
-- Last modified: tor aug 08, 2019  04:35
+- Last modified: ons okt 30, 2019  12:10
 - Sign: JN
 
 ## Description
@@ -13,7 +13,7 @@ See the `birdscanner/README.md` for detailed instructions.
 
 ##  Run order
 
-1. `sbatch init_and_plast.slurm.sh`
+1. `sbatch refdata_and_init_and_plast.slurm.sh`
 2. `sbatch hmmer.slurm.sh`
 3. `sbatch parsehmmer.slurm.sh`
 

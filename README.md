@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: ons okt 30, 2019  09:59
+- Last modified: ons okt 30, 2019  01:36
 - Sign: JN
 
 
@@ -77,7 +77,7 @@ the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 
 |Script|Current `-t` setting|Comment|
 |------|--------------------|-------|
-|`init_and_plast.slurm.sh`|01:00:00|Change. Allow, say, 40 min x number of genomes|
+|`refdata_and_init_and_plast.slurm.sh`|01:00:00|Change. Allow, say, 40 min x number of genomes|
 |`hmmer.slurm.sh`|40:00:00|The time asked for is per genome and is *not* set by the `-t` option,|
 |||but in the call to `make` (variable `HMMERTIME`)|
 |`parsehmmer.slurm.sh`|00:30:00|30 min should be OK?|
@@ -85,13 +85,13 @@ the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 
 ##### 5. Submit the first slurm script:
 
-    [user@rackham slurm]$ sbatch init_and_plast.slurm.sh
+    [user@rackham slurm]$ sbatch refdata_and_init_and_plast.slurm.sh
 
 This step will attempt to read and reformat the reference data, create hmm's
 for all alignments, perform a similarity search using plast, and finally
 prepare a more restricted data for the next step. A brief progress report (as
-well as any error messages) is printed to the file `init_and_plast.err`. More
-details are written in the file `init_and_plast.log`.
+well as any error messages) is printed to the file `refdata_and_init_and_plast.err`. More
+details are written in the file `refdata_and_init_and_plast.log`.
 
 
 ##### 6. When finished, submit the next:
@@ -135,7 +135,7 @@ genome files, use:
 
 - Most problems in the run will probably be associated with file formats.
   Please pay close attention to any error messages, especially in the file
-  `init_and_plast.log`.
+  `refdata_and_init_and_plast.log`.
 - The [`Makefile`](Makefile) also have settings that may be changed before the
   run. Please see the first 60 lines if anything specific applies for your
   data.
@@ -176,10 +176,10 @@ refdata`). It may be possible to circumvent that step by manually creating the
 necessary files (mostly untested).
 
 We also provide filtered versions of the "Jarvis data". If you wish to use any
-of these data sets, I recommend to download and uncompress the data-set folder
+of these data sets, it is recommend to download and uncompress the data
 directly inside the `birdscanner/data/reference/` folder, and the proceed with
-the first SLURM script (`init_and_plast.slurm.sh`). Please see the file
-[`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md).
+the first SLURM script (`refdata_and_init_and_plast.slurm.sh`). Please see the
+file [`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md).
 
 
 ## Outdata

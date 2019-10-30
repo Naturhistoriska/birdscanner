@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: tis aug 13, 2019  04:01
+## Last modified: ons okt 30, 2019  12:24
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -53,7 +53,7 @@ NHMMERSLURM   := $(SRCDIR)/create_nhmmer_slurm_file.pl
 REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel
 
 ## Check for programs. Need to be loaded using the module system on uppmax:
-## `module load bioinfo-tools hmmer/3.2.1-intel blast/2.7.1+ gnuparallel`
+## `module load bioinfo-tools hmmer/3.2.1-intel blast/2.9.0+ gnuparallel`
 #$(foreach bin,$(REQUIRED_BINS),\
 #	$(if $(shell command -v $(bin) 2> /dev/null),,$(error Error: could not find program `$(bin)`. Did you load/install it?)))
 
