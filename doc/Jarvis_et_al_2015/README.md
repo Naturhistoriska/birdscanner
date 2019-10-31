@@ -1,6 +1,6 @@
 # Phylogenomic data form the Avian Phylogenomics project.
 
-- Last modified: ons okt 30, 2019  03:50
+- Last modified: tor okt 31, 2019  12:21
 - Sign: JN
 
 
@@ -54,13 +54,13 @@ script `init_and_plast.slurm.sh`. These data can be downloaded here:
 
         $ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download"
 
-- [Length-filtered Introns with HMM's. Compressed folder "selected.tgz" XXX
-  MB](https://owncloud.nrm.se/XXXX).
+- [Length-filtered Introns with HMM's. Compressed folder "selected.tgz" 389.5 
+  MB](https://owncloud.nrm.se/index.php/s/rASoR1zdWeqj11A).
 
-        $ wget -O selected.tgz "https://owncloud.nrm.se/XXXX/download"
+        $ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/rASoR1zdWeqj11A/download"
 
 
-## Further filtering and selection of alignments
+## Further filtering and selection of alignments - examples
 
 When using sequences in searches using HMMer, it might be beneficial to filter
 the files based on sequence length. This can be done in many ways. Here are
