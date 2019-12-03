@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: ons okt 30, 2019  02:36
+## Last modified: tis dec 03, 2019  02:16
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -71,7 +71,9 @@ $(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
 SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run\/plast}; echo $${n%%.*}.split.fas; done)
 
 $(PLASTDIR)/%.split.fas: $(GENOMESDIR)/%.gz
-	$(SPLITFAST) <(gunzip -c $<) > $@
+	$(SPLITFAST) <(gunzip -c $<) | \
+		tr -cd '[:print:]\n' | \
+		awk 'BEGIN{RS=">";FS="\n";ORS=""}$2{print">"$0}' > $@
 
 DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLITFILES))
 
