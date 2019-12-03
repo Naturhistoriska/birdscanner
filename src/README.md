@@ -1,6 +1,6 @@
 # Software used for birdscanner
 
-- Last modified: tis okt 01, 2019  03:47
+- Last modified: tis dec 03, 2019  04:15
 - Sign: JN
 
 
@@ -12,6 +12,7 @@
 - `parallel` (<https://www.gnu.org/software/parallel/>)
 - `pigz` (<https://zlib.net/pigz/>)
 - `plast` (plast v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
+- `splitfast_100K` (provided, <https://github.com/nylander/Split_fasta_file>)
 
 
 ### In-house software 
@@ -23,7 +24,6 @@
 - `fasta_wrap.pl`
 - `parse_nhmmer.pl`
 - `remove_gaps_in_fasta.pl`
-- `splitfast_100K`
 
 
 ## Optional software
