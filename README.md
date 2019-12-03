@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: ons okt 30, 2019  03:47
+- Last modified: tis dec 03, 2019  04:19
 - Sign: JN
 
 
@@ -55,14 +55,14 @@ Note that the exact approach needs to be tailored to your own needs.
     [user@rackham ~]$ cd birdscanner
 
 
-##### 2. Set your compute account number (e.g. 'snic1234-5-678') by running
-
-    [user@rackham birdscanner]$ make account UPPNR=snic1234-5-678
-
-
-##### 3. Add correctly named and formatted genome files and reference data to the `data` folder
+##### 2. Add correctly named and formatted genome files and reference data to the `data` folder
 
 See instructions in section [Indata](#indata) below.
+
+
+##### 3. Set your compute account number (e.g. 'snic1234-5-678') by running
+
+    [user@rackham birdscanner]$ make account UPPNR=snic1234-5-678
 
 
 ##### 4. Change directory to the `slurm` directory.
