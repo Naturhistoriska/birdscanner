@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: tis dec 03, 2019  04:39
+## Last modified: ons dec 04, 2019  01:21
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -103,7 +103,7 @@ $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids: $(PLASTDIR)/%.selected.plast.tab
 SEARCHFILES1 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids,$(PLASTDIR)/%.searchfile1,$(SCAFFOLDIDS))
 
 $(PLASTDIR)/%.searchfile1: $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids
-	sed -e 's/$$/\$$/' -e 's/^/\^>/' $< > $@
+	sed -e 's/$$/\\s/' -e 's/^/\^>/' $< > $@
 
 PLASTFASFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.plast$(ALILENGTH).fas,$(SPLITFILES))
 
