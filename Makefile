@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: ons dec 04, 2019  01:21
+## Last modified: tor dec 05, 2019  11:28
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -55,7 +55,7 @@ GREPFASTA     := $(SRCDIR)/grepfasta.pl
 SPLITFAST     := $(SRCDIR)/splitfast_100K
 PARSENHMMER   := $(SRCDIR)/parse_nhmmer.pl
 NHMMERSLURM   := $(SRCDIR)/create_nhmmer_slurm_file.pl
-REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel
+REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel pigz
 
 ## Check for programs. Need to be loaded using the module system on uppmax:
 ## `module load bioinfo-tools hmmer/3.2.1-intel blast/2.9.0+ gnuparallel`
@@ -71,7 +71,7 @@ $(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
 SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run\/plast}; echo $${n%%.*}.split.fas; done)
 
 $(PLASTDIR)/%.split.fas: $(GENOMESDIR)/%.gz
-	$(SPLITFAST) <(gunzip -c $<) > $@
+	$(SPLITFAST) <(pigz -d -c $<) > $@
 
 DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLITFILES))
 
