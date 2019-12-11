@@ -65,7 +65,7 @@
 
       CREATED: 09/17/2015 11:06:04 PM
 
-     REVISION: 2019-06-13
+     REVISION: Wed 11 Dec 2019 10:02:09 AM CET
 
 =cut
 
@@ -145,9 +145,10 @@ print STDERR "Reading fasta file $genome\n" if ($VERBOSE);
 my $def = $/;
 $/ = ">";
 while (<$FASTA>) {
+    chomp;
     next if ( $_ eq '' );
     my ( $id, @sequencelines ) = split /\n/;
-    $id =~ s/>//;
+    $id =~ s/(\S+).*$/$1/;
     if ( exists( $HoH{$id} ) ) {
         my $sequence = '';
         foreach my $line (@sequencelines) {
