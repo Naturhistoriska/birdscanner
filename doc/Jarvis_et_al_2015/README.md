@@ -1,6 +1,6 @@
 # Phylogenomic data form the Avian Phylogenomics project.
 
-- Last modified: tor okt 31, 2019  12:21
+- Last modified: fre jan 17, 2020  01:30
 - Sign: JN
 
 
@@ -25,6 +25,10 @@ These two data sets are available for download here:
 
 Description of the original data can be found here <http://gigadb.org/dataset/101041>,
 and here <ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
+
+A taxon-translation file for the acronyms used in the fasta headers can be
+found here: [species_list.csv](species_list.csv). The source of this file was
+Table S6 from Jarvis *et al*., 2014 (Science 346, 1320). 
 
 Two additional subsets of the exon and intron data, including only files
 containing sequences of lengths between 200 and 5,000 bp (see below), are also
