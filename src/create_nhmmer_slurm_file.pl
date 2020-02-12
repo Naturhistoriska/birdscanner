@@ -43,7 +43,7 @@
 
       CREATED: 04/03/2019 10:34:41 AM
 
-     REVISION: ons  7 aug 2019 14:26:35
+     REVISION: Wed 12 Feb 2020 06:08:11 PM CET
 
 =cut
 
@@ -52,7 +52,6 @@
 
 use strict;
 use warnings;
-use Data::Dumper;
 use Getopt::Long;
 
 exec("perldoc", $0) unless (@ARGV);
@@ -153,23 +152,23 @@ fi
 
 ## Copy files to \$SNIC_TMP
 cp \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \$SNIC_TMP
-cp \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas \$SNIC_TMP
+cp \${BIRDSCANNERDIR}/run/plast/$genome.plast*.fas \$SNIC_TMP
 cd \$SNIC_TMP
 
 nhmmer --notextw --cpu $ncpu \\
     --tblout \${SNIC_TMP}/$genome.nhmmer.out \\
     \${SNIC_TMP}/$genome.selected_concat.hmm \\
-    \${SNIC_TMP}/$genome.plast200.fas
+    \${SNIC_TMP}/$genome.plast*.fas
 
 # Copy back
 cp \${SNIC_TMP}/$genome.nhmmer.out \${BIRDSCANNERDIR}/run/hmmer/.
 rm \${SNIC_TMP}/$genome.selected_concat.hmm
-rm \${SNIC_TMP}/$genome.plast200.fas
+rm \${SNIC_TMP}/$genome.plast*.fas
 
 #nhmmer --notextw --cpu $ncpu \\
 #    --tblout \${BIRDSCANNERDIR}/run/hmmer/$genome.nhmmer.out \\
 #    \${BIRDSCANNERDIR}/run/hmmer/$genome.selected_concat.hmm \\
-#    \${BIRDSCANNERDIR}/run/plast/$genome.plast200.fas
+#    \${BIRDSCANNERDIR}/run/plast/$genome.plast*.fas
 
 >&2 echo "Submitted the $genome.nhmmer slurm script"
 >&2 echo "Look for file ../run/hmmer/$genome.nhmmer.out when finished."
@@ -224,23 +223,23 @@ module load bioinfo-tools $hmmer
 
 ## Copy files to \$SNIC_TMP
 cp $path/run/hmmer/$genome.selected_concat.hmm \$SNIC_TMP
-cp $path/run/plast/$genome.plast200.fas \$SNIC_TMP
+cp $path/run/plast/$genome.plast*.fas \$SNIC_TMP
 cd \$SNIC_TMP
 
 nhmmer --notextw --cpu $ncpu \\
     --tblout \$SNIC_TMP/$genome.nhmmer.out \\
     \$SNIC_TMP/$genome.selected_concat.hmm \\
-    \$SNIC_TMP/$genome.plast200.fas
+    \$SNIC_TMP/$genome.plast*.fas
 
 # Copy back
 cp \$SNIC_TMP/$genome.nhmmer.out $path/run/hmmer/.
 rm \$SNIC_TMP/$genome.selected_concat.hmm
-rm \$SNIC_TMP/$genome.plast200.fas
+rm \$SNIC_TMP/$genome.plast*.fas
 
 #nhmmer --notextw --cpu $ncpu \\
 #    --tblout $path/run/hmmer/$genome.nhmmer.out \\
 #    $path/run/hmmer/$genome.selected_concat.hmm \\
-#    $path/run/plast/$genome.plast200.fas
+#    $path/run/plast/$genome.plast*.fas
 
 >&2 echo "Submitted the $genome.nhmmer slurm script"
 >&2 echo "Look for file ../run/hmmer/$genome.nhmmer.out when finished."

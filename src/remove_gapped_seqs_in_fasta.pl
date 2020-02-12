@@ -37,14 +37,13 @@
 
       CREATED: 10/31/2011 10:14:10 AM
 
-     REVISION: 03/21/2017 09:54:40 PM
+     REVISION: Wed 12 Feb 2020 06:10:06 PM CET
 
 =cut
 #===============================================================================
 
 use strict;
 use warnings;
-use Data::Dumper;
 use Getopt::Long;
 
 my $p_missing = 0;

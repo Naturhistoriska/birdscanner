@@ -18,14 +18,13 @@
       COMPANY: UiO/SU
       VERSION: 1.0
       CREATED: 01/19/2012 01:19:45 PM
-     REVISION: ---
+     REVISION: Wed 12 Feb 2020 06:10:23 PM CET
 
 =cut
 #===============================================================================
 
 use strict;
 use warnings;
-use Data::Dumper;
 
 #exec("perldoc", $0) unless (@ARGV);
 

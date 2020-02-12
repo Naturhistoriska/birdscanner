@@ -34,7 +34,7 @@
 
       CREATED: 2019-04-12 16:12:21
 
-     REVISION: 2019-10-01
+     REVISION: Wed 12 Feb 2020 06:09:47 PM CET
 
 =cut
 
@@ -43,7 +43,6 @@
 
 use strict;
 use warnings;
-#use Data::Dumper;
 use Getopt::Long;
 use File::Basename;
 

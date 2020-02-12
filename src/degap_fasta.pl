@@ -35,7 +35,7 @@
 
       CREATED: 02/22/2010 07:12:32 PM CET
 
-     REVISION: tis 13 aug 2019 14:40:47
+     REVISION: Wed 12 Feb 2020 06:08:57 PM CET
 
 =cut
 
@@ -44,7 +44,6 @@
 use warnings;
 use strict;
 use Getopt::Long;
-use Data::Dumper;
 
 my $usage = "\nUsage: $0 [--all][--any][-g=<char>][-o=<file>][-h] FASTA_file\n
   The --all option removes all gap characters (-) from the sequences,

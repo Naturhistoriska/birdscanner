@@ -40,7 +40,7 @@
 
       CREATED: 2019-04-30 15:26:30
 
-     REVISION: tor  2 maj 2019 10:43:26
+     REVISION: Wed 12 Feb 2020 06:09:19 PM CET
 
 =cut
 
@@ -52,7 +52,6 @@ use warnings;
 use Cwd;
 use File::Path qw( make_path );
 use File::Slurp;
-use Data::Dumper;
 use Parallel::ForkManager;
 use Getopt::Long;
 
