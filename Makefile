@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: Sun Jan 12, 2020  12:37PM
+## Last modified: tor feb 13, 2020  11:02
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -67,13 +67,13 @@ REQUIRED_BINS := hmmpress nhmmer plast makeblastdb grepfasta.pl parallel pigz
 ## Recepies
 $(PLASTQUERYFP): $(PLASTQUERYSELECTEDFP)
 	ln -sf $< $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 SPLITFILES := $(shell for name in $(GENOMEFILES); do n=$${name/data\/genomes/run\/plast}; echo $${n%%.*}.split.fas; done)
 
 $(PLASTDIR)/%.split.fas: $(GENOMESDIR)/%.gz
 	$(SPLITFAST) <(pigz -d -c $<) > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 DBFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.split.fas.nin,$(SPLITFILES))
 
@@ -101,19 +101,19 @@ $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids: $(PLASTDIR)/%.selected.plast.tab
 		awk -F $$'\t' '!x[$$1]++' | \
 		awk -F $$'\t' '{print $$2}' | \
 		sort -u > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 SEARCHFILES1 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids,$(PLASTDIR)/%.searchfile1,$(SCAFFOLDIDS))
 
 $(PLASTDIR)/%.searchfile1: $(PLASTDIR)/%.plast$(ALILENGTH).scaffolds.ids
 	sed -e 's/$$/\\s/' -e 's/^/\^>/' $< > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 PLASTFASFILES := $(patsubst $(PLASTDIR)/%.split.fas,$(PLASTDIR)/%.plast$(ALILENGTH).fas,$(SPLITFILES))
 
 $(PLASTDIR)/%.plast$(ALILENGTH).fas: $(PLASTDIR)/%.searchfile1 $(PLASTDIR)/%.split.fas
 	$(GREPFASTA) -f $^ > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 REFIDS := $(patsubst $(PLASTDIR)/%.selected.plast.tab,$(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTTABFILES))
 
@@ -123,19 +123,19 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 		sort -t$$'\t' -k1g -k12rg | \
 		awk -F $$'\t' '!x[$$1]++' | \
 		awk -F $$'\t' '{print $$1}' > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 SEARCHFILES2 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTDIR)/%.searchfile2,$(REFIDS))
 
 $(PLASTDIR)/%.searchfile2: $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids
 	sed -e 's/\([0-9]\+\)/hmm\/\1\\./' $< > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_concat.hmm,$(SEARCHFILES2))
 
 $(HMMERDIR)/%.selected_concat.hmm: $(PLASTDIR)/%.searchfile2
 	cat $$(find $(SELECTEDDIR)/hmm -type f -name \*.hmm | grep -f $<) > $@ ; \
-	test -s $@ || { echo "Error: empty file"; rm $@; exit 1; }
+	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 HMMPRESSFILES := $(patsubst $(HMMERDIR)/%.hmm,$(HMMERDIR)/%.hmm.h3f,$(SELECTEDHMMS))
 
