@@ -1,6 +1,6 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: ons okt 30, 2019  02:53
+# Last modified: Wed Apr 15, 2020  09:39PM
 # Sign: JN
 #
 # Usage:
@@ -36,7 +36,7 @@ all: linebreaks fastafiles trim1 trim2 trim3 tosto buildhmms concat degapandwrap
 
 #### If needed, convert line breaks to unix
 linebreaks:
-	find "$(REFERENCEDIR)/fasta_files" -type f -name '*.fas' | \
+	find -L "$(REFERENCEDIR)/fasta_files" -type f -name '*.fas' | \
 		parallel -j $(NCPU) "sed -i 's/.$$//' {}"
 
 #### Select which sequences, and which fasta files to be used ("selected").
