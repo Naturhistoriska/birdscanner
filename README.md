@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor apr 16, 2020  12:15
+- Last modified: tor apr 16, 2020  01:40
 - Sign: JN
 
 
@@ -48,6 +48,11 @@ Note that the exact approach needs to be tailored to your own needs.
 
 
 ## Steps to run the pipeline
+
+The pipeline is currently run in steps. Each step will utilize multiple cores
+on a compute cluster. Each step is described below. A [Worked
+Example](#Worked-Example) is given in the end.
+
 
 ##### 1. Start by cloning birdscanner:
 
@@ -97,7 +102,7 @@ well as any error messages) is printed to the file
 **Note:** as a default, only target scaffolds with plast hits longer than 200
 bp will be used in consecutive steps. Depending on the quality of the genomes,
 the user may want to lower this theshold (by changing the `ALILENGTH` parameter
-in the main [`Makefile`](Makefile). We have used a value of '50' with some
+in the main [`Makefile`](Makefile)). We have used a value of '50' with some
 success.
 
 
@@ -136,6 +141,52 @@ If you wish to remove all generated files, including your reference data and
 genome files, use:
 
     [user@rackham1 birdscanner]$ make distclean
+
+
+### Worked Example
+
+This example will use the pre-formatted ["Jarvis exons
+data"](#-2.2-Jarvis-data), and genome files available in local folder on
+UPPMAX. Note that genome files need to be named "some_name.gz", e.g.,
+"Otis_tarda.gz". Project directory `/proj/xyz123` needs to be substituted, as
+well as the UPPMAX account ID `snic1234-5-678`.
+
+    # Get birdscanner code
+    [uppmax]$ cd /proj/xyz123
+    [uppmax]$ git clone https://github.com/Naturhistoriska/birdscanner.git
+
+    # Get (link or copy) genome files 
+    [uppmax]$ cd /proj/xyz123/birdscanner/data/genomes
+    [uppmax]$ ln -s /proj/xyz123/assemblies/*.gz .
+
+    # Get the reference genes (Jarvis exons)
+    [uppmax]$ cd /proj/xyz123/birdscanner/data/reference
+    [uppmax]$ rm -r selected
+    [uppmax]$ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download"
+    [uppmax]$ tar xfz selected.tgz && rm selected.tgz
+
+    # Run first step, changing some default parameters
+    [uppmax]$ cd /proj/xyz123/birdscanner
+    [uppmax]$ make account UPPNR=snic1234-5-678
+    [uppmax]$ sed -i -e "s/ALILENGTH := 200/ALILENGTH := 50/" Makefile
+    [uppmax]$ cd slurm
+    [uppmax]$ sed -i -e 's/#SBATCH -t 01:00:00/#SBATCH -t 10:00:00/' init_and_plast.slurm.sh
+    [uppmax]$ sbatch init_and_plast.slurm.sh
+    # wait...
+
+    # Run second step
+    [uppmax]$ cd /proj/xyz123/birdscanner/slurm
+    [uppmax]$ sbatch hmmer.slurm.sh
+    # wait...
+
+    # Run third step
+    [uppmax]$ cd /proj/xyz123/birdscanner/slurm
+    [uppmax]$ sbatch parsehmmer.slurm.sh
+    # wait...
+
+    # Gather genes from the out folder
+    [uppmax]$ cd /proj/xyz123/birdscanner/
+    [uppmax]$ perl src/gather_genes.pl --outdir=genes $(find out -mindepth 1 -type d)
 
 
 ## Notes:
