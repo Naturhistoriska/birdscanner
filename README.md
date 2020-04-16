@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tis mar 24, 2020  02:30
+- Last modified: tor apr 16, 2020  12:15
 - Sign: JN
 
 
@@ -90,8 +90,15 @@ the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 This step will attempt to read and reformat the reference data, create HMM's
 for all alignments, perform a similarity search using plast, and finally
 prepare a more restricted data for the next step. A brief progress report (as
-well as any error messages) is printed to the file `refdata_and_init_and_plast.err`. More
-details are written in the file `refdata_and_init_and_plast.log`.
+well as any error messages) is printed to the file
+`refdata_and_init_and_plast.err`. More details are written in the file
+`refdata_and_init_and_plast.log`.
+
+**Note:** as a default, only target scaffolds with plast hits longer than 200
+bp will be used in consecutive steps. Depending on the quality of the genomes,
+the user may want to lower this theshold (by changing the `ALILENGTH` parameter
+in the main [`Makefile`](Makefile). We have used a value of '50' with some
+success.
 
 
 ##### 6. When finished, submit the next:
