@@ -1,5 +1,5 @@
 ## Makefile for birdscanner, uppmax
-## Last modified: tor feb 13, 2020  11:02
+## Last modified: Wed Apr 22, 2020  12:25AM
 ## Sign: JN
 
 ## Make sure you have the correct account nr (e.g. 'snic2019-1-234')
@@ -128,7 +128,7 @@ $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids: $(PLASTDIR)/%.selected.plast.tab
 SEARCHFILES2 := $(patsubst $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids,$(PLASTDIR)/%.searchfile2,$(REFIDS))
 
 $(PLASTDIR)/%.searchfile2: $(PLASTDIR)/%.plast$(ALILENGTH).ref.ids
-	sed -e 's/\([0-9]\+\)/hmm\/\1\\./' $< > $@ ; \
+	sed -e 's/\([[a-zA-Z0-9_]]\+\)/hmm\/\1\\./' $< > $@ ; \
 	test -s $@ || { echo "Error: empty $@ file"; rm $@; exit 1; }
 
 SELECTEDHMMS := $(patsubst $(PLASTDIR)/%.searchfile2,$(HMMERDIR)/%.selected_concat.hmm,$(SEARCHFILES2))
