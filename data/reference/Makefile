@@ -1,6 +1,6 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: tis apr 21, 2020  02:09
+# Last modified: tis apr 21, 2020  07:54
 # Sign: JN
 #
 # Usage:
@@ -70,7 +70,7 @@ buildhmms:
 	mkdir -p $(SELECTED)/hmm && \
 	cd $(SELECTED)/sto && \
 	find . -type f -name '*.sto' | \
-		parallel -j $(NCPU) "hmmbuild $(SELECTED)/hmm/{.}.hmm {}"
+		parallel -j $(NCPU) "hmmbuild --dna $(SELECTED)/hmm/{.}.hmm {}"
 
 #### Create concatenated fasta file for superficial searching
 concat:
