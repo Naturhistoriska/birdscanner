@@ -1,6 +1,6 @@
 # BirdScanner on Uppmax
 
-- Last modified: tor apr 16, 2020  01:40
+- Last modified: tis apr 21, 2020  03:29
 - Sign: JN
 
 
@@ -191,9 +191,9 @@ well as the UPPMAX account ID `snic1234-5-678`.
 
 ## Notes:
 
-- Most problems in the run will probably be associated with file formats.
-  Please pay close attention to any error messages, especially in the file
-  `refdata_and_init_and_plast.log`.
+- Most problems in the run will probably be associated with file names and file
+  formats.  Please pay close attention to any error messages, especially in the
+  file `refdata_and_init_and_plast.log`.
 - The [`Makefile`](Makefile) also have settings that may be changed before the
   run. Please see the first 60 lines if anything specific applies for your
   data.
@@ -219,11 +219,11 @@ Add reference sequence alignments (nucleotides, fasta format, file suffix
 `.fas`) in the folder `data/reference/fasta_files`. Each alignment file would
 represent one genomic region ("gene"). The name of the alignment file will be
 used in downstream analyses, so they should have names that are easy to parse
-(do not use spaces or special characters in the file names). Examples:
-`myo.fas`, `odc.fas`, `988.fas`, `999.fas`, etc. The fasta headers are also
-used in downstream analyses and should also be easy to parse. Examples,
-`>Passe`, `>Ploceu`, `>Prunell`. Fasta headers needs to be unique, but the
-number of sequences doesn't need to be the same in all files.
+(do not use spaces or special characters, not even hyphens (`-`) in the file
+names). Examples: `myo.fas`, `odc.fas`, `988.fas`, `999.fas`, etc. The fasta
+headers are also used in downstream analyses and should also be easy to parse.
+Examples, `>Passe`, `>Ploceu`, `>Prunell`. Fasta headers needs to be unique,
+but the number of sequences doesn't need to be the same in all files.
 
 From the pool of files in `data/reference/fasta_files`, a filtered selection is
 placed in the `data/reference/selected` folder by the pipeline. These steps
