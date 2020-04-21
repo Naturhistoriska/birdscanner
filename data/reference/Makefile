@@ -1,6 +1,6 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: Wed Apr 15, 2020  09:39PM
+# Last modified: tis apr 21, 2020  02:09
 # Sign: JN
 #
 # Usage:
@@ -77,7 +77,7 @@ concat:
 	cd $(SELECTED) && \
 	for f in fas/*.degap.fas ; do \
 		export f ; \
-		h=$$(f=$$f perl -e 'print"$$1"if($$ENV{f}=~/^fas\/(\w+)\./)') ; \
+		h=$$(f=$$f perl -e 'print"$$1"if($$ENV{f}=~/^fas\/([^\.]+)\./)') ; \
 		echo $$h ; \
 		h=$$h f=$$f perl -e '$$f=shift;open(F,"<",$$ENV{f});while(<F>){if(/>/){$$_=~s/>(\w+)$$/>$$ENV{h}-$$1/;print;}else{print;}}close(F);' >> $(SELECTED)/selected_shortlabel.fas ;\
 	done
