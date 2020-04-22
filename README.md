@@ -1,8 +1,7 @@
-# BirdScanner on Uppmax
+# BirdScanner on UPPMAX
 
-- Last modified: tis apr 21, 2020  03:29
+- Last modified: ons apr 22, 2020  11:44
 - Sign: JN
-
 
 ## Description
 
@@ -16,28 +15,25 @@ format, one or several scaffolds) must be provided by the user.
 
 ![Workflow](doc/workflow/Diagram1.png)
 
-
-The current version is made for running on "Uppmax" (compute clusters Rackham
+The current version is made for running on "UPPMAX" (compute clusters Rackham
 and Snowy, <https://www.uppmax.uu.se>).
 
 The workflow is managed by the `make` program, and tasks are send to compute
-units using the SLURM batch system implemented on Uppmax.
-
+units using the SLURM batch system implemented on UPPMAX.
 
 ## Prerequisites
 
 The workflow is tested on GNU/Linux (Ubuntu 18.04 and CentOS 7), and uses
 standard Linux (bash) tools. The current version is aimed for running on
-Uppmax, and hence it will load necessary software using the `module` system.
+UPPMAX, and hence it will load necessary software using the `module` system.
 In addition, the software `plast` needs to be installed **by the user** from
 the developer's site. Please see section [Software used](#software-used) below.
-
 
 ## Results
 
 Individual gene files (fasta format) for each `genome` are written to the
-folder `out/<genome>_nhmmer_output/`.
-
+folder `birdscanner/out/<genome>_nhmmer_output/`. A set of unaligned data
+matrices can also be extracted and are written to folder `birdscanner/genes/`.
 
 ## Further analysis
 
@@ -46,49 +42,43 @@ The gene files in `out/<genome>_nhmmer_output/` can be further analyzed
 approach is described in the file [`run/README.trees.md`](run/README.trees.md).
 Note that the exact approach needs to be tailored to your own needs.
 
-
 ## Steps to run the pipeline
 
 The pipeline is currently run in steps. Each step will utilize multiple cores
-on a compute cluster. Each step is described below. A [Worked
-Example](#Worked-Example) is given in the end.
-
+on a compute cluster. Each step is described below. A couple of [Worked
+Examples](#Worked-Examples) are given in the end.
 
 ##### 1. Start by cloning birdscanner:
 
     [user@rackham ~]$ git clone https://github.com/Naturhistoriska/birdscanner.git
     [user@rackham ~]$ cd birdscanner
 
-
 ##### 2. Add correctly named and formatted genome files and reference data to the `data` folder
 
 See instructions in section [Indata](#indata) below.
-
 
 ##### 3. Set your compute account number (e.g. 'snic1234-5-678') by running
 
     [user@rackham birdscanner]$ make account UPPNR=snic1234-5-678
 
-
 ##### 4. Change directory to the `slurm` directory.
 
     [user@rackham birdscanner]$ cd slurm
 
-Here you need to manually adjust (text edit) the time-asked-for in the slurm
+Here you need to manually adjust (text edit) the time-asked-for in the SLURM
 scripts.
 
 As a rough estimate, the "plast" step will take approx 20-60 mins/genome, while
 the "HMMer" step will take > ~30 h/per genome. This might be a starting point:
 
-|Script|Current `-t` setting|Comment|
-|------|--------------------|-------|
-|`refdata_and_init_and_plast.slurm.sh`|01:00:00|Change. Allow, say, 40 min x number of genomes|
-|`hmmer.slurm.sh`|40:00:00|The time asked for is per genome and is *not* set by the `-t` option,|
-|||but in the call to `make` (variable `HMMERTIME`)|
-|`parsehmmer.slurm.sh`|00:30:00|30 min should be OK?|
+|Script                               |Current `-t` setting|Comment|
+|-------------------------------------|--------------------|-------|
+|`refdata_and_init_and_plast.slurm.sh`|01:00:00            |Change. Allow, say, 60 min x number of genomes?|
+|`hmmer.slurm.sh`                     |40:00:00            |The time asked for is per genome and is *not* set by the `-t` option,|
+|                                     |                    |but in the call to `make` (variable `HMMERTIME`)|
+|`parsehmmer.slurm.sh`                |00:30:00            |30 min should be OK?|
 
-
-##### 5. Submit the first slurm script:
+##### 5. Submit the first SLURM script:
 
     [user@rackham slurm]$ sbatch refdata_and_init_and_plast.slurm.sh
 
@@ -101,35 +91,31 @@ well as any error messages) is printed to the file
 
 **Note:** as a default, only target scaffolds with plast hits longer than 200
 bp will be used in consecutive steps. Depending on the quality of the genomes,
-the user may want to lower this theshold (by changing the `ALILENGTH` parameter
+the user may want to lower this threshold (by changing the `ALILENGTH` parameter
 in the main [`Makefile`](Makefile)). We have used a value of '50' with some
 success.
-
 
 ##### 6. When finished, submit the next:
 
     [user@rackham1 slurm]$ sbatch hmmer.slurm.sh
 
-This step will attempt to submit several slurm jobs to the scheduler, one for
+This step will attempt to submit several SLURM jobs to the scheduler, one for
 each genome. This step is probably time consuming. A final report (as well as
 any error messages) are printed to the file `hmmer.err`.
-
 
 ##### 7. When finished, submit the last:
 
     [user@rackham1 slurm]$ sbatch parsehmmer.slurm.sh
 
-This step will attempt to parse the results from hmmer and create separate
+This step will attempt to parse the results from HMMer and create separate
 folders with found genomic regions in the `birdscanner/out` folder, one for
 each genome. A final report (as well as any error messages) are printed to the
 file `parsehmmer.err`.
-
 
 ##### 8. Results
 
 Individual gene files (fasta format) for each `genome` are written to the
 folder `out/<genome>_nhmmer_output/`.
-
 
 ##### 9. Clean up (optional)
 
@@ -142,14 +128,62 @@ genome files, use:
 
     [user@rackham1 birdscanner]$ make distclean
 
+### Worked Examples
 
-### Worked Example
+##### 1. Using your own reference data set
+
+This example assumes that you have your own reference data set, and genome
+files available in local folder on UPPMAX. Note that genome files need to be
+named "some_name.gz", e.g., "Otis_tarda.gz". Most importantly, the reference
+data need to be formatted correctly. See the section [Reference
+alignments](#2.-Reference-alignments) below.
+Project directory `/proj/xyz123` needs to be substituted, as
+well as the UPPMAX account ID `snic1234-5-678`.
+
+    # Get birdscanner code
+    [uppmax]$ cd /proj/xyz123
+    [uppmax]$ git clone https://github.com/Naturhistoriska/birdscanner.git
+
+    # Get (link or copy) genome files 
+    [uppmax]$ cd /proj/xyz123/birdscanner/data/genomes
+    [uppmax]$ ln -s /proj/xyz123/assemblies/*.gz .
+
+    # Get (link or copy) the reference fasta alignments
+    [uppmax]$ cd /proj/xyz123/birdscanner/data/reference/fasta_files
+    [uppmax]$ ln -s /proj/xyz123/alignments/*.fas .
+
+    # Run first step, changing some default parameters
+    [uppmax]$ cd /proj/xyz123/birdscanner
+    [uppmax]$ make account UPPNR=snic1234-5-678
+    [uppmax]$ sed -i -e "s/ALILENGTH := 200/ALILENGTH := 50/" Makefile
+    [uppmax]$ cd slurm
+    [uppmax]$ sed -i -e 's/#SBATCH -t 01:00:00/#SBATCH -t 10:00:00/' refdata_and_init_and_plast.slurm.sh
+    [uppmax]$ sbatch refdata_and_init_and_plast.slurm.sh
+    # wait...
+
+    # Run second step
+    [uppmax]$ cd /proj/xyz123/birdscanner/slurm
+    [uppmax]$ sbatch hmmer.slurm.sh
+    # wait...
+
+    # Run third step
+    [uppmax]$ cd /proj/xyz123/birdscanner/slurm
+    [uppmax]$ sbatch parsehmmer.slurm.sh
+    # wait...
+
+    # Gather genes from the out folder
+    [uppmax]$ cd /proj/xyz123/birdscanner/
+    [uppmax]$ perl src/gather_genes.pl --outdir=genes $(find out -mindepth 1 -type d)
+
+##### 2. Using a pre-formatted (Bird) reference data set
 
 This example will use the pre-formatted ["Jarvis exons
 data"](#-2.2-Jarvis-data), and genome files available in local folder on
 UPPMAX. Note that genome files need to be named "some_name.gz", e.g.,
 "Otis_tarda.gz". Project directory `/proj/xyz123` needs to be substituted, as
-well as the UPPMAX account ID `snic1234-5-678`.
+well as the UPPMAX account ID `snic1234-5-678`.  Note that in contrast to the
+previous example, we don't need to format fasta files and create hmms, so we
+can directly go to the plast step (by using another SLURM script).
 
     # Get birdscanner code
     [uppmax]$ cd /proj/xyz123
@@ -188,7 +222,6 @@ well as the UPPMAX account ID `snic1234-5-678`.
     [uppmax]$ cd /proj/xyz123/birdscanner/
     [uppmax]$ perl src/gather_genes.pl --outdir=genes $(find out -mindepth 1 -type d)
 
-
 ## Notes:
 
 - Most problems in the run will probably be associated with file names and file
@@ -197,7 +230,6 @@ well as the UPPMAX account ID `snic1234-5-678`.
 - The [`Makefile`](Makefile) also have settings that may be changed before the
   run. Please see the first 60 lines if anything specific applies for your
   data.
-
 
 ## Indata
 
@@ -222,8 +254,9 @@ used in downstream analyses, so they should have names that are easy to parse
 (do not use spaces or special characters, not even hyphens (`-`) in the file
 names). Examples: `myo.fas`, `odc.fas`, `988.fas`, `999.fas`, etc. The fasta
 headers are also used in downstream analyses and should also be easy to parse.
-Examples, `>Passe`, `>Ploceu`, `>Prunell`. Fasta headers needs to be unique,
-but the number of sequences doesn't need to be the same in all files.
+Examples, `>Passe`, `>Ploceu`, `>Prunell`. Use underscores (`_`) instead of
+hyphens (`-`). Fasta headers needs to be unique, but the number of sequences
+doesn't need to be the same in all files.
 
 From the pool of files in `data/reference/fasta_files`, a filtered selection is
 placed in the `data/reference/selected` folder by the pipeline. These steps
@@ -252,7 +285,6 @@ Please see the file
 [`doc/Jarvis_et_al_2015/README.md`](doc/Jarvis_et_al_2015/README.md) for full
 description.
 
-
 ## Outdata
 
 Individual `gene` files (fasta format) for each `genome` are written to the
@@ -263,7 +295,6 @@ default filenames and fasta header format can be changed by altering the call
 to the script [`parse_nhmmer.pl`](src/parse_nhmmer.pl) inside the
 [`Makefile`](Makefile) (line starting with `perl $(PARSENHMMER)`). This is
 mostly untested, however.
-
 
 ## Software used
 
@@ -276,17 +307,16 @@ mostly untested, however.
 - `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
 - Custom scripts in [src/](src/)
 
-
 #### plast
 
-The `plast` program needs to be installed locally on Uppmax.
+The `plast` program needs to be installed locally on UPPMAX.
 Here is one way (installing in user's own `bin` folder):
 
     wget http://plast.gforge.inria.fr/files/plastbinary_linux_v2.3.1.tar.gz
     tar xvzf plastbinary_linux_v2.3.1.tar.gz
     cp plastbinary_linux_20160121/build/bin/plast ~/bin/plast
 
-Or, compile (on Uppmax):
+Or, compile (on UPPMAX):
 
     module load cmake
     module load doxygen
@@ -300,7 +330,6 @@ Or, compile (on Uppmax):
     cmake ..
     make
     cp bin/PlastCmd ~/bin/plast
-
 
 ## License and copyright
 
