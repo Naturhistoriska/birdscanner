@@ -1,8 +1,7 @@
 # Software used for birdscanner
 
-- Last modified: tis dec 03, 2019  04:15
+- Last modified: ons apr 22, 2020  12:19
 - Sign: JN
-
 
 ### Public software
 
@@ -14,7 +13,6 @@
 - `plast` (plast v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
 - `splitfast_100K` (provided, <https://github.com/nylander/Split_fasta_file>)
 
-
 ### In-house software 
 
 - `create_nhmmer_slurm_file.pl`
@@ -25,7 +23,6 @@
 - `parse_nhmmer.pl`
 - `remove_gaps_in_fasta.pl`
 
-
 ## Optional software
 
 - `astral` (<https://github.com/smirarab/ASTRAL>)
@@ -34,7 +31,6 @@
 - `mafft` (<https://mafft.cbrc.jp/alignment/software/>)
 - `odseq` (<https://github.com/PeterJehl/OD-Seq>)
 - `oi.sh` (provided)
-- `extract_part_genes.pl` (provided)
 - `gather_genes.pl` (provided)
 - `remove_gapped_seqs_in_fasta.pl` (provided)
 

@@ -1,6 +1,6 @@
 # BirdScanner on UPPMAX
 
-- Last modified: ons apr 22, 2020  12:06
+- Last modified: ons apr 22, 2020  12:14
 - Sign: JN
 
 ## Description
@@ -178,8 +178,8 @@ well as the UPPMAX account ID `snic1234-5-678`.
 ### 2. Using a pre-formatted (Bird) reference data set
 
 This example will use the pre-formatted ["Jarvis exons
-data"](#-2.2-Jarvis-data), and genome files available in local folder on
-UPPMAX. Note that genome files need to be named "some_name.gz", e.g.,
+data"](doc/Jarvis_et_al_2015/README.md), and genome files available in local
+folder on UPPMAX. Note that genome files need to be named "some_name.gz", e.g.,
 "Otis_tarda.gz". Project directory `/proj/xyz123` needs to be substituted, as
 well as the UPPMAX account ID `snic1234-5-678`. Note that in contrast to the
 previous example, we don't need to format fasta files and create hmms, so we
@@ -310,7 +310,7 @@ at the end of the [Worked Examples](#worked-examples).
 - `makeblastdb` (ncbi-blast+ v.2.9.0+, <https://blast.ncbi.nlm.nih.gov/Blast.cgi?PAGE_TYPE=BlastDocs>)
 - `parallel` (<https://www.gnu.org/software/parallel/>)
 - `pigz` (<https://zlib.net/pigz/>)
-- `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
+- [`plast`](#plast) (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
 - Custom scripts in [src/](src/)
 
 ### plast
