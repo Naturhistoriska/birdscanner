@@ -43,6 +43,6 @@ echo "Reached the end of the hmmer slurm script."
 echo "nhmmer jobs should now have been submitted to cluster."
 echo "Submission details, and any possible errors, are in the hmmer.err file."
 echo "Monitor submitted jobs with with the 'jobinfo' command."
-echo "When all nhmmer searches are finished, you should see outfiles,"
-echo "/run/hmmer/<genome>.nhmmer.out, in the folder birdscanner/run/hmmer."
+echo "When all nhmmer searches are finished, you should see outfiles"
+echo "named <genome>.nhmmer.out in folder ../run/hmmer/"
 
