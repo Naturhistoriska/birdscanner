@@ -1,6 +1,6 @@
 # BirdScanner on UPPMAX
 
-- Last modified: ons apr 22, 2020  11:54
+- Last modified: ons apr 22, 2020  12:06
 - Sign: JN
 
 ## Description
@@ -32,8 +32,8 @@ the developer's site. Please see section [Software used](#software-used) below.
 ## Results
 
 Individual gene files (fasta format) for each `genome` are written to the
-folder `birdscanner/out/<genome>_nhmmer_output/`. A set of unaligned data
-matrices can also be extracted and are written to folder `birdscanner/genes/`.
+folder `birdscanner/out/<genome>_nhmmer_output/`. If several genome-files are
+used as input, a set of (unaligned) data matrices can also be extracted.
 
 ## Further analysis
 
@@ -237,7 +237,7 @@ can directly go to the plast step (by using another SLURM script).
 file names and file content. Safest option is to make sure they are OK before
 trying to run the analyses.
 
-#### 1. Genomes
+### 1. Genomes
 
 Add compressed (gzip) genome files (contig files in fasta format, nucleotide
 data) to the folder `data/genomes/`. Files need to be named `<name>.gz`. The
@@ -245,7 +245,7 @@ data) to the folder `data/genomes/`. Files need to be named `<name>.gz`. The
 the fasta header for the extracted sequences. Examples: `apa_genome.gz`,
 `bpa.gz` (but not, e.g., `apa.genome.fas.gz`, `bpa.tar.gz`, etc).
 
-#### 2. Reference alignments
+### 2. Reference alignments
 
 Add reference sequence alignments (nucleotides, fasta format, file suffix
 `.fas`) in the folder `data/reference/fasta_files`. Each alignment file would
@@ -267,7 +267,7 @@ carried out using the commands in the
 refdata`). It may be possible to circumvent that step by manually creating the
 necessary files (mostly untested).
 
-##### 2.2 Jarvis data
+#### 2.2 Jarvis data
 
 We also provide filtered versions of the "Jarvis data" ([Jarvis *et al*.
 2015](doc/Jarvis_et_al_2015/Jarvis_et_al_2015.pdf)). If you wish to use any of
@@ -297,6 +297,11 @@ to the script [`parse_nhmmer.pl`](src/parse_nhmmer.pl) inside the
 [`Makefile`](Makefile) (line starting with `perl $(PARSENHMMER)`). This is
 mostly untested, however.
 
+If several genome files have been run, it should be possible to gather the
+individual sequences and sort them into (unaligned) data matrices.  This can be
+done by using the [`gather_genes.pl`](src/gather_genes.pl) script. See examples
+at the end of the [Worked Examples](#worked-examples).
+
 ## Software used
 
 - `make` (GNU Make 4.1)
@@ -308,7 +313,7 @@ mostly untested, however.
 - `plast` (v.2.3.1, <https://plast.inria.fr/plast-algorithm/>)
 - Custom scripts in [src/](src/)
 
-#### plast
+### plast
 
 The `plast` program needs to be installed locally on UPPMAX.
 Here is one way (installing in user's own `bin` folder):
@@ -321,7 +326,6 @@ Or, compile (on UPPMAX):
 
     module load cmake
     module load doxygen
-
     git clone https://github.com/PLAST-software/plast-library.git
     cd plast-library
     git checkout stable
