@@ -1,6 +1,6 @@
-# BirdScanner on UPPMAX
+# Birdscanner
 
-- Last modified: ons apr 22, 2020  12:14
+- Last modified: ons apr 22, 2020  12:28
 - Sign: JN
 
 ## Description
