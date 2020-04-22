@@ -1,6 +1,6 @@
-# Phylogenomic data form the Avian Phylogenomics project.
+# Phylogenomic data for the Avian Phylogenomics project
 
-- Last modified: fre jan 17, 2020  01:30
+- Last modified: ons apr 22, 2020  12:23
 - Sign: JN
 
 
