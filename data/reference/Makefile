@@ -1,11 +1,12 @@
 # Makefile for birdscanner reference data preparation
 #
-# Last modified: tis apr 21, 2020  07:54
+# Last modified: mån apr 27, 2020  06:11
 # Sign: JN
 #
 # Usage:
-# 1) Add reference data (nt alignments in fasta format, files ending in '.fas', no periods in file names)'
-#    in birdscanner/data/reference/fasta_files.
+# 1) Add reference data (nt alignments in fasta format, files ending in
+#    '.fas', no periods in file names)' in folder 
+#    birdscanner/data/reference/fasta_files.
 # 2) Call this Makefile from the root Makefile as such
 #     cd /path/to/birdscanner && make reference
 #
@@ -37,7 +38,7 @@ all: linebreaks fastafiles trim1 trim2 trim3 tosto buildhmms concat degapandwrap
 #### If needed, convert line breaks to unix
 linebreaks:
 	find -L "$(REFERENCEDIR)/fasta_files" -type f -name '*.fas' | \
-		parallel -j $(NCPU) "sed -i 's/.$$//' {}"
+		parallel -j $(NCPU) "sed -i 's/\r\+$$//' {}"
 
 #### Select which sequences, and which fasta files to be used ("selected").
 #### If no filtering (as in example below), all files and sequences can be used.
@@ -52,17 +53,17 @@ trim1:
 
 trim2:
 	find "$(SELECTED)/fas" -type f -name '*.fas' | \
-		parallel -j $(NCPU) "$(SRCDIR)/degap_fasta.pl -o={}.degap.fas {}"
+		parallel -j $(NCPU) "$(SRCDIR)/degap_fasta.pl -o={}.degap {}"
 
 trim3:
-	find "$(SELECTED)/fas" -type f -name '*.degap.fas' | \
+	find "$(SELECTED)/fas" -type f -name '*.degap' | \
 		parallel -j $(NCPU) "sed -i '/^$$/d' {}"
 
 #### Fasta to Stockholm format conversion
 tosto: 
 	mkdir -p "$(SELECTED)/sto" && \
 	cd "$(SELECTED)/fas" && \
-	find . -type f -name '*.degap.fas' | \
+	find . -type f -name '*.degap' | \
 		parallel -j $(NCPU) "$(SRCDIR)/fasta2stockholm.pl {} > $(SELECTED)/sto/{.}.sto"
 
 #### Build hmms
@@ -75,7 +76,7 @@ buildhmms:
 #### Create concatenated fasta file for superficial searching
 concat:
 	cd $(SELECTED) && \
-	for f in fas/*.degap.fas ; do \
+	for f in fas/*.degap ; do \
 		export f ; \
 		h=$$(f=$$f perl -e 'print"$$1"if($$ENV{f}=~/^fas\/([^\.]+)\./)') ; \
 		echo $$h ; \
