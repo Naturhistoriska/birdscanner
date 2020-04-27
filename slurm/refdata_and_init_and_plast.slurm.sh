@@ -34,18 +34,19 @@ module load gnuparallel
 
 make -C .. refdata
 
->&2 echo "did make refdata"
+>&2 echo "1/4: did make refdata "
 
 make -C .. init
 
->&2 echo "did make init"
+>&2 echo "2/4: did make init"
 
 make -C .. plast
 
->&2 echo "did make plast"
+>&2 echo "3/4: did make plast"
 
 make -C .. parseplast
 
->&2 echo "did make parseplast"
+>&2 echo "4/4: did make parseplast"
+>&2 echo "Check refdata_and_init_and_plast.out for errors"
 >&2 echo "Reached the end of the first slurm script"
 
