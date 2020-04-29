@@ -37,12 +37,12 @@ module load gnuparallel
 
 make HMMERTIME=40:00:00 -C .. hmmer
 
-echo ""
-echo ""
-echo "Reached the end of the hmmer slurm script."
-echo "nhmmer jobs should now have been submitted to cluster."
-echo "Submission details, and any possible errors, are in the hmmer.err file."
-echo "Monitor submitted jobs with with the 'jobinfo' command."
-echo "When all nhmmer searches are finished, you should see outfiles"
-echo "named <genome>.nhmmer.out in folder ../run/hmmer/"
-
+>&2 echo ""
+>&2 echo ""
+>&2 echo "nhmmer jobs should now have been submitted to cluster."
+>&2 echo "Submission details, and any possible errors, are in the hmmer.err file."
+>&2 echo "Monitor submitted jobs with with the 'jobinfo' command."
+>&2 echo "When all nhmmer searches are finished, you should see outfiles"
+>&2 echo "named <genome>.nhmmer.out in folder ../run/hmmer/."
+>&2 echo "To monitor, try (from the slurm folder):  wc -l ../run/hmmer/*.nhmmer.out"
+>&2 echo "Reached the end of the hmmer slurm script."

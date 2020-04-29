@@ -34,7 +34,6 @@ module load gnuparallel
 
 make -C .. parsehmmer
 
->&2 echo "Reached the end of the parsehmmer slurm script"
 >&2 echo "Generated files should be in the ../out folder"
 >&2 tree ../out
-
+>&2 echo "Reached the end of the parsehmmer slurm script"
