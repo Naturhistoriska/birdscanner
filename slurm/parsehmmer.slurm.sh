@@ -32,7 +32,9 @@ module load hmmer/3.2.1-intel
 module load blast/2.9.0+
 module load gnuparallel
 
+>&2 echo "1/1: starting parsehmmer"
 make -C .. parsehmmer
+>&2 echo "did make parsehmmer"
 
 >&2 echo "Generated files should be in the ../out folder"
 >&2 tree ../out

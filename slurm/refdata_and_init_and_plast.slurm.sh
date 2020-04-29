@@ -32,20 +32,21 @@ module load hmmer/3.2.1-intel
 module load blast/2.9.0+
 module load gnuparallel
 
+>&2 echo "1/4: starting refdata"
 make -C .. refdata
+>&2 echo "did make refdata"
 
->&2 echo "1/4: did make refdata, next is init"
-
+>&2 echo "2/4: starting init"
 make -C .. init
+>&2 echo "did make init"
 
->&2 echo "2/4: did make init, next is plast"
-
+>&2 echo "3/4: starting plast"
 make -C .. plast
+>&2 echo "did make plast"
 
->&2 echo "3/4: did make plast, next is parseplast"
-
+>&2 echo "4/4: starting parseplast"
 make -C .. parseplast
+>&2 echo "did make parseplast"
 
->&2 echo "4/4: did make parseplast"
 >&2 echo "Check refdata_and_init_and_plast.out for errors"
 >&2 echo "Reached the end of the refdata_and_init_and_plast slurm script"

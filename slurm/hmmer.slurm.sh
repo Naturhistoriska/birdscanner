@@ -32,9 +32,9 @@ module load hmmer/3.2.1-intel
 module load blast/2.9.0+
 module load gnuparallel
 
-
 ## Adjust here the time asked for _per_genome_ in the nhmmer search
 
+>&2 echo "1/1: starting hmmer"
 make HMMERTIME=40:00:00 -C .. hmmer
 
 >&2 echo ""
