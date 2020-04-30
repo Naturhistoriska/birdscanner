@@ -1,6 +1,6 @@
 # Birdscanner
 
-- Last modified: ons apr 22, 2020  12:28
+- Last modified: Thu Apr 30, 2020  11:26PM
 - Sign: JN
 
 ## Description
@@ -87,7 +87,7 @@ for all alignments, perform a similarity search using plast, and finally
 prepare a more restricted data for the next step. A brief progress report (as
 well as any error messages) is printed to the file
 `refdata_and_init_and_plast.err`. More details are written in the file
-`refdata_and_init_and_plast.log`.
+`refdata_and_init_and_plast.out`.
 
 **Note:** as a default, only target scaffolds with plast hits longer than 200
 bp will be used in consecutive steps. Depending on the quality of the genomes,
@@ -226,7 +226,7 @@ can directly go to the plast step (by using another SLURM script).
 
 - Most problems in the run will probably be associated with file names and file
   formats.  Please pay close attention to any error messages, especially in the
-  file `refdata_and_init_and_plast.log`.
+  file `refdata_and_init_and_plast.out`.
 - The [`Makefile`](Makefile) also have settings that may be changed before the
   run. Please see the first 60 lines if anything specific applies for your
   data.
