@@ -1,19 +1,20 @@
-# Birdscanner
+# Birdscanner (UPPMAX version)
 
-- Last modified: Thu Apr 30, 2020  11:26PM
+- Last modified: lör sep 12, 2020  03:58
 - Sign: JN
 
 ## Description
 
-The workflow will try to extract known genomic regions (based on multiple-
-sequence alignments and HMMs) from genome files. The approach taken is
-essentially a search with HMM's against a reference genome, with an extra step
-where an initial similarity search is used to reduce the input data down to
-matching HMM's and genomic regions. Both the known genomic regions (multiple
-nucleotide-sequence alignments in fasta format), and the genome files (fasta
-format, one or several scaffolds) must be provided by the user.
+The workflow (Fig. \ref{workflow}) will try to extract known genomic regions
+(based on multiple- sequence alignments and HMMs) from genome files. The
+approach taken is essentially a search with HMM's against a reference genome,
+with an extra step where an initial similarity search is used to reduce the
+input data down to matching HMM's and genomic regions. Both the known genomic
+regions (multiple nucleotide-sequence alignments in fasta format), and the
+genome files (fasta format, one or several scaffolds) must be provided by the
+user.
 
-![Workflow](doc/workflow/Diagram1.png)
+![Birdscanner workflow\label{workflow}](doc/workflow/Diagram1.png){width=60%}
 
 The current version is made for running on "UPPMAX" (compute clusters Rackham
 and Snowy, <https://www.uppmax.uu.se>).

@@ -12,6 +12,7 @@ run/plast/
 run/trees/
 tmp/
 testdata/
+TODO/
 testdata.tgz
 *.swp
 NOTES
