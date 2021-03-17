@@ -1,7 +1,10 @@
 # Birdscanner (UPPMAX version)
 
-- Last modified: lör sep 12, 2020  03:58
+- Last modified: ons mar 17, 2021  03:02
 - Sign: JN
+
+**Note: A revised version of this workflow is available in another repository:**
+[github.com/nylander/birdscanner2](https://github.com/nylander/birdscanner2)
 
 ## Description
 
