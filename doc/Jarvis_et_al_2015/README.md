@@ -1,6 +1,6 @@
 # Phylogenomic data for the Avian Phylogenomics project
 
-- Last modified: ons apr 22, 2020  12:23
+- Last modified: fre dec 01, 2023  02:43
 - Sign: JN
 
 
@@ -12,16 +12,16 @@ polished into two sets; **Introns** and **Exons**.
 These two data sets are available for download here:
 
 - [Exons, compressed folder "fasta_files.tgz", 70
-  MB](https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf): 8,253 fasta files
+  MB](https://nrmcloud.nrm.se/s/dbiPtxJnasb4Yze): 8,253 fasta files
   with 42--48 sequences per file, and seq length in the range of 99--15,777 bp.
 
-        $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/HaHin085YXvDQIf/download"
+        $ wget -O fasta_files.tgz "https://nrmcloud.nrm.se/s/dbiPtxJnasb4Yze/download"
 
 - [Introns, compressed folder "fasta_files.tgz" 164
-  MB](https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9): 11,013 fasta files
+  MB](https://nrmcloud.nrm.se/s/TW3XK4BKA5HtHQX): 11,013 fasta files
   with 38--48 sequences per file, and seq length in the range of 58--38,848 bp.
 
-        $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/AJ2jgQl3DZr6cs9/download"
+        $ wget -O fasta_files.tgz "https://nrmcloud.nrm.se/s/TW3XK4BKA5HtHQX/download"
 
 Description of the original data can be found here <http://gigadb.org/dataset/101041>,
 and here <ftp://parrot.genomics.cn/gigadb/pub/10.5524/101001_102000/101041/readme.txt>.
@@ -35,16 +35,16 @@ containing sequences of lengths between 200 and 5,000 bp (see below), are also
 available here: 
 
 - [Length-filtered Exons, compressed folder "fasta_files.tgz", 60.3 
-  MB](https://owncloud.nrm.se/index.php/s/XaqkBWbAPCZenhI): 7,979 fasta files
+  MB](https://nrmcloud.nrm.se/s/nyoFF5ooZRoGsRA): 7,979 fasta files
   with 42--48 sequences per file, and seq length in the range of 201--4,989 bp.
 
-        $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/XaqkBWbAPCZenhI/download"
+        $ wget -O fasta_files.tgz "https://nrmcloud.nrm.se/s/nyoFF5ooZRoGsRA/download"
 
 - [Length-filtered Introns, compressed folder "fasta_files.tgz" 100.7
-  MB](https://owncloud.nrm.se/index.php/s/nPvL1lefxm1V8PO): 9,362 fasta files
+  MB](https://nrmcloud.nrm.se/s/SjH32GsX3222Nzp): 9,362 fasta files
   with 38--48 sequences per file, and seq length in the range of 200--4,998 bp.
 
-        $ wget -O fasta_files.tgz "https://owncloud.nrm.se/index.php/s/nPvL1lefxm1V8PO/download"
+        $ wget -O fasta_files.tgz "https://nrmcloud.nrm.se/s/SjH32GsX3222Nzp/download"
 
 To save some time in the Birdscanner pipeline, the HMM's and summary fasta
 file are also provided. If these data sets are to be used in
@@ -54,14 +54,14 @@ inside the `birdscanner/data/reference/` folder and proceed with the SLURM
 script `init_and_plast.slurm.sh`. These data can be downloaded here:
 
 - [Length-filtered Exons with HMM's. Compressed folder "selected.tgz", 233.4
-  MB](https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download).
+  MB](https://nrmcloud.nrm.se/s/QWqB2xASW4XDTFN).
 
-        $ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download"
+        $ wget -O selected.tgz "https://nrmcloud.nrm.se/s/QWqB2xASW4XDTFN/download"
 
 - [Length-filtered Introns with HMM's. Compressed folder "selected.tgz" 389.5 
-  MB](https://owncloud.nrm.se/index.php/s/rASoR1zdWeqj11A).
+  MB](https://nrmcloud.nrm.se/s/WjqyWJYiT6GJdeG).
 
-        $ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/rASoR1zdWeqj11A/download"
+        $ wget -O selected.tgz "https://nrmcloud.nrm.se/s/WjqyWJYiT6GJdeG/download"
 
 
 ## Further filtering and selection of alignments - examples
