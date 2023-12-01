@@ -3,7 +3,8 @@
 - Last modified: fre dec 01, 2023  02:48
 - Sign: JN
 
-**Note: A revised version of this workflow is available in another repository:**
+# Note: A revised version of this workflow is available in another repository
+
 [github.com/nylander/birdscanner2](https://github.com/nylander/birdscanner2)
 
 ## Description
