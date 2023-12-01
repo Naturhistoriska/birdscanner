@@ -1,6 +1,6 @@
 # Birdscanner (UPPMAX version)
 
-- Last modified: ons mar 17, 2021  03:02
+- Last modified: fre dec 01, 2023  02:48
 - Sign: JN
 
 **Note: A revised version of this workflow is available in another repository:**
@@ -200,7 +200,7 @@ can directly go to the plast step (by using another SLURM script).
     # Get the reference genes (Jarvis exons)
     [uppmax]$ cd /proj/xyz123/birdscanner/data/reference
     [uppmax]$ rm -r selected
-    [uppmax]$ wget -O selected.tgz "https://owncloud.nrm.se/index.php/s/oZQt1pbtcBRyTvk/download"
+    [uppmax]$ wget -O selected.tgz "https://nrmcloud.nrm.se/s/QWqB2xASW4XDTFN/download"
     [uppmax]$ tar xfz selected.tgz && rm selected.tgz
 
     # Run first step, changing some default parameters
@@ -342,7 +342,7 @@ Or, compile (on UPPMAX):
 
 ## License and copyright
 
-Copyright (c) 2019-2020 Johan Nylander
+Copyright (c) 2019-2023 Johan Nylander
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
